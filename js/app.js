@@ -13,9 +13,9 @@ import { Theme } from './modules/theme.js';
 class App {
     constructor() {
         this.factors = {
-            factor1: 0, // TRM/PARALELO
-            factor2: 0, // TRM/OFICIAL
-            factor3: 0  // TRM/EURO
+            factor1: 0,
+            factor2: 0,
+            factor3: 0
         };
         this.clock = new Clock();
         this.weather = new Weather();
@@ -23,22 +23,18 @@ class App {
         this.theme = new Theme();
     }
 
-    /**
-     * Inicializa la aplicación
-     */
     async init() {
         try {
-            // Aplicar tema primero
             this.theme.apply();
             this.theme.setupListeners();
 
             await this.loadAllData();
             this.loadCurrencies();
             this.setupEventListeners();
+            this.setupSidebarMenu();
             this.startServices();
             this.loadConversionHistory();
             
-            // Mostrar saludo
             this.greeting.show();
             this.greeting.setupListeners();
             
@@ -49,11 +45,7 @@ class App {
         }
     }
 
-    /**
-     * Carga todos los datos iniciales
-     */
     async loadAllData() {
-        // Cargar datos en paralelo
         await Promise.all([
             this.loadExchangeRates(),
             this.loadBCVData(),
@@ -64,9 +56,6 @@ class App {
         ]);
     }
 
-    /**
-     * Carga tasas de cambio generales
-     */
     async loadExchangeRates() {
         try {
             await API.getExchangeRates('USD');
@@ -75,9 +64,6 @@ class App {
         }
     }
 
-    /**
-     * Carga datos del dólar BCV
-     */
     async loadBCVData() {
         try {
             const data = await API.getDolarOficial();
@@ -87,9 +73,6 @@ class App {
         }
     }
 
-    /**
-     * Carga datos del dólar paralelo
-     */
     async loadParaleloData() {
         try {
             const data = await API.getDolarParalelo();
@@ -99,9 +82,6 @@ class App {
         }
     }
 
-    /**
-     * Carga datos del euro oficial
-     */
     async loadEuroData() {
         try {
             const data = await API.getEuroOficial();
@@ -111,9 +91,6 @@ class App {
         }
     }
 
-    /**
-     * Carga TRM Colombia
-     */
     async loadTRMData() {
         try {
             const data = await API.getTRMColombia();
@@ -123,9 +100,6 @@ class App {
         }
     }
 
-    /**
-     * Carga factores de conversión
-     */
     async loadConversionFactors() {
         try {
             this.factors = await API.getConversionFactors();
@@ -138,20 +112,15 @@ class App {
         }
     }
 
-    /**
-     * Carga las monedas en los selectores del conversor general
-     */
     loadCurrencies() {
         const fromSelect = document.getElementById('from');
         const toSelect = document.getElementById('to');
 
         if (!fromSelect || !toSelect) return;
 
-        // Limpiar opciones anteriores
         fromSelect.innerHTML = '';
         toSelect.innerHTML = '';
 
-        // Crear opciones desde CONFIG
         CONFIG.CURRENCIES.forEach(currency => {
             const option1 = document.createElement('option');
             option1.value = currency.code;
@@ -164,35 +133,27 @@ class App {
             toSelect.appendChild(option2);
         });
 
-        // Establecer valores predeterminados
         fromSelect.value = CONFIG.DEFAULT_CURRENCY.FROM;
         toSelect.value = CONFIG.DEFAULT_CURRENCY.TO;
 
         console.log('✅ Currencies loaded in selectors');
     }
 
-    /**
-     * Configura todos los event listeners
-     */
     setupEventListeners() {
-        // Conversor general
         const currencyForm = document.getElementById('currency-form');
         if (currencyForm) {
             currencyForm.addEventListener('submit', (e) => this.handleConversion(e));
         }
 
-        // Botones de actualización
         this.setupRefreshButton('refresh', () => this.loadExchangeRates());
         this.setupRefreshButton('actualizar', () => this.loadBCVData());
         this.setupRefreshButton('actualizarEuro', () => this.loadEuroData());
         this.setupRefreshButton('actualizarParalelo', () => this.loadParaleloData());
         this.setupRefreshButton('actualizarTRM', () => this.loadTRMData());
 
-        // Toggle conversores
         this.setupToggle('show-converter', 'close-converter', 'converter-container');
         this.setupToggle('show-converter-paralelo', 'close-converter-paralelo', 'convertir-a-paralelo');
 
-        // Conversión en tiempo real Bs -> COP
         const inputBolivares = document.getElementById('input-bolivares');
         if (inputBolivares) {
             inputBolivares.addEventListener('input', Utils.debounce(() => {
@@ -200,7 +161,6 @@ class App {
             }, 300));
         }
 
-        // Conversión en tiempo real COP -> Bs
         const inputPesos = document.getElementById('input-pesos');
         if (inputPesos) {
             inputPesos.addEventListener('input', Utils.debounce(() => {
@@ -210,8 +170,205 @@ class App {
     }
 
     /**
-     * Configura botón de actualización
+     * Configura el menú lateral (sidebar)
      */
+    setupSidebarMenu() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('app-sidebar');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        // Abrir menú
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        // Cerrar menú
+        const closeSidebar = () => {
+            sidebar.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+        if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // Actualizar label del tema en el menú
+        this.updateMenuThemeLabel();
+
+        // Botón de tema en menú
+        const menuThemeBtn = document.getElementById('menu-theme');
+        if (menuThemeBtn) {
+            menuThemeBtn.addEventListener('click', () => {
+                this.theme.toggle();
+                this.updateMenuThemeLabel();
+                UI.showToast('Tema actualizado', 'success');
+            });
+        }
+
+        // Actualizar todas las tasas
+        const refreshAllBtn = document.getElementById('menu-refresh-all');
+        if (refreshAllBtn) {
+            refreshAllBtn.addEventListener('click', async () => {
+                UI.showToast('Actualizando todas las tasas...', 'info');
+                await this.loadAllData();
+                UI.showToast('Todas las tasas actualizadas', 'success');
+                closeSidebar();
+            });
+        }
+
+        // Compartir app
+        const shareBtn = document.getElementById('menu-share');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', async () => {
+                const shareData = {
+                    title: 'Conversor de Monedas Pro',
+                    text: 'Convierte monedas con tasas en tiempo real',
+                    url: window.location.href
+                };
+
+                try {
+                    if (navigator.share) {
+                        await navigator.share(shareData);
+                    } else {
+                        await navigator.clipboard.writeText(window.location.href);
+                        UI.showToast('Enlace copiado al portapapeles', 'success');
+                    }
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                }
+                closeSidebar();
+            });
+        }
+
+        // Limpiar caché
+        const clearCacheBtn = document.getElementById('menu-clear-cache');
+        if (clearCacheBtn) {
+            clearCacheBtn.addEventListener('click', () => {
+                localStorage.clear();
+                UI.showToast('Caché limpiado. Recarga la página.', 'success');
+                closeSidebar();
+            });
+        }
+
+        // Mostrar historial
+        const showHistoryBtn = document.getElementById('menu-show-history');
+        if (showHistoryBtn) {
+            showHistoryBtn.addEventListener('click', () => {
+                this.showHistoryModal();
+                closeSidebar();
+            });
+        }
+
+        // Mostrar acerca de
+        const aboutBtn = document.getElementById('menu-about');
+        if (aboutBtn) {
+            aboutBtn.addEventListener('click', () => {
+                this.openModal('modal-about');
+                closeSidebar();
+            });
+        }
+
+        // Limpiar historial
+        const clearHistoryBtn = document.getElementById('btn-clear-history');
+        if (clearHistoryBtn) {
+            clearHistoryBtn.addEventListener('click', () => {
+                Storage.clearHistory();
+                this.loadConversionHistory();
+                this.showHistoryModal();
+                UI.showToast('Historial limpiado', 'success');
+            });
+        }
+
+        // Cerrar modales
+        document.querySelectorAll('.modal-custom-close').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalId = btn.getAttribute('data-modal');
+                this.closeModal(modalId);
+            });
+        });
+
+        // Cerrar modal al hacer clic en overlay
+        document.querySelectorAll('.modal-custom-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                const modal = e.target.closest('.modal-custom');
+                if (modal) {
+                    this.closeModal(modal.id);
+                }
+            });
+        });
+    }
+
+    updateMenuThemeLabel() {
+        const label = document.getElementById('menu-theme-label');
+        const icon = document.querySelector('#menu-theme i');
+        if (label && icon) {
+            if (this.theme.currentTheme === 'dark') {
+                label.textContent = 'Cambiar a Modo Claro';
+                icon.className = 'fas fa-sun';
+            } else {
+                label.textContent = 'Cambiar a Modo Oscuro';
+                icon.className = 'fas fa-moon';
+            }
+        }
+    }
+
+    openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    showHistoryModal() {
+        const history = Storage.getConversionHistory();
+        const list = document.getElementById('modal-history-list');
+        
+        if (!list) return;
+
+        list.innerHTML = '';
+
+        if (history.length === 0) {
+            list.innerHTML = '<p style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay conversiones en el historial</p>';
+        } else {
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                
+                const date = new Date(item.timestamp).toLocaleString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                div.innerHTML = `
+                    <div>
+                        <strong>${Utils.formatNumber(item.amount)} ${item.from}</strong>
+                        <br>
+                        <small style="color: var(--text-secondary);">= ${Utils.formatNumber(item.result)} ${item.to}</small>
+                    </div>
+                    <div class="history-date">${date}</div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        this.openModal('modal-history');
+    }
+
     setupRefreshButton(buttonId, callback) {
         const button = document.getElementById(buttonId);
         if (button) {
@@ -223,9 +380,6 @@ class App {
         }
     }
 
-    /**
-     * Configura toggle de visibilidad
-     */
     setupToggle(showId, hideId, containerId) {
         const showBtn = document.getElementById(showId);
         const hideBtn = document.getElementById(hideId);
@@ -243,9 +397,6 @@ class App {
         }
     }
 
-    /**
-     * Maneja conversión general
-     */
     async handleConversion(event) {
         event.preventDefault();
 
@@ -267,7 +418,6 @@ class App {
             const result = await Converter.convert(amount, fromCurrency, toCurrency);
             UI.updateConversionResult('result', amount, fromCurrency, result, toCurrency);
             
-            // Guardar en historial
             Converter.saveToHistory(amount, fromCurrency, result, toCurrency);
             this.loadConversionHistory();
             
@@ -278,9 +428,6 @@ class App {
         }
     }
 
-    /**
-     * Conversión Bs a COP en tiempo real
-     */
     convertBsToCopRealtime() {
         const input = document.getElementById('input-bolivares');
         const result = document.getElementById('resultado-cop');
@@ -297,9 +444,6 @@ class App {
         }
     }
 
-    /**
-     * Conversión COP a Bs en tiempo real
-     */
     convertCopToBsRealtime() {
         const input = document.getElementById('input-pesos');
         const result = document.getElementById('resultado-bs');
@@ -316,9 +460,6 @@ class App {
         }
     }
 
-    /**
-     * Carga historial de conversiones
-     */
     loadConversionHistory() {
         const history = Storage.getConversionHistory();
         const list = document.getElementById('history-list');
@@ -327,15 +468,17 @@ class App {
 
         list.innerHTML = '';
         
-        history.forEach(item => {
+        if (history.length === 0) {
+            list.innerHTML = '<li style="text-align: center; color: var(--text-tertiary);">Sin conversiones recientes</li>';
+            return;
+        }
+
+        history.slice(0, 5).forEach(item => {
             const text = `${Utils.formatNumber(item.amount)} ${item.from} = ${Utils.formatNumber(item.result)} ${item.to}`;
             UI.addHistoryItem('history-list', text);
         });
     }
 
-    /**
-     * Inicia servicios (reloj, clima)
-     */
     startServices() {
         this.clock.start();
         this.weather.init();

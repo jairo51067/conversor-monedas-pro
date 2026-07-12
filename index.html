@@ -14,28 +14,168 @@
 </head>
 
 <body>
-    <!-- HEADER -->
-    <header class="app-header">
-        <div class="header-container">
-            <div class="header-content">
-                <div class="header-left">
-                    <button class="menu-toggle" id="menu-toggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="header-title">
-                        <h1>💰 Conversor de Monedas</h1>
-                        <p>Tasas en tiempo real</p>
+   <!-- HEADER -->
+<header class="app-header">
+    <div class="header-container">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-title">
+                    <h1>💰 Conversor de Monedas</h1>
+                    <p>Tasas en tiempo real</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon theme-toggle-icon"></i>
+                    <span class="theme-toggle-label">Oscuro</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- MENÚ LATERAL (SIDEBAR) -->
+<aside class="app-sidebar" id="app-sidebar">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="sidebar-content">
+        <div class="sidebar-header">
+            <h2>Menú</h2>
+            <button class="sidebar-close" id="sidebar-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <!-- Sección: Herramientas -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Herramientas</div>
+                <a href="calculadora.html" class="sidebar-item">
+                    <i class="fas fa-calculator"></i>
+                    <span>Calculadora</span>
+                </a>
+                <button class="sidebar-item" id="menu-show-history">
+                    <i class="fas fa-history"></i>
+                    <span>Historial de Conversiones</span>
+                </button>
+            </div>
+
+            <!-- Sección: Acciones -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Acciones</div>
+                <button class="sidebar-item" id="menu-refresh-all">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Actualizar Todas las Tasas</span>
+                </button>
+                <button class="sidebar-item" id="menu-share">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Compartir App</span>
+                </button>
+            </div>
+
+            <!-- Sección: Configuración -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Configuración</div>
+                <button class="sidebar-item" id="menu-theme">
+                    <i class="fas fa-moon"></i>
+                    <span id="menu-theme-label">Cambiar a Modo Oscuro</span>
+                </button>
+                <button class="sidebar-item" id="menu-clear-cache">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Limpiar Caché</span>
+                </button>
+            </div>
+
+            <!-- Sección: Información -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Información</div>
+                <button class="sidebar-item" id="menu-about">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Acerca de</span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>© 2026 Conversor de Monedas Pro</p>
+            <p class="sidebar-version">v2.0.0</p>
+        </div>
+    </div>
+</aside>
+
+<!-- MODAL DE HISTORIAL -->
+<div class="modal-custom" id="modal-history">
+    <div class="modal-custom-overlay"></div>
+    <div class="modal-custom-content">
+        <div class="modal-custom-header">
+            <h3> Historial de Conversiones</h3>
+            <button class="modal-custom-close" data-modal="modal-history">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-custom-body">
+            <div id="modal-history-list"></div>
+        </div>
+        <div class="modal-custom-footer">
+            <button class="btn btn-danger" id="btn-clear-history">
+                <i class="fas fa-trash-alt"></i> Limpiar Historial
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ACERCA DE -->
+<div class="modal-custom" id="modal-about">
+    <div class="modal-custom-overlay"></div>
+    <div class="modal-custom-content">
+        <div class="modal-custom-header">
+            <h3>ℹ️ Acerca de</h3>
+            <button class="modal-custom-close" data-modal="modal-about">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-custom-body">
+            <div class="about-content">
+                <div class="about-logo">💰</div>
+                <h4>Conversor de Monedas Pro</h4>
+                <p class="about-version">Versión 2.0.0</p>
+                <p>Aplicación profesional para conversión de monedas con tasas oficiales y paralelas de Venezuela y Colombia en tiempo real.</p>
+                
+                <div class="about-features">
+                    <div class="about-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Tasas BCV oficiales</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Dólar paralelo Binance</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>TRM Colombia</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Conversión en tiempo real</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Historial persistente</span>
                     </div>
                 </div>
-                <div class="header-right">
-                    <button id="theme-toggle" class="theme-toggle">
-                        <i class="fas fa-moon theme-toggle-icon"></i>
-                        <span class="theme-toggle-label">Oscuro</span>
-                    </button>
+
+                <div class="about-author">
+                    <p><strong>Autor:</strong> Jairo Cárdenas</p>
+                    <a href="mailto:jairo.cardenas.dev@gmail.com">
+                        <i class="fas fa-envelope"></i> jairo.cardenas.dev@gmail.com
+                    </a>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</div>
 
     <!-- MAIN CONTAINER -->
     <main class="app-main">
