@@ -72,20 +72,20 @@ export class UI {
   }
 
   /**
-   * Muestra toast notification
-   */
-  static showToast(message, type = "info") {
-    const toast = document.createElement("div");
+ * Muestra toast notification
+ */
+static showToast(message, type = 'info') {
+    const toast = document.createElement('div');
     toast.className = `toast-notification toast-${type}`;
     toast.textContent = message;
     document.body.appendChild(toast);
 
-    setTimeout(() => toast.classList.add("show"), 100);
+    setTimeout(() => toast.classList.add('show'), 100);
     setTimeout(() => {
-      toast.classList.remove("show");
-      setTimeout(() => toast.remove(), 300);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
     }, 3000);
-  }
+}
 
   /**
    * Actualiza resultado de conversión
