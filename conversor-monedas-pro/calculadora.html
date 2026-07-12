@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <title>Calculator PRO</title>
+
+    <style>
+        :root {
+            --bg: #0d0f14;
+            --card: #171a21;
+            --text: #ffffff;
+            --muted: #8b90a0;
+            --accent: #4f8cff;
+            --danger: #ff5c5c;
+            --border: rgba(255, 255, 255, 0.06);
+        }
+
+        /* Base */
+        body {
+            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text);
+        }
+
+        /* Layout */
+        .app {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Calculator */
+        .calculator {
+            width: 100%;
+            max-width: 340px;
+            background: var(--card);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border);
+        }
+
+        /* Display */
+        .display {
+            background: #0a0c10;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: right;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* Buttons */
+        .btn-calc {
+            height: 64px;
+            border-radius: 14px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: all .2s ease;
+        }
+
+        /* Variants */
+        .btn-num {
+            background: #1f2330;
+            color: white;
+        }
+
+        .btn-op {
+            background: #2a2f3d;
+            color: var(--accent);
+        }
+
+        .btn-eq {
+            background: var(--accent);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-clear {
+            background: #2a2f3d;
+            color: var(--danger);
+        }
+
+        /* Hover */
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            opacity: .9;
+        }
+
+        /* Active */
+        .btn-calc:active {
+            transform: scale(0.96);
+        }
+
+        /* Special */
+        .zero {
+            grid-column: span 2;
+        }
+
+        /* Header btn */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            color: var(--muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .calculator {
+                padding: 18px;
+            }
+
+            .display {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-btn" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <div class="app">
+        <div class="calculator">
+            <div id="display" class="display">0</div>
+
+            <div class="grid">
+                <button class="btn-calc btn-clear" onclick="clearAll()">C</button>
+                <button class="btn-calc btn-clear" onclick="deleteLast()"><i class="fas fa-delete-left"></i></button>
+                <button class="btn-calc btn-op" onclick="setOperator('/')">÷</button>
+                <button class="btn-calc btn-op" onclick="setOperator('*')">×</button>
+
+                <button class="btn-calc btn-num" onclick="inputNumber('7')">7</button>
+                <button class="btn-calc btn-num" onclick="inputNumber('8')">8</button>
+                <button class="btn-calc btn-num" onclick="inputNumber('9')">9</button>
+                <button class="btn-calc btn-op" onclick="setOperator('-')">−</button>
+
+                <button class="btn-calc btn-num" onclick="inputNumber('4')">4</button>
+                <button class="btn-calc btn-num" onclick="inputNumber('5')">5</button>
+                <button class="btn-calc btn-num" onclick="inputNumber('6')">6</button>
+                <button class="btn-calc btn-op" onclick="setOperator('+')">+</button>
+
+                <button class="btn-calc btn-num" onclick="inputNumber('1')">1</button>
+                <button class="btn-calc btn-num" onclick="inputNumber('2')">2</button>
+                <button class="btn-calc btn-num" onclick="inputNumber('3')">3</button>
+                <button class="btn-calc btn-num" onclick="inputNumber('0')">0</button>
+                <button class="btn-calc btn-num" onclick="inputDecimal()">.</button>
+                <button class="btn-calc btn-num" onclick="inputDecimal()"></button>
+                
+                <button class="btn-calc btn-eq" onclick="calculate()">=</button>
+                
+
+                <button class="btn-calc btn-num invisible"></button>
+                <button class="btn-calc btn-num invisible"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Calculator {
+            constructor() {
+                this.display = document.getElementById('display');
+                this.current = '0';
+                this.prev = null;
+                this.operator = null;
+                this.waiting = false;
+                this.update();
+            }
+
+            inputNumber(n) {
+                if (this.waiting) {
+                    this.current = n;
+                    this.waiting = false;
+                } else {
+                    this.current = this.current === '0' ? n : this.current + n;
+                }
+                this.update();
+            }
+
+            inputDecimal() {
+                if (!this.current.includes('.')) {
+                    this.current += '.';
+                }
+                this.update();
+            }
+
+            setOperator(op) {
+                const value = parseFloat(this.current);
+
+                if (this.prev === null) {
+                    this.prev = value;
+                } else if (this.operator) {
+                    this.prev = this.calc(this.prev, value, this.operator);
+                }
+
+                this.operator = op;
+                this.waiting = true;
+                this.update();
+            }
+
+            calc(a, b, op) {
+                if (op === '+') return a + b;
+                if (op === '-') return a - b;
+                if (op === '*') return a * b;
+                if (op === '/') return b === 0 ? 0 : a / b;
+            }
+
+            calculate() {
+                if (this.operator) {
+                    this.current = this.calc(this.prev, parseFloat(this.current), this.operator).toString();
+                    this.prev = null;
+                    this.operator = null;
+                }
+                this.update();
+            }
+
+            clearAll() {
+                this.current = '0';
+                this.prev = null;
+                this.operator = null;
+                this.update();
+            }
+
+            deleteLast() {
+                this.current = this.current.length > 1 ? this.current.slice(0, -1) : '0';
+                this.update();
+            }
+
+            update() {
+                this.display.textContent = this.current;
+            }
+        }
+
+        const calc = new Calculator();
+
+        window.inputNumber = n => calc.inputNumber(n);
+        window.inputDecimal = () => calc.inputDecimal();
+        window.setOperator = o => calc.setOperator(o);
+        window.calculate = () => calc.calculate();
+        window.clearAll = () => calc.clearAll();
+        window.deleteLast = () => calc.deleteLast();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Entorno
+.env
+.env.local
+
+# Dependencias
+node_modules/
+package-lock.json
+
+# Build
+dist/
+build/
+*.min.js
+*.min.css
+
+# Caché
+.cache/
+*.cache

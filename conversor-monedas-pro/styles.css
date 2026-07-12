@@ -1,0 +1,695 @@
+/* styles.css */
+:root {
+  --font-size-base: 1rem;
+  /* Cambiado a rem para mayor flexibilidad */
+}
+
+/* Reset de márgenes y padding */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.paleta {
+  display: none;
+}
+
+html {
+  font-size: var(--font-size-base);
+}
+
+/* Tema claro (por defecto) */
+body {
+  /* Fondo más claro */
+  background-color: #313647;
+  color: #333;
+  /* Color del texto */
+  margin: 0 auto;
+  /* Centrado */
+  line-height: 1.5;
+  /* Mejora la legibilidad */
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+
+header {
+  background-color: #313647;
+  /* Fondo oscuro */
+  /*background-color: #E2E8F0;*/
+  /* Fondo claro */
+  padding: 0;
+  /* Espaciado interno */
+  display: flex;
+  /* Elementos en línea */
+  justify-content: space-between;
+  /* Alinear los elementos en la línea horizontal */
+  align-items: center;
+  /* Alinear los elementos en la línea vertical */
+}
+
+header h1 {
+  margin: 0;
+  /* Eliminar márgenes por defecto */
+  font-size: 1.5rem;
+  /* Tamaño de fuente más grande */
+  font-weight: bold;
+  /* Negrita para el título */
+}
+
+hr {
+  border-color: white;
+}
+
+/* Contenedores */
+.contenedor-dataTime {
+  /* background-color: #A3B087; */
+  background-color: white;
+}
+
+.date-time {
+  width: 100%;
+  display: flex;
+  /* Elementos en línea */
+  justify-content: center;
+  /* Centrado horizontal */
+  align-items: center;
+  gap: 12px;
+  /* Espaciado entre elementos */
+  color: black;
+  /* Texto oscuro */
+  margin: 2%;
+}
+
+.day-glow{
+text-shadow:0 0 6px rgba(255,193,7,0.8),0 0 12px rgba(255,193,7,0.6);
+}
+
+
+#current-date::first-letter {
+  text-transform: uppercase;
+}
+
+.boton-convertidor {
+  padding: 3%;
+}
+
+.container {
+  /* display: flex; */
+  /* Elementos en línea */
+  flex-wrap: nowrap;
+  /* Asegura que los elementos se envuelvan */
+  justify-content: center;
+  /* Centrado horizontal */
+  gap: 0px;
+  /* Espaciado entre elementos */
+  /* margin-top: 1rem; */
+  /* Espaciado superior */
+  /* margin-bottom: 1rem; */
+  /* Espaciado inferior */
+  padding: 1rem;
+  /* Espaciado interno */
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+  /* background-color: #A3B087; */
+  background-color: white;
+  /* Fondo claro por defecto */
+  margin: 0 auto;
+  /* Centrado */
+  max-width: 100%;
+  /* Ancho máximo */
+}
+
+
+.container-conversor,
+.container-bolivarDolarPesos,
+.container-valorDollar,
+.container-factores {
+  width: 100%;
+  /* Espaciado proporcional */
+  margin: 0 auto;
+  /* Espaciado interno proporcional */
+  padding: 3%;
+  /* Sombra */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  /* Fondo claro por defecto */
+  /* background-color: #FFF8D4; */
+  /* background-color: #E2E8F0; */
+  /* background: rgb(94, 240, 3); */
+  /* background-color: #F2E9E4; */
+  /* border */
+  /* border: 2px solid #ff0000; */
+}
+
+
+
+.titulo-valor {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  /* color: #2c3e50; */
+  color: white;
+  /* margin-bottom: 10px; */
+}
+
+.valor-moneda {
+  /* color: #27ae60; */
+  font-size: 26px;
+  color: #ffc107;
+  text-transform: uppercase;
+  text-shadow:0 0 6px rgba(255,193,7,0.1),0 0 12px rgba(255,193,7,0.6);
+  font-weight: bold;
+}
+
+.titulo-actualizacion {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  color: #7f8c8d;
+}
+
+.fecha-hora {
+  color: #95a5a6;
+  font-size: 16px;
+}
+
+.subtitulo {
+  font-size: 0.8em;
+  /* Tamaño de fuente más pequeño */
+  color: #000;
+  /* Color gris para un efecto disimulado */
+  opacity: 0.9;
+  /* Opacidad para un efecto más elegante */
+  padding: 3%;
+}
+
+/* Estilos de encabezado */
+hr {
+  margin: 1rem 0;
+  /* Espaciado uniforme */
+}
+
+h1 {
+  text-align: start;
+  align-items: center;
+  /* font-size: 2rem;  */
+  /* Tamaño de fuente proporcional */
+}
+
+h2 {
+  margin: 1rem 0;
+  /* Espaciado uniforme */
+}
+
+h3 {
+  margin: 1rem 0;
+  /* Espaciado uniforme */
+}
+
+h4 {
+  margin: 0;
+  /* Espaciado uniforme */
+}
+
+h5 {
+  margin: 1rem 0;
+  /* Espaciado uniforme */
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  /* Tamaño de fuente proporcional */
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos generales para los campos de entrada */
+input,
+select {
+  width: 100%;
+  /* Campos de entrada ocupan todo el ancho */
+  margin: 0.5rem 0;
+  /* Espaciado uniforme */
+  padding: 0.75rem;
+  /* Espaciado interno */
+  border: 1px solid #ccc;
+  /* Borde más suave */
+  border-radius: 5px;
+  /* Bordes redondeados */
+  transition: border-color 0.3s, box-shadow 0.3s;
+  /* Transición para el borde y sombra */
+  font-size: 1rem;
+  /* Tamaño de fuente */
+  background-color: #f9f9f9;
+  /* Color de fondo suave */
+}
+
+/* Efecto de enfoque */
+input:focus,
+select:focus {
+  border-color: #007bff;
+  /* Color del borde al enfocar */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  /* Sombra al enfocar */
+  outline: none;
+  /* Eliminar el contorno predeterminado */
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 500px) {
+
+  input,
+  select {
+    padding: 1rem;
+    /* Aumentar el espaciado interno en móviles */
+    font-size: 1.1rem;
+    /* Aumentar el tamaño de fuente en móviles */
+    border-radius: 10px;
+    /* Bordes más redondeados en móviles */
+    background-color: #e9ecef;
+    /* Color de fondo más claro en móviles */
+  }
+
+  .contenedor-dataTime {
+    flex-direction: flex;
+    padding: 2%;
+  }
+
+  .date-time {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+
+}
+
+/* Estilo para el contenedor de los campos */
+
+/* Estilo para etiquetas */
+label {
+  font-weight: bold;
+  /* Negrita para las etiquetas */
+  margin-bottom: 0.5rem;
+  /* Espaciado inferior */
+  display: block;
+  /* Asegura que la etiqueta esté en una nueva línea */
+}
+
+button {
+  width: 100%;
+  background-color: #007bff;
+  /* Color del botón */
+  color: white;
+  /* Texto del botón */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  /* Transición suave */
+}
+
+button:hover {
+  background-color: #0056b3;
+  /* Color del botón al pasar el mouse */
+  transform: translateY(-2px);
+  /* Efecto de elevación */
+}
+
+
+#result,
+#history-list {
+  border: none;
+  padding: 0.75rem;
+  /* Espaciado interno */
+  background-color: #fff;
+  color: #000;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  /* Transición para el color de fondo */
+}
+
+/* Botones */
+#theme-toggle {
+  margin: 0 auto;
+  background-color: #333;
+  /* Fondo del botón */
+  color: white;
+  /* Texto del botón */
+  border: none;
+  font-size: 1rem;
+  /* Tamaño de fuente proporcional */
+  padding: 1rem;
+  /* Espaciado interno */
+}
+
+button {
+  width: 100%;
+  background-color: #007bff;
+  /* Color del botón */
+  color: white;
+  /* Texto del botón */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  /* Transición suave */
+
+}
+
+button:hover {
+  background-color: #0056b3;
+  /* Color del botón al pasar el mouse */
+  transform: translateY(-2px);
+  /* Efecto de elevación */
+}
+
+/* Estilos adicionales */
+#history {
+  margin-top: 1rem;
+  /* Espaciado superior */
+}
+
+#history-list {
+  list-style-type: none;
+  /* Sin viñetas */
+  padding: 0;
+  /* Sin padding */
+}
+
+.estiloDolar {
+  color: green;
+  /* Cambia el color del texto */
+  font-weight: bold;
+  /* Hace el texto más grueso */
+  font-size: 1.5em;
+  /* Aumenta el tamaño de la fuente */
+}
+
+.estiloFactor {
+  color: blue;
+  /* Cambia el color del texto */
+  font-weight: bold;
+  /* Hace el texto más grueso */
+  font-size: 1.5em;
+  /* Aumenta el tamaño de la fuente */
+}
+
+footer {
+  /* Alineación a la derecha */
+  text-align: right;
+  /* Mejora la legibilidad */
+  line-height: 1;
+  /* Fondo oscuro */
+  background-color: #313647;
+  /* Texto claro */
+  color: #ffffff;
+  /* Espaciado interno */
+  padding: 20px;
+  /* Sombra suave para dar profundidad */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+  /* Espaciado en la parte superior */
+  /* margin-top: 20px; */
+}
+
+/* Estilo para el párrafo */
+footer p {
+  margin: 0;
+  /* Eliminar márgenes por defecto */
+  font-size: 0.9rem;
+  /* Tamaño de fuente más pequeño */
+}
+
+/* Estilo para el encabezado */
+footer h5 {
+  margin: 0.5rem 0;
+  /* Espaciado superior e inferior */
+  font-size: 1rem;
+  /* Tamaño de fuente */
+  font-weight: 600;
+  /* Negrita */
+}
+
+/* Estilo para el enlace */
+footer a {
+  color: #00bfff;
+  /* Color del enlace */
+  text-decoration: none;
+  /* Sin subrayado */
+  transition: color 0.3s;
+  /* Transición suave para el color */
+}
+
+/* Efecto al pasar el ratón sobre el enlace */
+footer a:hover {
+  color: #ffcc00;
+  /* Color del enlace al pasar el ratón */
+  text-decoration: underline;
+  /* Subrayar al pasar el ratón */
+}
+
+/* Estilos de modo oscuro para botones */
+body.dark-mode button {
+  background-color: #3a3a3a;
+  /* Color del botón en modo oscuro */
+  color: #ffffff;
+}
+
+body.dark-mode button:hover {
+  background-color: #4a4a4a;
+  /* Color del botón al pasar el mouse en modo oscuro */
+}
+
+#resultado,
+#resultadoBcv {
+  font-weight: bold;
+  /* Negrita */
+}
+
+table {
+  width: 100%;
+  /* Tabla ocupa todo el ancho */
+  border-collapse: collapse;
+  /* Colapsar bordes */
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  /* Bordes suaves */
+  padding: 0.5rem;
+  /* Espaciado interno */
+  text-align: center;
+  /* Alineación centrada */
+}
+
+th {
+  background-color: #f2f2f2;
+  /* Fondo de encabezado */
+}
+
+.gradient-info {
+  background: linear-gradient(45deg, #17a2b8, #0dcaf0);
+  /* Colores de info */
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: start;
+}
+
+.gradient-success {
+  background: linear-gradient(45deg, #28a745, #85e89e);
+  /* Colores de success */
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: start;
+}
+
+/* Estilos PRO para Factores de Conversión */
+.container-factores {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.factor-card {
+    border-radius: 20px !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.factor-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.25) !important;
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 50%, #ff5722 100%) !important;
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #0dcaf0 0%, #00b4d8 50%, #0077b6 100%) !important;
+}
+
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+/* ⭐ CORRECCIONES PARA VISIBILIDAD DE TÍTULOS ⭐ */
+.card-header {
+    z-index: 10 !important;
+    position: relative !important;
+}
+
+.card-header .alert {
+    position: relative !important;
+    z-index: 20 !important;
+}
+
+.card-header h5 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+    z-index: 30 !important;
+}
+
+.card-footer {
+    z-index: 10 !important;
+    position: relative !important;
+}
+
+.card-footer small {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+}
+
+.card-footer .text-muted {
+    color: #cccccc !important;
+}
+
+/* Asegurar que los títulos de factores sean visibles */
+.factor-title {
+    position: relative !important;
+    z-index: 15 !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7) !important;
+    -webkit-text-stroke: 0.5px rgba(255,255,255,0.3);
+}
+
+.loading-placeholder {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.value-placeholder.show {
+    animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.98); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Media query para pantallas de 1000px o menos */
+@media only screen and (max-width: 1000px) {
+  html {
+    font-size: calc(var(--font-size-base) * 0.9);
+    /* Ajuste de tamaño de fuente */
+
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    /* Ajuste para pantallas pequeñas */
+  }
+
+  .container {
+    flex-direction: column;
+    /* Apilado vertical */
+    padding: 0.3rem;
+    /* Sin padding */
+    margin: 0;
+    /* Sin margen */
+  }
+
+  body {
+    margin: 0 auto;
+  }
+
+}
+
+/* Media query para pantallas de 500px o menos */
+@media only screen and (max-width: 500px) {
+  html {
+    font-size: calc(var(--font-size-base) * 0.8);
+    /* Ajuste de tamaño de fuente */
+  }
+
+  body {
+    margin: 0 auto;
+  }
+
+}
+
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success {
+    border-left: 4px solid #28a745;
+}
+
+.toast-error {
+    border-left: 4px solid #dc3545;
+}
+
+.toast-info {
+    border-left: 4px solid #17a2b8;
+}
+
+/* Selectores de moneda en conversor */
+#currency-form select {
+    display: block !important;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#currency-form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
