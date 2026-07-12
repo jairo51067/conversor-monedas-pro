@@ -1,19 +1,17 @@
-// Manejo del widget de clima
+// Manejo del widget de clima mejorado
 import { CONFIG } from '../config.js';
 
 export class Weather {
     constructor() {
         this.initialized = false;
+        this.defaultCity = 'Caracas'; // Ciudad por defecto
     }
 
-    /**
-     * Inicializa el widget de clima
-     */
     async init() {
         if (this.initialized) return;
 
         if (!navigator.geolocation) {
-            this.showError('Geolocalización no soportada');
+            this.loadDefaultWeather();
             return;
         }
 
@@ -22,23 +20,33 @@ export class Weather {
             await this.getWeather(position.coords.latitude, position.coords.longitude);
             this.initialized = true;
         } catch (error) {
-            console.error('Error initializing weather:', error);
-            this.showError('No se pudo obtener el clima');
+            console.warn('⚠️ Geolocation denied, loading default weather');
+            this.loadDefaultWeather();
         }
     }
 
     /**
-     * Obtiene posición actual
+     * Carga clima de ciudad por defecto
      */
+    async loadDefaultWeather() {
+        try {
+            // Coordenadas de Caracas, Venezuela
+            await this.getWeather(10.4806, -66.9036);
+            this.initialized = true;
+        } catch (error) {
+            this.showError('Clima no disponible');
+        }
+    }
+
     getCurrentPosition() {
         return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                timeout: 5000,
+                enableHighAccuracy: false
+            });
         });
     }
 
-    /**
-     * Obtiene datos del clima
-     */
     async getWeather(lat, lon) {
         try {
             const url = `${CONFIG.APIs.WEATHER}?latitude=${lat}&longitude=${lon}&current_weather=true&daily=sunrise,sunset&timezone=auto`;
@@ -47,14 +55,11 @@ export class Weather {
 
             this.displayWeather(data);
         } catch (error) {
-            console.error('Error fetching weather:', error);
+            console.error('❌ Error fetching weather:', error);
             this.showError('Error al obtener el clima');
         }
     }
 
-    /**
-     * Muestra datos del clima
-     */
     displayWeather(data) {
         const temp = Math.round(data.current_weather.temperature);
         const weatherCode = data.current_weather.weathercode;
@@ -68,9 +73,6 @@ export class Weather {
         this.checkDayOrNight(data.daily.sunrise[0], data.daily.sunset[0]);
     }
 
-    /**
-     * Verifica si es día o noche
-     */
     checkDayOrNight(sunrise, sunset) {
         const now = new Date();
         const rise = new Date(sunrise);
@@ -88,32 +90,26 @@ export class Weather {
         }
     }
 
-    /**
-     * Obtiene descripción del clima
-     */
     getDescription(code) {
         const weatherCodes = {
-            0: 'Cielo despejado',
-            1: 'Mayormente despejado',
-            2: 'Parcialmente nublado',
-            3: 'Nublado',
-            45: 'Niebla',
-            48: 'Niebla con escarcha',
-            51: 'Llovizna ligera',
-            61: 'Lluvia ligera',
-            63: 'Lluvia moderada',
-            65: 'Lluvia fuerte',
-            71: 'Nieve ligera',
-            80: 'Chubascos',
-            95: 'Tormenta'
+            0: '☀️ Cielo despejado',
+            1: '🌤️ Mayormente despejado',
+            2: '⛅ Parcialmente nublado',
+            3: '️ Nublado',
+            45: '🌫️ Niebla',
+            48: '🌫️ Niebla con escarcha',
+            51: '️ Llovizna ligera',
+            61: '🌧️ Lluvia ligera',
+            63: '🌧️ Lluvia moderada',
+            65: '🌧️ Lluvia fuerte',
+            71: '🌨️ Nieve ligera',
+            80: '🌦️ Chubascos',
+            95: '⛈️ Tormenta'
         };
 
-        return weatherCodes[code] || 'Clima desconocido';
+        return weatherCodes[code] || '🌡️ Clima desconocido';
     }
 
-    /**
-     * Muestra error
-     */
     showError(message) {
         const descElement = document.getElementById('weather-description');
         if (descElement) {

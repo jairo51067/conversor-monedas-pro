@@ -48,48 +48,48 @@
 
 
 <body>
-    <header class="text-white p-3 mb-1 bg-dark rounded-2 shadow-lg">
-        <div class="px-3 pt-3">
-            <div class="d-flex align-items-start justify-content-between">
-                <!-- Menú hamburguesa a la izquierda -->
-                <div class="dropdown me-3">
-                    <button class="btn btn-warning btn-sm dropdown-toggle p-1 text-dark shadow-sm" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bars fs-5"></i>
-                    </button>
-                    <ul class="dropdown-menu bg-dark border-warning shadow-lg">
-                        <!-- CALCULADORA MODERNA (EMBEDDED) -->
-                        <li>
-                            <a class="dropdown-item text-white fw-bold" href="calculadora.html"
-                                onclick="openCalculator()">
-                                <i class="fas fa-calculator me-2 text-warning"></i>Abrir Calculadora
-                            </a>
-                        </li>
-                        <!-- CALENDARIO GOOGLE -->
-                        <!-- <li>
-                            <a class="dropdown-item text-white fw-bold" href="https://calendar.google.com/calendar/u/0/r" target="_blank">
-                                <i class="fas fa-calendar-alt me-2 text-success"></i>Abrir Calendario
-                            </a>
-                        </li> -->
-                        <li>
-                            <hr class="dropdown-divider bg-white opacity-25">
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-muted" href="#">
-                                <i class="fas fa-info-circle me-2"></i>Acerca de
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+  <header class="text-white p-3 mb-1 bg-dark rounded-2 shadow-lg">
+    <div class="px-3 pt-3">
+        <div class="d-flex align-items-start justify-content-between">
+            <!-- Menú hamburguesa a la izquierda -->
+            <div class="dropdown me-3">
+                <button class="btn btn-warning btn-sm dropdown-toggle p-1 text-dark shadow-sm" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars fs-5"></i>
+                </button>
+                <ul class="dropdown-menu bg-dark border-warning shadow-lg">
+                    <li>
+                        <a class="dropdown-item text-white fw-bold" href="calculadora.html">
+                            <i class="fas fa-calculator me-2 text-warning"></i>Abrir Calculadora
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider bg-white opacity-25">
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-muted" href="#">
+                            <i class="fas fa-info-circle me-2"></i>Acerca de
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <!-- Título y subtítulo -->
-                <div class="flex-grow-1 ms-2">
-                    <h1 class="text-warning mb-1 fs-3 fw-bold">💰 Conversor de Monedas</h1>
-                    <p class="mb-0 small text-light opacity-90">Valor del Dólar - Conversiones en tiempo real</p>
-                </div>
+            <!-- Título y subtítulo -->
+            <div class="flex-grow-1 ms-2">
+                <h1 class="text-warning mb-1 fs-3 fw-bold">💰 Conversor de Monedas</h1>
+                <p class="mb-0 small text-light opacity-90">Valor del Dólar - Conversiones en tiempo real</p>
+            </div>
+
+            <!-- Toggle Switch de Tema Profesional -->
+            <div class="theme-toggle-container">
+                <button id="theme-toggle" class="theme-toggle" title="Cambiar tema">
+                    <i class="fas fa-moon theme-toggle-icon"></i>
+                    <span class="theme-toggle-label">Modo Oscuro</span>
+                </button>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
     <!-- TODO Fecha y Hora -->
     <div class="card shadow-sm border-0 rounded-2 p-3 mb-1 bg-dark" style="max-width:1020px;">
@@ -481,8 +481,8 @@
         <p><a href="mailto:jairo.cardenas.dev@gmail.com"
                 class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">jairo.cardenas.dev@gmail.com</a>
         </p>
-        <h5 class="paleta"><a href="https://colorhunt.co/palette/313647435663a3b087fff8d4" target="_blank">paleta de
-                colores</a></h5>
+        <!-- <h5 class="paleta"><a href="https://colorhunt.co/palette/313647435663a3b087fff8d4" target="_blank">paleta de
+                colores</a></h5> -->
     </footer>
 
     <!-- JS de Alertify -->
