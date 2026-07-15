@@ -4,46 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Calculadora profesional integrada">
+    <meta name="description" content="Calculadora profesional con experiencia táctil premium">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <title>Calculadora Pro</title>
 
     <style>
-        /* ===== VARIABLES (Heredadas de la app principal para consistencia) ===== */
+        /* ===== VARIABLES (Sincronizadas con la app principal) ===== */
         :root {
-            --bg-app: #F8FAFC;
+            --bg-app: #F0F4F8;
             --bg-calc: #FFFFFF;
-            --text-primary: #1E293B;
+            --text-primary: #0F172A;
             --text-secondary: #64748B;
             --btn-num: #F1F5F9;
-            --btn-num-text: #1E293B;
+            --btn-num-text: #0F172A;
             --btn-op: #E0E7FF;
             --btn-op-text: #4F46E5;
             --btn-action: #FEE2E2;
             --btn-action-text: #EF4444;
             --btn-equal: #4F46E5;
             --btn-equal-text: #FFFFFF;
-            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-            --radius: 20px;
+            --shadow-calc: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            --shadow-btn: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-btn-active: inset 0 2px 4px rgba(0, 0, 0, 0.15);
         }
 
         [data-theme="dark"] {
-            --bg-app: #0F172A;
-            --bg-calc: #1E293B;
-            --text-primary: #F1F5F9;
+            --bg-app: #020617;
+            --bg-calc: #0F172A;
+            --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
-            --btn-num: #334155;
-            --btn-num-text: #F1F5F9;
-            --btn-op: #312E81;
+            --btn-num: #1E293B;
+            --btn-num-text: #F8FAFC;
+            --btn-op: #1E1B4B;
             --btn-op-text: #818CF8;
             --btn-action: #451A1A;
             --btn-action-text: #F87171;
             --btn-equal: #6366F1;
             --btn-equal-text: #FFFFFF;
-            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            --shadow-calc: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            --shadow-btn: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-btn-active: inset 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
-        /* ===== BASE ===== */
+        /* ===== BASE Y FONDO ANIMADO ===== */
         * {
             margin: 0;
             padding: 0;
@@ -61,7 +64,26 @@
             align-items: center;
             justify-content: center;
             padding: 1rem;
-            transition: background 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fondo animado sutil para dar profundidad */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.08) 0%, transparent 50%);
+            animation: rotateBg 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* ===== BOTÓN VOLVER ===== */
@@ -80,89 +102,125 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-btn);
             z-index: 100;
         }
 
         .back-btn:hover {
             background: var(--btn-action);
             color: var(--btn-action-text);
-            transform: translateX(-3px);
+            transform: translateX(-3px) scale(1.05);
+        }
+
+        .back-btn:active {
+            transform: translateX(-3px) scale(0.95);
         }
 
         /* ===== CALCULADORA ===== */
         .calculator {
             width: 100%;
-            max-width: 380px;
+            max-width: 360px;
             background: var(--bg-calc);
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--btn-num);
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: var(--shadow-calc);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 16px; /* ESPACIADO CORREGIDO: Cohesión entre pantalla y teclas */
         }
 
         /* ===== PANTALLA ===== */
         .display-container {
             background: var(--btn-num);
-            border-radius: 16px;
-            padding: 24px 20px;
-            margin-bottom: 24px;
+            border-radius: 20px;
+            padding: 20px;
             text-align: right;
-            min-height: 120px;
+            min-height: 110px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             word-wrap: break-word;
             word-break: break-all;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .history-display {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-secondary);
             font-weight: 500;
             min-height: 1.5rem;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             opacity: 0.8;
+            transition: opacity 0.2s ease;
         }
 
         .main-display {
-            font-size: 3rem;
+            font-size: 3.2rem;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.1;
-            letter-spacing: -0.02em;
-            transition: font-size 0.2s ease;
+            letter-spacing: -0.03em;
+            transition: all 0.2s ease;
+            /* Efecto de brillo sutil en los números */
+            text-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
         }
 
-        /* Ajuste dinámico de fuente para números largos */
-        .main-display.long { font-size: 2.2rem; }
+        [data-theme="dark"] .main-display {
+            text-shadow: 0 0 25px rgba(129, 140, 248, 0.3);
+        }
+
+        .main-display.long { font-size: 2.4rem; }
         .main-display.very-long { font-size: 1.8rem; }
 
         /* ===== GRID DE BOTONES ===== */
         .keypad {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
+            gap: 12px;
         }
 
         .btn-calc {
-            height: 68px;
-            border-radius: 16px;
+            height: 64px;
+            border-radius: 18px;
             border: none;
             font-size: 1.4rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             user-select: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-btn);
         }
 
+        /* Efecto 3D al presionar */
         .btn-calc:active {
-            transform: scale(0.92);
+            transform: translateY(3px) scale(0.96);
+            box-shadow: var(--shadow-btn-active);
+        }
+
+        /* Efecto de onda (ripple) sutil al hacer hover */
+        .btn-calc::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+        .btn-calc:active::after {
+            width: 200%;
+            height: 200%;
+            transition: 0s;
         }
 
         /* Variantes de botones */
@@ -171,6 +229,7 @@
             color: var(--btn-num-text);
         }
         .btn-num:hover { filter: brightness(0.95); }
+        [data-theme="dark"] .btn-num:hover { filter: brightness(1.15); }
 
         .btn-op {
             background: var(--btn-op);
@@ -178,51 +237,69 @@
             font-size: 1.6rem;
         }
         .btn-op:hover { filter: brightness(0.95); }
+        [data-theme="dark"] .btn-op:hover { filter: brightness(1.15); }
 
         .btn-action {
             background: var(--btn-action);
             color: var(--btn-action-text);
+            font-weight: 700;
         }
         .btn-action:hover { filter: brightness(0.95); }
+        [data-theme="dark"] .btn-action:hover { filter: brightness(1.15); }
 
         .btn-equal {
             background: var(--btn-equal);
             color: var(--btn-equal-text);
             font-size: 1.8rem;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4);
         }
         .btn-equal:hover { 
             filter: brightness(1.1); 
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.5);
         }
-        .btn-equal:active { transform: translateY(0) scale(0.95); }
+        .btn-equal:active { 
+            transform: translateY(3px) scale(0.96); 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
 
         .span-2 { grid-column: span 2; }
 
-        /* ===== RESPONSIVE ===== */
+        /* ===== RESPONSIVE MÓVIL ===== */
         @media (max-width: 400px) {
-            .calculator { padding: 16px; border-radius: 0; height: 100vh; max-width: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
-            .display-container { margin-bottom: auto; min-height: 140px; }
+            body { padding: 0; justify-content: flex-end; }
+            .calculator { 
+                max-width: 100%; 
+                height: 100vh; 
+                border-radius: 28px 28px 0 0; 
+                padding: 24px 16px 32px 16px;
+                gap: 20px;
+            }
+            .display-container { 
+                margin-bottom: auto; /* Empuja el teclado hacia abajo */
+                min-height: 140px; 
+                border-radius: 24px;
+            }
             .keypad { gap: 10px; }
-            .btn-calc { height: 64px; border-radius: 50%; } /* Estilo circular en móvil como iOS */
-            .back-btn { top: 16px; left: 16px; }
+            .btn-calc { 
+                height: 68px; 
+                border-radius: 50%; /* Estilo circular tipo iOS en móvil */
+            }
+            .back-btn { top: 16px; left: 16px; width: 44px; height: 44px; }
         }
     </style>
 
-    <!-- Script para sincronizar tema con la app principal -->
     <script>
         // Sincronizar tema al cargar
         const savedTheme = localStorage.getItem('app-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
         
-        // Escuchar cambios de tema desde la app principal (si están en la misma ventana/pestaña)
         window.addEventListener('storage', (e) => {
             if (e.key === 'app-theme') {
                 document.documentElement.setAttribute('data-theme', e.newValue);
             }
         });
     </script>
-
 </head>
 
 <body>
@@ -238,35 +315,30 @@
         </div>
 
         <div class="keypad">
-            <!-- Fila 1 -->
-            <button class="btn-calc btn-action" onclick="calc.clearAll()">AC</button>
-            <button class="btn-calc btn-action" onclick="calc.toggleSign()">+/-</button>
-            <button class="btn-calc btn-action" onclick="calc.percentage()">%</button>
+            <button class="btn-calc btn-action" onclick="calc.action('clear')">AC</button>
+            <button class="btn-calc btn-action" onclick="calc.action('sign')">+/-</button>
+            <button class="btn-calc btn-action" onclick="calc.action('percent')">%</button>
             <button class="btn-calc btn-op" onclick="calc.setOperator('÷')">÷</button>
 
-            <!-- Fila 2 -->
             <button class="btn-calc btn-num" onclick="calc.inputNumber('7')">7</button>
             <button class="btn-calc btn-num" onclick="calc.inputNumber('8')">8</button>
             <button class="btn-calc btn-num" onclick="calc.inputNumber('9')">9</button>
             <button class="btn-calc btn-op" onclick="calc.setOperator('×')">×</button>
 
-            <!-- Fila 3 -->
             <button class="btn-calc btn-num" onclick="calc.inputNumber('4')">4</button>
             <button class="btn-calc btn-num" onclick="calc.inputNumber('5')">5</button>
             <button class="btn-calc btn-num" onclick="calc.inputNumber('6')">6</button>
             <button class="btn-calc btn-op" onclick="calc.setOperator('-')">−</button>
 
-            <!-- Fila 4 -->
             <button class="btn-calc btn-num" onclick="calc.inputNumber('1')">1</button>
             <button class="btn-calc btn-num" onclick="calc.inputNumber('2')">2</button>
             <button class="btn-calc btn-num" onclick="calc.inputNumber('3')">3</button>
             <button class="btn-calc btn-op" onclick="calc.setOperator('+')">+</button>
 
-            <!-- Fila 5 -->
             <button class="btn-calc btn-num span-2" onclick="calc.inputNumber('0')">0</button>
             <button class="btn-calc btn-num" onclick="calc.inputDecimal()">.</button>
             <button class="btn-calc btn-equal" onclick="calc.calculate()">=</button>
-        </div>
+        </div
     </div>
 
     <script>
@@ -277,7 +349,11 @@
                 this.clearAll();
             }
 
-            // Formatear número con comas (ej: 1,234,567.89)
+            // Retroalimentación háptica (vibración suave en móviles)
+            haptic() {
+                if (navigator.vibrate) navigator.vibrate(15);
+            }
+
             formatNumber(num) {
                 if (num === 'Error') return 'Error';
                 const parts = num.toString().split('.');
@@ -288,14 +364,9 @@
             updateDisplay() {
                 this.mainDisplay.textContent = this.formatNumber(this.current);
                 
-                // Ajustar tamaño de fuente si el número es muy largo
                 this.mainDisplay.classList.remove('long', 'very-long');
-                if (this.current.toString().length > 9) {
-                    this.mainDisplay.classList.add('long');
-                }
-                if (this.current.toString().length > 12) {
-                    this.mainDisplay.classList.add('very-long');
-                }
+                if (this.current.toString().length > 9) this.mainDisplay.classList.add('long');
+                if (this.current.toString().length > 12) this.mainDisplay.classList.add('very-long');
 
                 if (this.prev !== null && this.operator) {
                     this.historyDisplay.textContent = `${this.formatNumber(this.prev)} ${this.operator}`;
@@ -305,16 +376,15 @@
             }
 
             inputNumber(n) {
+                this.haptic();
                 if (this.current === 'Error') this.clearAll();
                 if (this.waiting) {
                     this.current = n;
                     this.waiting = false;
                 } else {
-                    // Evitar múltiples ceros al inicio
                     if (this.current === '0' && n !== '0') {
                         this.current = n;
                     } else if (this.current !== '0') {
-                        // Limitar longitud para evitar desbordamiento
                         if (this.current.replace(/[^0-9]/g, '').length < 15) {
                             this.current += n;
                         }
@@ -324,6 +394,7 @@
             }
 
             inputDecimal() {
+                this.haptic();
                 if (this.current === 'Error') this.clearAll();
                 if (this.waiting) {
                     this.current = '0.';
@@ -335,6 +406,7 @@
             }
 
             setOperator(op) {
+                this.haptic();
                 if (this.current === 'Error') return;
                 const value = parseFloat(this.current);
 
@@ -360,11 +432,11 @@
                         result = a / b; 
                         break;
                 }
-                // Redondear para evitar errores de punto flotante de JS (ej: 0.1 + 0.2)
                 return Math.round(result * 1000000000) / 1000000000;
             }
 
             calculate() {
+                this.haptic();
                 if (this.current === 'Error' || !this.operator || this.prev === null) return;
                 
                 const value = parseFloat(this.current);
@@ -377,6 +449,13 @@
                 this.updateDisplay();
             }
 
+            action(type) {
+                this.haptic();
+                if (type === 'clear') this.clearAll();
+                if (type === 'sign') this.toggleSign();
+                if (type === 'percent') this.percentage();
+            }
+
             clearAll() {
                 this.current = '0';
                 this.prev = null;
@@ -386,6 +465,7 @@
             }
 
             deleteLast() {
+                this.haptic();
                 if (this.current === 'Error' || this.waiting) {
                     this.clearAll();
                     return;
@@ -409,10 +489,8 @@
 
         const calc = new Calculator();
 
-        // ===== SOPORTE DE TECLADO (PRO FEATURE) =====
+        // SOPORTE DE TECLADO
         document.addEventListener('keydown', (e) => {
-            e.preventDefault(); // Evitar scroll o acciones por defecto
-            
             if (e.key >= '0' && e.key <= '9') calc.inputNumber(e.key);
             if (e.key === '.') calc.inputDecimal();
             if (e.key === '+') calc.setOperator('+');
