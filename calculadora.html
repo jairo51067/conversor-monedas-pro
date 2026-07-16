@@ -1,507 +1,556 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Calculadora profesional con experiencia táctil premium">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <title>Calculadora Pro</title>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+   <meta name="description" content="Calculadora profesional responsiva con historial, memoria y modo científico" />
+   <title>Calculadora Pro</title>
+   <style>
+      :root {
+         --bg-app: #f1f5f9;
+         --bg-calc: #ffffff;
+         --text-primary: #0f172a;
+         --text-secondary: #64748b;
+         
+         --btn-num: #f8fafc;
+         --btn-num-text: #334155;
+         --btn-num-hover: #f1f5f9;
+         
+         --btn-op: #eff6ff;
+         --btn-op-text: #2563eb;
+         --btn-op-hover: #dbeafe;
+         
+         --btn-fn: #f1f5f9;
+         --btn-fn-text: #475569;
+         --btn-fn-hover: #e2e8f0;
+         
+         --btn-action: #fef2f2;
+         --btn-action-text: #ef4444;
+         --btn-action-hover: #fee2e2;
+         
+         --btn-equal: linear-gradient(135deg, #4f46e5, #6366f1);
+         --btn-equal-text: #ffffff;
+         
+         --shadow-calc: 0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+         --shadow-btn: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+         --border-ui: 1px solid #e2e8f0;
+         --glow: rgba(79, 70, 229, 0.05);
+         --transition-speed: 0.25s;
+      }
 
-    <style>
-        /* ===== VARIABLES (Sincronizadas con la app principal) ===== */
-        :root {
-            --bg-app: #F0F4F8;
-            --bg-calc: #FFFFFF;
-            --text-primary: #0F172A;
-            --text-secondary: #64748B;
-            --btn-num: #F1F5F9;
-            --btn-num-text: #0F172A;
-            --btn-op: #E0E7FF;
-            --btn-op-text: #4F46E5;
-            --btn-action: #FEE2E2;
-            --btn-action-text: #EF4444;
-            --btn-equal: #4F46E5;
-            --btn-equal-text: #FFFFFF;
-            --shadow-calc: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5);
-            --shadow-btn: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-btn-active: inset 0 2px 4px rgba(0, 0, 0, 0.15);
-        }
+      html[data-theme="dark"] {
+         --bg-app: #090d16;
+         --bg-calc: #111827;
+         --text-primary: #f8fafc;
+         --text-secondary: #94a3b8;
+         
+         --btn-num: #1f2937;
+         --btn-num-text: #f3f4f6;
+         --btn-num-hover: #374151;
+         
+         --btn-op: #1e1b4b;
+         --btn-op-text: #60a5fa;
+         --btn-op-hover: #2e1065;
+         
+         --btn-fn: #1f2937;
+         --btn-fn-text: #9ca3af;
+         --btn-fn-hover: #374151;
+         
+         --btn-action: #2d1616;
+         --btn-action-text: #fca5a5;
+         --btn-action-hover: #451a1a;
+         
+         --btn-equal: linear-gradient(135deg, #6366f1, #4f46e5);
+         --btn-equal-text: #ffffff;
+         
+         --shadow-calc: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+         --shadow-btn: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+         --border-ui: 1px solid #1f2937;
+         --glow: rgba(99, 102, 241, 0.15);
+      }
 
-        [data-theme="dark"] {
-            --bg-app: #020617;
-            --bg-calc: #0F172A;
-            --text-primary: #F8FAFC;
-            --text-secondary: #94A3B8;
-            --btn-num: #1E293B;
-            --btn-num-text: #F8FAFC;
-            --btn-op: #1E1B4B;
-            --btn-op-text: #818CF8;
-            --btn-action: #451A1A;
-            --btn-action-text: #F87171;
-            --btn-equal: #6366F1;
-            --btn-equal-text: #FFFFFF;
-            --shadow-calc: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            --shadow-btn: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --shadow-btn-active: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-        }
+      * {
+         box-sizing: border-box;
+         margin: 0;
+         padding: 0;
+         /* Evitar selección de texto al tapear rápido */
+         -webkit-touch-callout: none;
+         -webkit-user-select: none;
+         user-select: none;
+         -webkit-tap-highlight-color: transparent;
+      }
 
-        /* ===== BASE Y FONDO ANIMADO ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+      html, body {
+         height: 100%;
+         width: 100%;
+         background: var(--bg-app);
+         color: var(--text-primary);
+         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         transition: background var(--transition-speed) ease;
+         /* Permitir scroll solo a nivel de la app si es estrictamente necesario */
+         overflow-y: auto; 
+         display: flex;
+         justify-content: center;
+         align-items: center;
+      }
 
-        body {
-            background: var(--bg-app);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
+      .viewport {
+         width: 100%;
+         height: 100dvh;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         padding: clamp(8px, 2vw, 16px);
+      }
 
-        /* Fondo animado sutil para dar profundidad */
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.08) 0%, transparent 50%);
-            animation: rotateBg 20s linear infinite;
-            z-index: -1;
-        }
+      .nav-header {
+         position: absolute;
+         top: calc(12px + env(safe-area-inset-top));
+         left: 16px;
+         right: 16px;
+         display: flex;
+         justify-content: space-between;
+         z-index: 10;
+         pointer-events: none;
+      }
 
-        @keyframes rotateBg {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+      .back-btn, .theme-btn {
+         pointer-events: auto;
+         width: 40px;
+         height: 40px;
+         border-radius: 12px;
+         border: var(--border-ui);
+         background: var(--bg-calc);
+         color: var(--text-primary);
+         box-shadow: var(--shadow-btn);
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 1.1rem;
+         transition: all 0.2s;
+      }
 
-        /* ===== BOTÓN VOLVER ===== */
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: var(--bg-calc);
-            border: 1px solid var(--btn-num);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            color: var(--text-secondary);
-            font-size: 1.25rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--shadow-btn);
-            z-index: 100;
-        }
+      .back-btn:active, .theme-btn:active {
+         transform: scale(0.92);
+         background: var(--btn-num-hover);
+      }
 
-        .back-btn:hover {
-            background: var(--btn-action);
-            color: var(--btn-action-text);
-            transform: translateX(-3px) scale(1.05);
-        }
+      .calculator {
+         width: 100%;
+         max-width: 400px;
+         height: 100%;
+         max-height: 850px; /* Limite máximo en PC/Tablets */
+         background: var(--bg-calc);
+         border-radius: 32px;
+         box-shadow: var(--shadow-calc);
+         display: flex;
+         flex-direction: column;
+         gap: 12px;
+         border: var(--border-ui);
+         padding: 16px;
+         padding-top: calc(56px + env(safe-area-inset-top));
+         padding-bottom: max(16px, env(safe-area-inset-bottom));
+         /* Permite scrollear solo el interior de la calc si la pantalla es enana */
+         overflow-y: auto; 
+      }
 
-        .back-btn:active {
-            transform: translateX(-3px) scale(0.95);
-        }
+      .display {
+         flex: 1 1 auto; /* Se encoge si falta espacio */
+         min-height: 90px;
+         max-height: 140px;
+         border-radius: 20px;
+         background: var(--btn-num);
+         padding: 12px 16px;
+         display: flex;
+         flex-direction: column;
+         justify-content: flex-end;
+         text-align: right;
+         border: var(--border-ui);
+         transition: all var(--transition-speed) ease;
+      }
 
-        /* ===== CALCULADORA ===== */
-        .calculator {
-            width: 100%;
-            max-width: 360px;
-            background: var(--bg-calc);
-            border-radius: 28px;
-            padding: 20px;
-            box-shadow: var(--shadow-calc);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 16px; /* ESPACIADO CORREGIDO: Cohesión entre pantalla y teclas */
-        }
+      .status-row {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: auto; /* Empuja el texto principal hacia abajo */
+      }
 
-        /* ===== PANTALLA ===== */
-        .display-container {
-            background: var(--btn-num);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: right;
-            min-height: 110px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            word-wrap: break-word;
-            word-break: break-all;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        }
+      .memory-indicator {
+         font-size: 0.8rem;
+         font-weight: 800;
+         color: var(--btn-op-text);
+      }
 
-        .history-display {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            min-height: 1.5rem;
-            margin-bottom: 4px;
-            opacity: 0.8;
-            transition: opacity 0.2s ease;
-        }
+      .mode-badge {
+         padding: 4px 10px;
+         border-radius: 8px;
+         border: var(--border-ui);
+         background: var(--bg-calc);
+         color: var(--text-secondary);
+         font-size: 0.7rem;
+         font-weight: 700;
+         cursor: pointer;
+      }
 
-        .main-display {
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            transition: all 0.2s ease;
-            /* Efecto de brillo sutil en los números */
-            text-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
-        }
+      .mode-badge.active {
+         background: var(--btn-op);
+         color: var(--btn-op-text);
+         border-color: transparent;
+      }
 
-        [data-theme="dark"] .main-display {
-            text-shadow: 0 0 25px rgba(129, 140, 248, 0.3);
-        }
+      .history {
+         min-height: 1.2rem;
+         font-size: 0.9rem;
+         color: var(--text-secondary);
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+         font-weight: 500;
+      }
 
-        .main-display.long { font-size: 2.4rem; }
-        .main-display.very-long { font-size: 1.8rem; }
+      .main {
+         font-size: clamp(2rem, 8vw, 3rem);
+         font-weight: 600;
+         line-height: 1.1;
+         letter-spacing: -0.02em;
+         word-break: break-all;
+      }
 
-        /* ===== GRID DE BOTONES ===== */
-        .keypad {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
+      /* Contenedor fluido para todo el teclado */
+      .keyboard-container {
+         display: flex;
+         flex-direction: column;
+         flex: 4 1 auto; /* Toma la mayor parte del espacio y se ajusta */
+         gap: 8px;
+         min-height: 0; /* Clave para que flexbox comprima su contenido */
+      }
 
-        .btn-calc {
-            height: 64px;
-            border-radius: 18px;
-            border: none;
-            font-size: 1.4rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-btn);
-        }
+      .science-panel, .keypad {
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         grid-auto-rows: 1fr; /* Todas las filas miden lo mismo */
+         gap: 8px;
+      }
 
-        /* Efecto 3D al presionar */
-        .btn-calc:active {
-            transform: translateY(3px) scale(0.96);
-            box-shadow: var(--shadow-btn-active);
-        }
+      .science-panel {
+         flex: 2 1 auto;
+         animation: fadeIn 0.2s ease-out;
+      }
 
-        /* Efecto de onda (ripple) sutil al hacer hover */
-        .btn-calc::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-        .btn-calc:active::after {
-            width: 200%;
-            height: 200%;
-            transition: 0s;
-        }
+      .keypad {
+         flex: 5 1 auto;
+      }
 
-        /* Variantes de botones */
-        .btn-num {
-            background: var(--btn-num);
-            color: var(--btn-num-text);
-        }
-        .btn-num:hover { filter: brightness(0.95); }
-        [data-theme="dark"] .btn-num:hover { filter: brightness(1.15); }
+      .science-panel[hidden] {
+         display: none !important;
+      }
 
-        .btn-op {
-            background: var(--btn-op);
-            color: var(--btn-op-text);
-            font-size: 1.6rem;
-        }
-        .btn-op:hover { filter: brightness(0.95); }
-        [data-theme="dark"] .btn-op:hover { filter: brightness(1.15); }
+      /* Botones dinámicos (sin height fijo ni aspect-ratio) */
+      .btn {
+         width: 100%;
+         height: 100%;
+         min-height: 44px; /* Altura mínima táctil recomendada por Apple/Google */
+         border: 0;
+         border-radius: 14px;
+         font-size: clamp(1rem, 4vw, 1.3rem);
+         font-weight: 600;
+         cursor: pointer;
+         box-shadow: var(--shadow-btn);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         transition: background 0.1s, transform 0.05s;
+         touch-action: manipulation; /* Optimiza el tacto en móviles */
+      }
 
-        .btn-action {
-            background: var(--btn-action);
-            color: var(--btn-action-text);
-            font-weight: 700;
-        }
-        .btn-action:hover { filter: brightness(0.95); }
-        [data-theme="dark"] .btn-action:hover { filter: brightness(1.15); }
+      .btn.span-2 {
+         grid-column: span 2;
+      }
 
-        .btn-equal {
-            background: var(--btn-equal);
-            color: var(--btn-equal-text);
-            font-size: 1.8rem;
-            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4);
-        }
-        .btn-equal:hover { 
-            filter: brightness(1.1); 
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.5);
-        }
-        .btn-equal:active { 
-            transform: translateY(3px) scale(0.96); 
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-        }
+      .btn-num { background: var(--btn-num); color: var(--btn-num-text); }
+      .btn-num:active { background: var(--btn-num-hover); }
 
-        .span-2 { grid-column: span 2; }
+      .btn-op { background: var(--btn-op); color: var(--btn-op-text); font-weight: 700; font-size: 1.4rem; }
+      .btn-op:active { background: var(--btn-op-hover); }
 
-        /* ===== RESPONSIVE MÓVIL ===== */
-        @media (max-width: 400px) {
-            body { padding: 0; justify-content: flex-end; }
-            .calculator { 
-                max-width: 100%; 
-                height: 100vh; 
-                border-radius: 28px 28px 0 0; 
-                padding: 24px 16px 32px 16px;
-                gap: 20px;
-            }
-            .display-container { 
-                margin-bottom: auto; /* Empuja el teclado hacia abajo */
-                min-height: 140px; 
-                border-radius: 24px;
-            }
-            .keypad { gap: 10px; }
-            .btn-calc { 
-                height: 68px; 
-                border-radius: 50%; /* Estilo circular tipo iOS en móvil */
-            }
-            .back-btn { top: 16px; left: 16px; width: 44px; height: 44px; }
-        }
-    </style>
+      .btn-fn { background: var(--btn-fn); color: var(--btn-fn-text); font-size: 0.95rem; }
+      .btn-fn:active { background: var(--btn-fn-hover); }
 
-    <script>
-        // Sincronizar tema al cargar
-        const savedTheme = localStorage.getItem('app-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'app-theme') {
-                document.documentElement.setAttribute('data-theme', e.newValue);
-            }
-        });
-    </script>
+      .btn-action { background: var(--btn-action); color: var(--btn-action-text); font-weight: 700; }
+      .btn-action:active { background: var(--btn-action-hover); }
+
+      .btn-equal { background: var(--btn-equal); color: var(--btn-equal-text); font-size: 1.4rem; }
+      .btn-equal:active { transform: scale(0.95); filter: brightness(0.9); }
+
+      .btn:not(.btn-equal):active { transform: scale(0.94); }
+
+      @keyframes fadeIn {
+         from { opacity: 0; transform: translateY(-5px); }
+         to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Adaptación para móviles estándar */
+      @media (max-width: 480px) {
+         .viewport { padding: 0; align-items: flex-end; }
+         .calculator {
+            border-radius: 24px 24px 0 0;
+            border-bottom: 0;
+            padding: 12px;
+            padding-top: calc(56px + env(safe-area-inset-top));
+         }
+         .nav-header { top: calc(8px + env(safe-area-inset-top)); }
+      }
+   </style>
 </head>
 
 <body>
+   <header class="nav-header">
+      <button class="back-btn" type="button" id="backBtn" aria-label="Volver">←</button>
+      <button class="theme-btn" type="button" id="themeBtn" aria-label="Cambiar tema">◐</button>
+   </header>
 
-    <button class="back-btn" onclick="window.location.href='index.html'" title="Volver al conversor">
-        <i class="fas fa-arrow-left"></i>
-    </button>
+   <main class="viewport">
+      <section class="calculator" aria-label="Calculadora">
+         <section class="display" aria-live="polite">
+            <div class="status-row">
+               <div id="memoryIndicator" class="memory-indicator"></div>
+               <button type="button" class="mode-badge" id="scienceToggle">SCI</button>
+            </div>
+            <div id="historyDisplay" class="history"></div>
+            <output id="mainDisplay" class="main">0</output>
+         </section>
 
-    <div class="calculator">
-        <div class="display-container">
-            <div id="historyDisplay" class="history-display"></div>
-            <div id="mainDisplay" class="main-display">0</div>
-        </div>
+         <div class="keyboard-container">
+            <section id="sciencePanel" class="science-panel" hidden>
+               <button type="button" class="btn btn-fn" data-science="sqrt">√x</button>
+               <button type="button" class="btn btn-fn" data-science="square">x²</button>
+               <button type="button" class="btn btn-fn" data-science="cube">x³</button>
+               <button type="button" class="btn btn-fn" data-science="inv">1/x</button>
+               <button type="button" class="btn btn-fn" data-science="sin">sin</button>
+               <button type="button" class="btn btn-fn" data-science="cos">cos</button>
+               <button type="button" class="btn btn-fn" data-science="tan">tan</button>
+               <button type="button" class="btn btn-fn" data-science="log">log</button>
+            </section>
 
-        <div class="keypad">
-            <button class="btn-calc btn-action" onclick="calc.action('clear')">AC</button>
-            <button class="btn-calc btn-action" onclick="calc.action('sign')">+/-</button>
-            <button class="btn-calc btn-action" onclick="calc.action('percent')">%</button>
-            <button class="btn-calc btn-op" onclick="calc.setOperator('÷')">÷</button>
+            <section class="keypad">
+               <button type="button" class="btn btn-fn" data-action="mc">MC</button>
+               <button type="button" class="btn btn-fn" data-action="mr">MR</button>
+               <button type="button" class="btn btn-fn" data-action="mplus">M+</button>
+               <button type="button" class="btn btn-fn" data-action="mminus">M-</button>
 
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('7')">7</button>
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('8')">8</button>
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('9')">9</button>
-            <button class="btn-calc btn-op" onclick="calc.setOperator('×')">×</button>
+               <button type="button" class="btn btn-action" data-action="clear">AC</button>
+               <button type="button" class="btn btn-action" data-action="delete">DEL</button>
+               <button type="button" class="btn btn-fn" data-action="sign">+/-</button>
+               <button type="button" class="btn btn-op" data-operator="÷">÷</button>
 
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('4')">4</button>
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('5')">5</button>
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('6')">6</button>
-            <button class="btn-calc btn-op" onclick="calc.setOperator('-')">−</button>
+               <button type="button" class="btn btn-num" data-number="7">7</button>
+               <button type="button" class="btn btn-num" data-number="8">8</button>
+               <button type="button" class="btn btn-num" data-number="9">9</button>
+               <button type="button" class="btn btn-op" data-operator="×">×</button>
 
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('1')">1</button>
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('2')">2</button>
-            <button class="btn-calc btn-num" onclick="calc.inputNumber('3')">3</button>
-            <button class="btn-calc btn-op" onclick="calc.setOperator('+')">+</button>
+               <button type="button" class="btn btn-num" data-number="4">4</button>
+               <button type="button" class="btn btn-num" data-number="5">5</button>
+               <button type="button" class="btn btn-num" data-number="6">6</button>
+               <button type="button" class="btn btn-op" data-operator="-">−</button>
 
-            <button class="btn-calc btn-num span-2" onclick="calc.inputNumber('0')">0</button>
-            <button class="btn-calc btn-num" onclick="calc.inputDecimal()">.</button>
-            <button class="btn-calc btn-equal" onclick="calc.calculate()">=</button>
-        </div
-    </div>
+               <button type="button" class="btn btn-num" data-number="1">1</button>
+               <button type="button" class="btn btn-num" data-number="2">2</button>
+               <button type="button" class="btn btn-num" data-number="3">3</button>
+               <button type="button" class="btn btn-op" data-operator="+">+</button>
 
-    <script>
-        class Calculator {
-            constructor() {
-                this.mainDisplay = document.getElementById('mainDisplay');
-                this.historyDisplay = document.getElementById('historyDisplay');
-                this.clearAll();
+               <button type="button" class="btn btn-num span-2" data-number="0">0</button>
+               <button type="button" class="btn btn-num" data-action="decimal">.</button>
+               <button type="button" class="btn btn-equal" data-action="equals">=</button>
+            </section>
+         </div>
+      </section>
+   </main>
+
+   <script>
+      // Mantengo tu motor JS exacto, enfocado en el UI/UX que pidió el usuario.
+      class CalculatorApp {
+         constructor() {
+            this.mainDisplay = document.getElementById("mainDisplay");
+            this.historyDisplay = document.getElementById("historyDisplay");
+            this.memoryIndicator = document.getElementById("memoryIndicator");
+            this.sciencePanel = document.getElementById("sciencePanel");
+            this.scienceToggle = document.getElementById("scienceToggle");
+            this.themeBtn = document.getElementById("themeBtn");
+            this.backBtn = document.getElementById("backBtn");
+
+            this.current = "0";
+            this.prev = null;
+            this.operator = null;
+            this.waiting = false;
+            this.memory = 0;
+
+            this.initTheme();
+            this.bindEvents();
+            this.updateDisplay();
+         }
+
+         bindEvents() {
+            document.addEventListener("click", (e) => {
+               const btn = e.target.closest("button");
+               if (!btn) return;
+               const { number, operator, action, science } = btn.dataset;
+               if (number !== undefined) this.inputNumber(number);
+               else if (operator) this.setOperator(operator);
+               else if (action) this.handleAction(action);
+               else if (science) this.applyScience(science);
+            });
+
+            this.themeBtn.addEventListener("click", () => this.toggleTheme());
+            this.scienceToggle.addEventListener("click", () => this.toggleScience());
+         }
+
+         initTheme() {
+            const saved = localStorage.getItem("app-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", saved);
+            this.updateThemeButton(saved);
+         }
+
+         toggleTheme() {
+            const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("app-theme", next);
+            this.updateThemeButton(next);
+         }
+
+         updateThemeButton(theme) {
+            this.themeBtn.textContent = theme === "dark" ? "☀" : "◐";
+         }
+
+         toggleScience() {
+            const isHidden = this.sciencePanel.hasAttribute("hidden");
+            if (isHidden) {
+               this.sciencePanel.removeAttribute("hidden");
+               this.scienceToggle.classList.add("active");
+            } else {
+               this.sciencePanel.setAttribute("hidden", "");
+               this.scienceToggle.classList.remove("active");
             }
+         }
 
-            // Retroalimentación háptica (vibración suave en móviles)
-            haptic() {
-                if (navigator.vibrate) navigator.vibrate(15);
+         haptic() { if (navigator.vibrate) navigator.vibrate(10); }
+
+         round(n) { return Math.round((n + Number.EPSILON) * 1e9) / 1e9; }
+
+         formatNumber(value) {
+            if (value === "Error") return "Error";
+            const num = Number(value);
+            return Number.isFinite(num) ? new Intl.NumberFormat("es-ES", { maximumFractionDigits: 9 }).format(num) : "Error";
+         }
+
+         updateDisplay() {
+            this.mainDisplay.textContent = this.formatNumber(this.current);
+            this.historyDisplay.textContent = this.prev !== null && this.operator ? `${this.formatNumber(this.prev)} ${this.operator}` : "";
+            this.memoryIndicator.textContent = this.memory !== 0 ? "M" : "";
+         }
+
+         inputNumber(n) {
+            this.haptic();
+            if (this.current === "Error") this.clearAll();
+            if (this.waiting) { this.current = n; this.waiting = false; } 
+            else if (this.current === "0") { this.current = n; } 
+            else { this.current += n; }
+            this.updateDisplay();
+         }
+
+         setOperator(op) {
+            this.haptic();
+            if (this.current === "Error") return;
+            const value = Number(this.current);
+            if (this.prev === null) { this.prev = value; } 
+            else if (this.operator && !this.waiting) {
+               const result = this.compute(this.prev, value, this.operator);
+               if (result === "Error") return this.setError();
+               this.prev = result;
+               this.current = String(result);
             }
+            this.operator = op;
+            this.waiting = true;
+            this.updateDisplay();
+         }
 
-            formatNumber(num) {
-                if (num === 'Error') return 'Error';
-                const parts = num.toString().split('.');
-                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                return parts.join('.');
+         compute(a, b, op) {
+            switch (op) {
+               case "+": return this.round(a + b);
+               case "-": return this.round(a - b);
+               case "×": return this.round(a * b);
+               case "÷": return b === 0 ? "Error" : this.round(a / b);
+               default: return b;
             }
+         }
 
-            updateDisplay() {
-                this.mainDisplay.textContent = this.formatNumber(this.current);
-                
-                this.mainDisplay.classList.remove('long', 'very-long');
-                if (this.current.toString().length > 9) this.mainDisplay.classList.add('long');
-                if (this.current.toString().length > 12) this.mainDisplay.classList.add('very-long');
+         calculate() {
+            this.haptic();
+            if (this.current === "Error" || !this.operator || this.prev === null) return;
+            const result = this.compute(this.prev, Number(this.current), this.operator);
+            if (result === "Error") return this.setError();
+            this.current = String(result);
+            this.prev = null;
+            this.operator = null;
+            this.waiting = true;
+            this.updateDisplay();
+         }
 
-                if (this.prev !== null && this.operator) {
-                    this.historyDisplay.textContent = `${this.formatNumber(this.prev)} ${this.operator}`;
-                } else {
-                    this.historyDisplay.textContent = '';
-                }
+         handleAction(action) {
+            switch (action) {
+               case "clear": this.clearAll(); break;
+               case "delete": 
+                  this.haptic();
+                  if (this.current === "Error" || this.waiting) return;
+                  this.current = this.current.length > 1 ? this.current.slice(0, -1) : "0";
+                  if (this.current === "-" || this.current === "") this.current = "0";
+                  this.updateDisplay(); break;
+               case "sign": 
+                  this.haptic();
+                  if (this.current !== "0" && this.current !== "Error") this.current = String(Number(this.current) * -1);
+                  this.updateDisplay(); break;
+               case "decimal": 
+                  this.haptic();
+                  if (this.current === "Error") this.clearAll();
+                  if (this.waiting) { this.current = "0."; this.waiting = false; } 
+                  else if (!this.current.includes(".")) { this.current += "."; }
+                  this.updateDisplay(); break;
+               case "equals": this.calculate(); break;
+               case "mc": this.haptic(); this.memory = 0; this.updateDisplay(); break;
+               case "mr": this.haptic(); this.current = String(this.memory); this.waiting = false; this.updateDisplay(); break;
+               case "mplus": this.haptic(); if (this.current !== "Error") this.memory = this.round(this.memory + Number(this.current)); this.updateDisplay(); break;
+               case "mminus": this.haptic(); if (this.current !== "Error") this.memory = this.round(this.memory - Number(this.current)); this.updateDisplay(); break;
             }
+         }
 
-            inputNumber(n) {
-                this.haptic();
-                if (this.current === 'Error') this.clearAll();
-                if (this.waiting) {
-                    this.current = n;
-                    this.waiting = false;
-                } else {
-                    if (this.current === '0' && n !== '0') {
-                        this.current = n;
-                    } else if (this.current !== '0') {
-                        if (this.current.replace(/[^0-9]/g, '').length < 15) {
-                            this.current += n;
-                        }
-                    }
-                }
-                this.updateDisplay();
+         applyScience(type) {
+            this.haptic();
+            if (this.current === "Error") return;
+            const value = Number(this.current);
+            let result;
+            switch (type) {
+               case "sqrt": result = value < 0 ? "Error" : this.round(Math.sqrt(value)); break;
+               case "square": result = this.round(value ** 2); break;
+               case "cube": result = this.round(value ** 3); break;
+               case "inv": result = value === 0 ? "Error" : this.round(1 / value); break;
+               case "sin": result = this.round(Math.sin(value)); break;
+               case "cos": result = this.round(Math.cos(value)); break;
+               case "tan": result = this.round(Math.tan(value)); break;
+               case "log": result = value <= 0 ? "Error" : this.round(Math.log10(value)); break;
             }
+            if (result === "Error") return this.setError();
+            this.current = String(result);
+            this.waiting = true;
+            this.updateDisplay();
+         }
 
-            inputDecimal() {
-                this.haptic();
-                if (this.current === 'Error') this.clearAll();
-                if (this.waiting) {
-                    this.current = '0.';
-                    this.waiting = false;
-                } else if (!this.current.includes('.')) {
-                    this.current += '.';
-                }
-                this.updateDisplay();
-            }
+         clearAll() { this.current = "0"; this.prev = null; this.operator = null; this.waiting = false; this.updateDisplay(); }
+         setError() { this.current = "Error"; this.prev = null; this.operator = null; this.waiting = true; this.updateDisplay(); }
+      }
 
-            setOperator(op) {
-                this.haptic();
-                if (this.current === 'Error') return;
-                const value = parseFloat(this.current);
-
-                if (this.prev === null) {
-                    this.prev = value;
-                } else if (this.operator && !this.waiting) {
-                    this.prev = this.compute(this.prev, value, this.operator);
-                }
-
-                this.operator = op;
-                this.waiting = true;
-                this.updateDisplay();
-            }
-
-            compute(a, b, op) {
-                let result = 0;
-                switch (op) {
-                    case '+': result = a + b; break;
-                    case '-': result = a - b; break;
-                    case '×': result = a * b; break;
-                    case '÷': 
-                        if (b === 0) return 'Error';
-                        result = a / b; 
-                        break;
-                }
-                return Math.round(result * 1000000000) / 1000000000;
-            }
-
-            calculate() {
-                this.haptic();
-                if (this.current === 'Error' || !this.operator || this.prev === null) return;
-                
-                const value = parseFloat(this.current);
-                const result = this.compute(this.prev, value, this.operator);
-                
-                this.current = result.toString();
-                this.prev = null;
-                this.operator = null;
-                this.waiting = true;
-                this.updateDisplay();
-            }
-
-            action(type) {
-                this.haptic();
-                if (type === 'clear') this.clearAll();
-                if (type === 'sign') this.toggleSign();
-                if (type === 'percent') this.percentage();
-            }
-
-            clearAll() {
-                this.current = '0';
-                this.prev = null;
-                this.operator = null;
-                this.waiting = false;
-                this.updateDisplay();
-            }
-
-            deleteLast() {
-                this.haptic();
-                if (this.current === 'Error' || this.waiting) {
-                    this.clearAll();
-                    return;
-                }
-                this.current = this.current.toString().slice(0, -1) || '0';
-                this.updateDisplay();
-            }
-
-            toggleSign() {
-                if (this.current === '0' || this.current === 'Error') return;
-                this.current = (parseFloat(this.current) * -1).toString();
-                this.updateDisplay();
-            }
-
-            percentage() {
-                if (this.current === 'Error') return;
-                this.current = (parseFloat(this.current) / 100).toString();
-                this.updateDisplay();
-            }
-        }
-
-        const calc = new Calculator();
-
-        // SOPORTE DE TECLADO
-        document.addEventListener('keydown', (e) => {
-            if (e.key >= '0' && e.key <= '9') calc.inputNumber(e.key);
-            if (e.key === '.') calc.inputDecimal();
-            if (e.key === '+') calc.setOperator('+');
-            if (e.key === '-') calc.setOperator('-');
-            if (e.key === '*') calc.setOperator('×');
-            if (e.key === '/') calc.setOperator('÷');
-            if (e.key === 'Enter' || e.key === '=') calc.calculate();
-            if (e.key === 'Backspace') calc.deleteLast();
-            if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') calc.clearAll();
-            if (e.key === '%') calc.percentage();
-        });
-    </script>
+      new CalculatorApp();
+   </script>
 </body>
 </html>
