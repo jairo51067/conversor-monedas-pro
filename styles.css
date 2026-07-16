@@ -209,8 +209,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    /* gap: 1rem; */
+    flex-wrap: wrap; /* Mantiene el comportamiento responsivo por defecto */
 }
 
 .datetime-info {
@@ -282,6 +282,91 @@ body {
     font-size: 0.875rem;
     color: var(--text-secondary);
     font-weight: 500;
+}
+
+/* ==========================================================
+   MÓVILES: Optimización extrema para el Widget de Clima/Fecha
+   ========================================================== */
+@media (max-width: 576px) {
+    /* 1. Compactamos el contenedor principal */
+    .widget-datetime {
+        padding: 0.6rem 1rem !important; /* Reducción drástica de padding */
+        border-radius: 16px !important;  /* Bordes más limpios para móviles */
+        box-shadow: var(--shadow-sm) !important; /* Sombra más sutil */
+    }
+
+    /* 2. Forzamos la alineación en una sola fila sin envoltura */
+    .datetime-content {
+        flex-wrap: nowrap !important;
+        align-items: center;
+        /* gap: 0.5rem; */
+    }
+
+    /* 3. Columna Izquierda: Fecha y Hora */
+    .datetime-info {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1px; /* Espaciado mínimo entre líneas */
+    }
+
+    .day-name {
+        font-size: 0.85rem !important; /* Tamaño discreto y elegante */
+        font-weight: 800;
+        line-height: 1.1;
+        margin: 0 !important;
+    }
+
+    .date-text {
+        font-size: 0.75rem !important; /* Fecha secundaria pequeña */
+        font-weight: 500;
+        margin: 0 !important;
+    }
+
+    .time-text {
+        font-size: 1.35rem !important; /* Hora legible pero sin gigantismo */
+        font-weight: 700;
+        margin-top: 2px !important;
+        line-height: 1.1;
+    }
+
+    /* 4. Columna Derecha: Clima */
+    .weather-info {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        /* gap: 1px; */
+    }
+
+    /* DECISIÓN DE UX: Ocultamos "Día/Noche" para ahorrar espacio vertical */
+    .weather-status {
+        display: none !important; 
+    }
+
+    .weather-temp {
+        font-size: 1.25rem !important; /* Copia el peso visual de la hora */
+        font-weight: 700;
+        margin: 0 !important;
+        line-height: 1.1;
+        gap: 0.2rem;
+    }
+
+    .weather-temp i {
+        font-size: 0.9rem !important; /* Icono del termómetro alineado */
+    }
+
+    .weather-desc {
+        font-size: 0.75rem !important; /* Texto micro para el estado del clima */
+        font-weight: 500;
+        margin: 0 !important;
+        line-height: 1.1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px; /* Evita que descripciones largas rompan el grid */
+    }
 }
 
 /* ===== GRID DE TASAS ===== */
