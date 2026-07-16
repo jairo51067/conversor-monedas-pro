@@ -181,7 +181,7 @@ body {
 .app-main {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1rem 0rem;
+    padding: 0.5rem 0rem;
 }
 
 .container {
@@ -290,7 +290,7 @@ body {
 @media (max-width: 576px) {
     /* 1. Compactamos el contenedor principal */
     .widget-datetime {
-        padding: 0.6rem 1rem !important; /* Reducción drástica de padding */
+        padding: 0.4rem 1rem !important; /* Reducción drástica de padding */
         border-radius: 16px !important;  /* Bordes más limpios para móviles */
         box-shadow: var(--shadow-sm) !important; /* Sombra más sutil */
     }
