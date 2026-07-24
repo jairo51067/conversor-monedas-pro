@@ -1695,3 +1695,101 @@ body {
 .app-header {
     animation: slideDownHeader 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+
+/* ===== MODAL DE ESTADÍSTICAS ===== */
+.stats-modal-content {
+    max-width: 600px; /* Un poco más ancho para el gráfico */
+}
+
+.stats-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.stats-tab {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.stats-tab.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.stats-summary {
+    display: flex;
+    justify-content: space-between;
+    background: var(--bg-tertiary);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.summary-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.summary-value.positive { color: var(--money); }
+.summary-value.negative { color: var(--danger); }
+
+.timeframe-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.time-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 20px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.time-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+}
