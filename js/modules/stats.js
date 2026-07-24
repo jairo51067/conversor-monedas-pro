@@ -1,4 +1,4 @@
-// Manejo de Estadísticas y Gráficos
+// Manejo de Estadísticas y Gráficos - VERSIÓN CORREGIDA
 import { API } from './api.js';
 import { Utils } from './utils.js';
 
@@ -7,6 +7,7 @@ export class Stats {
         this.chart = null;
         this.currentCurrency = 'paralelo';
         this.currentDays = 7;
+        this.dataCache = new Map(); // Caché en memoria
     }
 
     init() {
@@ -15,7 +16,6 @@ export class Stats {
     }
 
     setupListeners() {
-        // Cambio de moneda
         document.querySelectorAll('.stats-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
@@ -25,7 +25,6 @@ export class Stats {
             });
         });
 
-        // Cambio de tiempo
         document.querySelectorAll('.time-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
@@ -40,7 +39,12 @@ export class Stats {
         const currentRate = await this.getCurrentRate(this.currentCurrency);
         if (!currentRate) return;
 
-        const historyData = this.generateRealisticHistory(currentRate, this.currentDays);
+        // Generar semilla única para hoy + moneda + periodo
+        const seed = this.generateSeed(this.currentCurrency, this.currentDays);
+        
+        // Obtener datos (desde caché o generar nuevos)
+        const historyData = this.getOrCreateHistoryData(currentRate, this.currentDays, seed);
+        
         this.updateSummary(historyData);
         this.renderChart(historyData);
     }
@@ -67,32 +71,78 @@ export class Stats {
     }
 
     /**
-     * Genera datos históricos cronológicamente correctos.
-     * Comienza en el pasado y camina hacia el presente, aterrizando exactamente en el valor de hoy.
+     * Genera una semilla numérica única basada en fecha + moneda + periodo
+     * Esto garantiza que los datos sean consistentes durante todo el día
      */
-    generateRealisticHistory(currentValue, days) {
+    generateSeed(currency, days) {
+        const now = new Date();
+        const dateKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+        const seedString = `${dateKey}-${currency}-${days}`;
+        
+        // Convertir string a número (hash simple)
+        let hash = 0;
+        for (let i = 0; i < seedString.length; i++) {
+            const char = seedString.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convertir a 32bit integer
+        }
+        return Math.abs(hash);
+    }
+
+    /**
+     * Generador pseudoaleatorio con semilla (mulberry32)
+     * Siempre devuelve la misma secuencia para la misma semilla
+     */
+    seededRandom(seed) {
+        let a = seed;
+        return function() {
+            a |= 0; a = a + 0x6D2B79F5 | 0;
+            let t = Math.imul(a ^ a >>> 15, 1 | a);
+            t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        }
+    }
+
+    /**
+     * Obtiene datos del caché o los genera nuevos
+     */
+    getOrCreateHistoryData(currentValue, days, seed) {
+        const cacheKey = `${this.currentCurrency}-${this.currentDays}-${seed}`;
+        
+        if (this.dataCache.has(cacheKey)) {
+            return this.dataCache.get(cacheKey);
+        }
+
+        const historyData = this.generateRealisticHistory(currentValue, days, seed);
+        this.dataCache.set(cacheKey, historyData);
+        return historyData;
+    }
+
+    /**
+     * Genera datos históricos DETERMINÍSTICOS (siempre iguales para la misma semilla)
+     */
+    generateRealisticHistory(currentValue, days, seed) {
         const labels = [];
         const data = [];
         const now = new Date();
+        const random = this.seededRandom(seed); // Generador con semilla
 
-        // 1. Establecer un valor base en el pasado (hace 'days' días) con una variación realista de +/- 5%
-        let pastValue = currentValue * (1 + (Math.random() * 0.10 - 0.05));
+        // Valor base en el pasado con variación realista
+        let pastValue = currentValue * (1 + (random() * 0.10 - 0.05));
         
         for (let i = days; i >= 0; i--) {
             const date = new Date(now);
             date.setDate(date.getDate() - i);
             
-            // Formato DD/MM
             const label = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
             labels.push(label);
 
             if (i === 0) {
-                // El último punto (HOY) SIEMPRE debe ser el valor real actual
+                // HOY siempre es el valor real actual
                 data.push(currentValue);
             } else {
-                // Para los días pasados, aplicamos una fluctuación suave diaria
-                // Esto crea una curva natural que conecta el pasado con el valor de hoy
-                const dailyVariation = (Math.random() - 0.5) * 0.015; // +/- 0.75% de volatilidad diaria
+                // Fluctuación diaria determinística (±0.75%)
+                const dailyVariation = (random() - 0.5) * 0.015;
                 pastValue = pastValue * (1 + dailyVariation);
                 data.push(parseFloat(pastValue.toFixed(2)));
             }
@@ -102,14 +152,12 @@ export class Stats {
     }
 
     updateSummary(historyData) {
-        const firstValue = historyData.data[0]; // Valor más antiguo (izquierda)
-        const lastValue = historyData.data[historyData.data.length - 1]; // Valor de hoy (derecha)
+        const firstValue = historyData.data[0];
+        const lastValue = historyData.data[historyData.data.length - 1];
         
-        // Calcular variación porcentual del periodo
         const variation = ((lastValue - firstValue) / firstValue) * 100;
         const isPositive = variation >= 0;
         
-        // Actualizar DOM
         document.getElementById('stat-current-value').textContent = Utils.formatNumber(historyData.currentValue, 'es-VE', { minimumFractionDigits: 2 });
         
         const variationEl = document.getElementById('stat-variation');
@@ -121,7 +169,6 @@ export class Stats {
         const ctx = document.getElementById('statsChart').getContext('2d');
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         
-        // Colores dinámicos según la moneda
         const colors = {
             paralelo: { main: '#F59E0B', bg: 'rgba(245, 158, 11, 0.15)' },
             bcv: { main: '#4F46E5', bg: 'rgba(79, 70, 229, 0.15)' },
@@ -131,12 +178,10 @@ export class Stats {
         
         const color = colors[this.currentCurrency];
 
-        // Destruir gráfico anterior para evitar superposiciones
         if (this.chart) {
             this.chart.destroy();
         }
 
-        // Crear degradado para el área bajo la línea (efecto premium)
         const gradient = ctx.createLinearGradient(0, 0, 0, 250);
         gradient.addColorStop(0, color.bg);
         gradient.addColorStop(1, 'rgba(0,0,0,0)');
@@ -144,20 +189,20 @@ export class Stats {
         this.chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: historyData.labels, // Orden cronológico: Pasado -> Presente
+                labels: historyData.labels,
                 datasets: [{
                     label: 'Tasa de Cambio',
                     data: historyData.data,
                     borderColor: color.main,
                     backgroundColor: gradient,
                     borderWidth: 2.5,
-                    pointRadius: 0, // Línea limpia sin puntos
+                    pointRadius: 0,
                     pointHoverRadius: 6,
                     pointHoverBackgroundColor: color.main,
                     pointHoverBorderColor: '#fff',
                     pointHoverBorderWidth: 2,
                     fill: true,
-                    tension: 0.4 // Curva suave (spline) profesional
+                    tension: 0.4
                 }]
             },
             options: {
@@ -192,7 +237,7 @@ export class Stats {
                         grid: { display: false, drawBorder: false },
                         ticks: { 
                             color: isDark ? '#94A3B8' : '#64748B',
-                            maxTicksLimit: 6 // Evita que las fechas se amontonen
+                            maxTicksLimit: 6
                         }
                     },
                     y: {

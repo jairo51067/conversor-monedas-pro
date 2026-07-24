@@ -493,7 +493,7 @@
                     <button class="stats-tab" data-currency="euro">Euro</button>
                     <button class="stats-tab active" data-currency="paralelo">Paralelo</button>
                     <button class="stats-tab" data-currency="trm">TRM</button>
-                    
+
                 </div>
 
                 <!-- Resumen de Variación -->
@@ -523,12 +523,56 @@
         </div>
     </div>
 
-    <!-- MODAL DE SALUDO -->
+    <!-- MODAL DE BIENVENIDA (WELCOME DASHBOARD) -->
     <div id="modalSaludo" class="glass-modal">
-        <div class="glass-content">
-            <h2>👋 ¡Hola!</h2>
-            <p>¡Bienvenido a:<br><strong>Tu Conversor de Monedas!</strong></p>
-            <button>¡Genial!</button>
+        <div class="glass-content welcome-dashboard">
+            <!-- Saludo Personalizado -->
+            <div class="welcome-header">
+                <h2 id="welcome-greeting">👋 ¡Hola!</h2>
+                <p class="welcome-subtitle">Resumen del mercado hoy</p>
+            </div>
+
+            <!-- Grid de Tasas Rápidas -->
+            <div class="rates-mini-grid">
+                <div class="rate-mini-card">
+                    <div class="rate-mini-label">BCV</div>
+                    <div class="rate-mini-value" id="welcome-bcv">--</div>
+                </div>
+                <div class="rate-mini-card">
+                    <div class="rate-mini-label">Paralelo</div>
+                    <div class="rate-mini-value" id="welcome-paralelo">--</div>
+                </div>
+                <div class="rate-mini-card">
+                    <div class="rate-mini-label">TRM</div>
+                    <div class="rate-mini-value" id="welcome-trm">--</div>
+                </div>
+            </div>
+
+            <!-- Insight del Día -->
+            <div class="welcome-insight">
+                <div class="insight-icon">💡</div>
+                <div class="insight-content">
+                    <div class="insight-title">Insight del día</div>
+                    <div class="insight-text" id="welcome-insight-text">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- Tip Rotativo -->
+            <div class="welcome-tip">
+                <i class="fas fa-lightbulb"></i>
+                <span id="welcome-tip-text">Tip del día</span>
+            </div>
+
+            <!-- Estado de Actualización -->
+            <div class="welcome-footer">
+                <div class="update-status">
+                    <i class="fas fa-clock"></i>
+                    <span id="welcome-last-update">Actualizado: --</span>
+                </div>
+            </div>
+
+            <!-- Botón de Cierre -->
+            <button class="welcome-close-btn">¡Entendido!</button>
         </div>
     </div>
 
