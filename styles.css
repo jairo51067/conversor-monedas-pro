@@ -2090,7 +2090,7 @@ body {
 .market-price-banner {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
-    padding: 6px;
+    padding: 16px;
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
@@ -2279,6 +2279,10 @@ body {
     }
     .purity-desc {
         font-size: 0.75rem;
+    }
+
+    .banner-update{
+        display: none;
     }
 }
 
