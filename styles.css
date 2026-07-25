@@ -2090,7 +2090,7 @@ body {
 .market-price-banner {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
-    padding: 16px;
+    padding: 6px;
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
