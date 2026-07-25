@@ -10,6 +10,7 @@ import { Weather } from "./modules/weather.js";
 import { Greeting } from "./modules/greeting.js";
 import { Theme } from "./modules/theme.js";
 import { Stats } from "./modules/stats.js";
+import { GoldCalculator } from "./modules/gold.js";
 
 class App {
   constructor() {
@@ -23,6 +24,7 @@ class App {
     this.greeting = new Greeting();
     this.theme = new Theme();
     this.stats = new Stats();
+    this.goldCalc = new GoldCalculator();
   }
 
   async init() {
@@ -44,6 +46,18 @@ class App {
     } catch (error) {
       console.error("❌ Error al inicializar:", error);
       UI.showToast("Error al cargar algunos datos", "error");
+    }
+
+    // Registrar Service Worker para modo offline
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() =>
+            console.log("✅ Service Worker registrado (Modo Offline listo)"),
+          )
+          .catch((err) => console.error("❌ Error SW:", err));
+      });
     }
   }
 
@@ -195,6 +209,14 @@ class App {
     const sidebar = document.getElementById("app-sidebar");
     const sidebarClose = document.getElementById("sidebar-close");
     const sidebarOverlay = document.getElementById("sidebar-overlay");
+
+    const showGoldBtn = document.getElementById("menu-show-gold");
+    if (showGoldBtn) {
+      showGoldBtn.addEventListener("click", () => {
+        this.openModal("modal-gold");
+        closeSidebar();
+      });
+    }
 
     // Mostrar estadísticas
     const showStatsBtn = document.getElementById("menu-show-stats");

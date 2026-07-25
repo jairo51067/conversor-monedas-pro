@@ -1983,3 +1983,522 @@ body {
         font-size: 1.125rem;
     }
 }
+
+/* ===== CALCULADORA DE ORO ===== */
+.gold-modal-content {
+    max-width: 550px;
+}
+
+.gold-intro {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.5;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.gold-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.gold-grid .form-group {
+    margin-bottom: 0;
+}
+
+.tooltip-icon {
+    color: var(--primary);
+    cursor: help;
+    margin-left: 4px;
+    font-size: 0.875rem;
+}
+
+.input-group {
+    display: flex;
+}
+
+.input-group .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group select.form-control {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
+    background-color: var(--bg-tertiary);
+}
+
+.form-text {
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+/* Resultados */
+.gold-results {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border-left: 4px solid var(--warning);
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+}
+
+.result-row.highlight {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.res-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.res-value-total {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--warning);
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 480px) {
+    .gold-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== CALCULADORA DE ORO EDUCATIVA ===== */
+.gold-modal-content {
+    max-width: 600px;
+}
+
+.market-price-banner {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.market-price-banner i {
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.banner-label {
+    display: block;
+    font-size: 0.8125rem;
+    opacity: 0.9;
+}
+
+.banner-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.banner-update {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-left: auto;
+    text-align: right;
+}
+
+.gold-intro {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* Pasos */
+.step-container {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.form-hint {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.gold-unit-select {
+    max-width: 125px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
+    background-color: var(--bg-tertiary);
+}
+
+/* Tarjetas de Operación */
+.operation-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* ===== TARJETAS DE PUREZA (Paso 2) ===== */
+.purity-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.purity-card {
+    cursor: pointer;
+}
+
+.purity-card input[type="radio"] {
+    display: none;
+}
+
+.purity-card-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    transition: all 0.2s ease;
+}
+
+/* Kilate (ej: 24k) - Destacado */
+.purity-k {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--warning);
+    min-width: 48px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Porcentaje */
+.purity-pct {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 80px;
+}
+
+/* Descripción */
+.purity-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    flex: 1;
+    line-height: 1.3;
+}
+
+/* Estado seleccionado */
+.purity-card input[type="radio"]:checked + .purity-card-content {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+    box-shadow: 0 0 0 1px var(--primary);
+}
+
+.purity-card input[type="radio"]:checked + .purity-card-content .purity-k {
+    color: var(--primary);
+}
+
+.purity-card input[type="radio"]:checked + .purity-card-content .purity-pct {
+    color: var(--primary-dark);
+}
+
+/* Hover */
+.purity-card-content:hover {
+    border-color: var(--primary-light);
+    transform: translateX(2px);
+}
+
+/* Ajuste del contenedor del paso 2 */
+.step-purity .step-content {
+    flex: 1;
+}
+
+/* Responsive: en pantallas muy pequeñas, ajustar */
+@media (max-width: 480px) {
+    .purity-card-content {
+        padding: 12px;
+        gap: 10px;
+    }
+    .purity-k {
+        font-size: 1.1rem;
+        min-width: 42px;
+    }
+    .purity-pct {
+        font-size: 0.8125rem;
+        min-width: 70px;
+    }
+    .purity-desc {
+        font-size: 0.75rem;
+    }
+}
+
+.op-card {
+    cursor: pointer;
+}
+
+.op-card input[type="radio"] {
+    display: none;
+}
+
+.op-card-content {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    text-align: center;
+    transition: all 0.2s ease;
+    background: var(--bg-secondary);
+}
+
+.op-card-content i {
+    font-size: 1.5rem;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.op-card-content span {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.op-card-content small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    line-height: 1.3;
+}
+
+/* Estado seleccionado de la tarjeta */
+.op-card input[type="radio"]:checked + .op-card-content {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+}
+
+.op-card input[type="radio"]:checked + .op-card-content i {
+    color: var(--primary);
+}
+
+/* Resultados Narrativos */
+.gold-results-narrative {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-top: 8px;
+    border-left: 4px solid var(--warning);
+    animation: fadeIn 0.3s ease;
+}
+
+.narrative-main {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.narrative-main strong {
+    color: var(--primary);
+    font-size: 1.25rem;
+}
+
+.narrative-breakdown {
+    border-top: 1px dashed var(--border);
+    padding-top: 12px;
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.breakdown-row.highlight-row {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+    .operation-cards {
+        grid-template-columns: 1fr;
+    }
+    .step-container {
+        gap: 12px;
+    }
+}
+
+/* ===== SECCIÓN EDUCATIVA DEL ORO ===== */
+.gold-education-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 2px dashed var(--border);
+}
+
+.education-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.education-title i {
+    color: var(--warning);
+}
+
+.education-tips {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.edu-tip {
+    display: flex;
+    gap: 16px;
+    background: var(--bg-tertiary);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--primary);
+    transition: transform 0.2s ease;
+}
+
+.edu-tip:hover {
+    transform: translateX(4px);
+}
+
+.edu-tip i {
+    font-size: 1.25rem;
+    color: var(--primary);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.edu-tip strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    margin-bottom: 4px;
+}
+
+.edu-tip p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.education-links {
+    background: rgba(79, 70, 229, 0.05);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+.links-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    margin-top: 0;
+}
+
+.link-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.edu-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    flex: 1;
+    justify-content: center;
+    min-width: 200px;
+}
+
+.edu-link-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 480px) {
+    .link-buttons {
+        flex-direction: column;
+    }
+    .edu-link-btn {
+        width: 100%;
+    }
+}

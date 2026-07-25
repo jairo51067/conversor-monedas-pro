@@ -101,6 +101,11 @@
                         <i class="fas fa-history"></i>
                         <span>Historial de Conversiones</span>
                     </button>
+
+                    <button class="sidebar-item" id="menu-show-gold">
+                        <i class="fas fa-coins" style="color: #F59E0B;"></i>
+                        <span>Calculadora de Oro</span>
+                    </button>
                 </div>
 
                 <!-- Sección: Análisis -->
@@ -187,7 +192,7 @@
                 <div class="about-content">
                     <div class="about-logo">💰</div>
                     <h4>Conversor de Monedas Pro</h4>
-                    <p class="about-version">Versión 2.0.0</p>
+                    <p class="about-version">Versión 3.0.0</p>
                     <p>Aplicación profesional para conversión de monedas con tasas oficiales y paralelas de Venezuela y
                         Colombia en tiempo real.</p>
 
@@ -470,7 +475,7 @@
     <!-- FOOTER -->
     <footer class="app-footer">
         <div class="footer-content">
-            <spam class="title-app">&copy; 2026 Conversor de Monedas Pro</spam>
+            <spam class="title-app">&copy; 2026 Conversor de Monedas Pro V3</spam>
             <p>Autor: Jairo Cárdenas</p>
             <a href="mailto:jairo.cardenas.dev@gmail.com">jairo.cardenas.dev@gmail.com</a>
         </div>
@@ -519,6 +524,196 @@
                 <div class="chart-container">
                     <canvas id="statsChart"></canvas>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CALCULADORA DE ORO EDUCATIVA -->
+    <div class="modal-custom" id="modal-gold">
+        <div class="modal-custom-overlay"></div>
+        <div class="modal-custom-content gold-modal-content">
+            <div class="modal-custom-header">
+                <h3>🏆 Calculadora de Oro</h3>
+                <button class="modal-custom-close" data-modal="modal-gold">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-custom-body">
+
+                <!-- Precio de Mercado (Automático) -->
+                <div class="market-price-banner">
+                    <i class="fas fa-globe-americas"></i>
+                    <div>
+                        <span class="banner-label">Precio internacional del Oro (24k):</span>
+                        <span class="banner-value" id="market-gold-price">Cargando...</span>
+                    </div>
+                    <small class="banner-update" id="market-gold-time"></small>
+                </div>
+
+                <p class="gold-intro">Sigue estos 3 pasos para obtener una estimación realista. La onza troy (31.1035g)
+                    es el estándar mundial y su precio base siempre se calcula sobre oro puro (24k).</p>
+
+                <!-- Paso 1: Cantidad -->
+                <div class="step-container">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <label>Ingresa cuánto oro tienes que deseas adquirir o vender:</label>
+                        <div class="input-group">
+                            <input type="number" id="gold-amount" class="form-control" placeholder="Ej: 5" value="5"
+                                step="0.1" min="0.1">
+                            <select id="gold-unit" class="form-control gold-unit-select">
+                                <option value="g">Gramos (g)</option>
+                                <option value="oz">Onzas Troy (oz)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paso 2: Pureza (Tarjetas Visuales) -->
+                <div class="step-container step-purity">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <label>Escoge o determina cuál es la pureza (kilates) de la pieza:</label>
+                        <div class="purity-cards">
+                            <label class="purity-card">
+                                <input type="radio" name="gold-purity" value="24">
+                                <div class="purity-card-content">
+                                    <span class="purity-k">24k</span>
+                                    <span class="purity-pct">99.9% Oro</span>
+                                    <span class="purity-desc">Lingotes y monedas de inversión</span>
+                                </div>
+                            </label>
+                            <label class="purity-card">
+                                <input type="radio" name="gold-purity" value="22">
+                                <div class="purity-card-content">
+                                    <span class="purity-k">22k</span>
+                                    <span class="purity-pct">91.6% Oro</span>
+                                    <span class="purity-desc">Joyería de alta ley</span>
+                                </div>
+                            </label>
+                            <label class="purity-card">
+                                <input type="radio" name="gold-purity" value="18" checked>
+                                <div class="purity-card-content">
+                                    <span class="purity-k">18k</span>
+                                    <span class="purity-pct">75.0% Oro</span>
+                                    <span class="purity-desc">Joyería fina y anillos</span>
+                                </div>
+                            </label>
+                            <label class="purity-card">
+                                <input type="radio" name="gold-purity" value="14">
+                                <div class="purity-card-content">
+                                    <span class="purity-k">14k</span>
+                                    <span class="purity-pct">58.3% Oro</span>
+                                    <span class="purity-desc">Joyería común resistente</span>
+                                </div>
+                            </label>
+                            <label class="purity-card">
+                                <input type="radio" name="gold-purity" value="10">
+                                <div class="purity-card-content">
+                                    <span class="purity-k">10k</span>
+                                    <span class="purity-pct">41.7% Oro</span>
+                                    <span class="purity-desc">Mínimo legal para ser "oro"</span>
+                                </div>
+                            </label>
+                        </div>
+                        <small class="form-hint" id="purity-hint">El 75% del peso es oro puro. El 25% restante son otros
+                            metales (cobre, plata, etc.) que le dan dureza y durabilidad.</small>
+                    </div>
+                </div>
+
+                <!-- Paso 3: Operación -->
+                <div class="step-container">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <label>¿Cuál es tu objetivo con esta pieza?</label>
+                        <div class="operation-cards">
+                            <label class="op-card">
+                                <input type="radio" name="gold-operation" value="venta" checked>
+                                <div class="op-card-content">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                    <span>Quiero <strong>VENDER</strong> mi oro</span>
+                                    <small>(La casa de compra retiene un margen por refinación y ganancia)</small>
+                                </div>
+                            </label>
+                            <label class="op-card">
+                                <input type="radio" name="gold-operation" value="compra">
+                                <div class="op-card-content">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    <span>Quiero <strong>COMPRAR</strong> oro</span>
+                                    <small>(La joyería agrega un margen por diseño, fabricación y venta)</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultado Narrativo y Desglose -->
+                <div class="gold-results-narrative" id="gold-result-box" style="display: none;">
+                    <div class="narrative-main" id="narrative-text"></div>
+                    <div class="narrative-breakdown">
+                        <div class="breakdown-row">
+                            <span>Valor base del oro puro (por gramo):</span>
+                            <span id="break-base">$0.00</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span>Valor ajustado por pureza (<span id="break-purity-pct">75%</span>):</span>
+                            <span id="break-adjusted">$0.00</span>
+                        </div>
+                        <div class="breakdown-row highlight-row">
+                            <span id="break-margin-label">Margen de la casa de compra (-15%):</span>
+                            <span id="break-final">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NUEVA SECCIÓN: Conoce más sobre el Oro -->
+                <div class="gold-education-section">
+                    <h4 class="education-title"><i class="fas fa-graduation-cap"></i> Conoce más sobre el Oro</h4>
+
+                    <div class="education-tips">
+                        <div class="edu-tip">
+                            <i class="fas fa-ring"></i>
+                            <div>
+                                <strong>¿Qué significan los Kilates (K)?</strong>
+                                <p>Indican la pureza. 24K es oro puro (99.9%), pero es muy blando. Por eso la joyería
+                                    usa 18K (75% oro) o 14K (58.3%), mezclándolo con otros metales para darle
+                                    resistencia.</p>
+                            </div>
+                        </div>
+                        <div class="edu-tip">
+                            <i class="fas fa-weight-hanging"></i>
+                            <div>
+                                <strong>Onza Troy vs. Onza Normal</strong>
+                                <p>El mercado mundial de metales preciosos usa la <strong>Onza Troy</strong> (31.1035
+                                    gramos), que es ligeramente más pesada que la onza común de cocina (28.35 gramos).
+                                </p>
+                            </div>
+                        </div>
+                        <div class="edu-tip">
+                            <i class="fas fa-balance-scale"></i>
+                            <div>
+                                <strong>¿Por qué cambia el precio al Comprar o Vender?</strong>
+                                <p>Existe un "spread" o margen. Al <strong>vender</strong>, las casas de compra retienen
+                                    un % por costos de refinación. Al <strong>comprar</strong>, las joyerías agregan un
+                                    % por diseño y fabricación.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="education-links">
+                        <p class="links-title">🔗 Fuentes confiables para ampliar tu conocimiento:</p>
+                        <div class="link-buttons">
+                            <a href="https://www.gold.org/" target="_blank" class="edu-link-btn">
+                                <i class="fas fa-globe"></i> Consejo Mundial del Oro
+                            </a>
+                            <a href="https://www.tradingview.com/symbols/XAUUSD/" target="_blank" class="edu-link-btn">
+                                <i class="fas fa-chart-line"></i> Precio del Oro en Tiempo Real
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
