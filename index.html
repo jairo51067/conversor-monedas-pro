@@ -650,19 +650,33 @@
 
                 <!-- Resultado Narrativo y Desglose -->
                 <div class="gold-results-narrative" id="gold-result-box" style="display: none;">
-                    <div class="narrative-main" id="narrative-text"></div>
+                    <!-- Cabecera narrativa con ícono explicativo -->
+                    <div class="narrative-main-wrapper">
+                        <div class="narrative-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="narrative-main" id="narrative-text"></div>
+                    </div>
+
+                    <!-- Desglose numérico -->
                     <div class="narrative-breakdown">
                         <div class="breakdown-row">
-                            <span>Valor base del oro puro (por gramo):</span>
-                            <span id="break-base">$0.00</span>
+                            <span class="breakdown-label">Valor base del oro puro (por gramo):</span>
+                            <span class="breakdown-value" id="break-base">$0.00</span>
                         </div>
+
                         <div class="breakdown-row">
-                            <span>Valor ajustado por pureza (<span id="break-purity-pct">75%</span>):</span>
-                            <span id="break-adjusted">$0.00</span>
+                            <span class="breakdown-label">
+                                Valor ajustado por pureza (<span id="break-purity-pct">75%</span>):
+                            </span>
+                            <span class="breakdown-value" id="break-adjusted">$0.00</span>
                         </div>
+
+                        <!-- Banner destacado para la cifra final -->
                         <div class="breakdown-row highlight-row">
-                            <span id="break-margin-label">Margen de la casa de compra (-15%):</span>
-                            <span id="break-final">$0.00</span>
+                            <span class="breakdown-label" id="break-margin-label">Margen de la casa de compra
+                                (-15%):</span>
+                            <span class="breakdown-value highlight-value" id="break-final">$0.00</span>
                         </div>
                     </div>
                 </div>

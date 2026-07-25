@@ -2334,58 +2334,95 @@ body {
     color: var(--primary);
 }
 
-/* Resultados Narrativos */
+/* Contenedor Principal */
 .gold-results-narrative {
     background: var(--bg-tertiary);
-    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius-md, 12px);
     padding: 20px;
-    margin-top: 8px;
-    border-left: 4px solid var(--warning);
-    animation: fadeIn 0.3s ease;
+    margin-top: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Cabecera / Texto Narrativo */
+.narrative-main-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.narrative-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--primary) 15%, transparent);
+    color: var(--primary);
+    flex-shrink: 0;
+    font-size: 0.9rem;
 }
 
 .narrative-main {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 500;
     color: var(--text-primary);
-    margin-bottom: 16px;
-    line-height: 1.4;
+    line-height: 1.5;
+    flex: 1;
 }
 
 .narrative-main strong {
     color: var(--primary);
-    font-size: 1.25rem;
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
+/* Desglose de Totales */
 .narrative-breakdown {
-    border-top: 1px dashed var(--border);
-    padding-top: 12px;
+    border-top: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .breakdown-row {
     display: flex;
     justify-content: space-between;
-    font-size: 0.875rem;
+    align-items: center;
+    font-size: 0.85rem;
     color: var(--text-secondary);
-    margin-bottom: 6px;
 }
 
+.breakdown-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums; /* Mantiene el ancho fijo de dígitos */
+}
+
+/* Tarjeta Destacada (Fila Final) */
 .breakdown-row.highlight-row {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border);
-    font-size: 1rem;
-    font-weight: 700;
+    margin-top: 4px;
+    padding: 12px 14px;
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    border-radius: 8px;
     color: var(--text-primary);
 }
 
-@media (max-width: 480px) {
-    .operation-cards {
-        grid-template-columns: 1fr;
-    }
-    .step-container {
-        gap: 12px;
-    }
+.breakdown-row.highlight-row .breakdown-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.highlight-value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary);
 }
 
 /* ===== SECCIÓN EDUCATIVA DEL ORO ===== */
