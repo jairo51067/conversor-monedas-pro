@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+
     <!-- SEO Básico -->
-    <title>Conversor de Monedas Pro | Tasas BCV, Paralelo y TRM en Tiempo Real</title>
-    <meta name="description" content="Convierte divisas y oro al instante con tasas oficiales del BCV, Dólar Paralelo Binance y TRM de Colombia. App rápida, precisa y sin anuncios.">
-    <meta name="keywords" content="conversor de monedas, dolar bcv, dolar paralelo, trm colombia, calculadora de oro, convertir bolivares a pesos">
+   <title>Conversor Pro | BCV, Paralelo, TRM, Oro y Estadísticas en Tiempo Real</title>
+    <meta name="description"
+        content="Convierte divisas y oro al instante con tasas oficiales del BCV, Dólar Paralelo Binance y TRM de Colombia. App rápida, precisa y sin anuncios.">
+    <meta name="keywords"
+        content="conversor de monedas, dolar bcv, dolar paralelo, trm colombia, calculadora de oro, convertir bolivares a pesos">
     <meta name="author" content="Jairo Cárdenas">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://jairo51067.github.io/conversor-monedas-pro/">
@@ -47,7 +49,10 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
-    
+
+    <!-- FONT AWESOME (CORRECCIÓN CRÍTICA) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- Non-blocking Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
@@ -61,9 +66,10 @@
                     <button class="menu-toggle" id="menu-toggle">
                         <i class="fas fa-bars"></i>
                     </button>
+
                     <div class="header-title">
-                        <h1>💰 Conversor de Monedas</h1>
-                        <p>Tasas en tiempo real</p>
+                        <h1>💰 Conversor Pro</h1>
+                        <p>BCV · Paralelo · TRM · Oro · Estadísticas</p>
                     </div>
                 </div>
                 <div class="header-right">
@@ -94,14 +100,15 @@
                         <i class="fas fa-calculator"></i>
                         <span>Calculadora</span>
                     </a>
-                    <button class="sidebar-item" id="menu-show-history">
-                        <i class="fas fa-history"></i>
-                        <span>Historial de Conversiones</span>
-                    </button>
 
                     <button class="sidebar-item" id="menu-show-gold">
                         <i class="fas fa-coins" style="color: #F59E0B;"></i>
                         <span>Calculadora de Oro</span>
+                    </button>
+
+                    <button class="sidebar-item" id="menu-show-history">
+                        <i class="fas fa-history"></i>
+                        <span>Historial de Conversiones</span>
                     </button>
                 </div>
 
@@ -149,7 +156,7 @@
 
             <div class="sidebar-footer">
                 <p>© 2026 Conversor de Monedas Pro</p>
-                <p class="sidebar-version">v2.0.0</p>
+                <p class="sidebar-version">v3.0.0</p>
             </div>
         </div>
     </aside>
@@ -472,7 +479,7 @@
     <!-- FOOTER -->
     <footer class="app-footer">
         <div class="footer-content">
-            <spam class="title-app">&copy; 2026 Conversor de Monedas Pro V3</spam>
+            <spam class="title-app">&copy; 2026 Conversor de Monedas Pro v3.0.0</spam>
             <p>Autor: Jairo Cárdenas</p>
             <a href="mailto:jairo.cardenas.dev@gmail.com">jairo.cardenas.dev@gmail.com</a>
         </div>
