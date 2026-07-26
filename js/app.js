@@ -11,7 +11,7 @@ import { Greeting } from "./modules/greeting.js";
 import { Theme } from "./modules/theme.js";
 import { Stats } from "./modules/stats.js";
 import { GoldCalculator } from "./modules/gold.js";
-import NewsModule from './modules/news.js';
+import { News } from './modules/news.js'; // ✅ Importado
 
 class App {
   constructor() {
@@ -26,6 +26,7 @@ class App {
     this.theme = new Theme();
     this.stats = new Stats();
     this.goldCalc = new GoldCalculator();
+    this.news = new News(); // ✅ Inicializado en el constructor
   }
 
   async init() {
@@ -39,7 +40,7 @@ class App {
       this.loadCurrencies();
       this.setupEventListeners();
       this.setupSidebarMenu();
-      this.startServices();
+      this.startServices(); // <-- Aquí se llamará a this.news.init()
       this.loadConversionHistory();
 
       // 3. Mostrar saludo de bienvenida
@@ -467,6 +468,7 @@ class App {
   startServices() {
     this.clock.start();
     this.weather.init();
+    this.news.init(); // ✅ ¡AQUÍ ESTABA EL FALTANTE! Esto inicia la carga de noticias
   }
 }
 
