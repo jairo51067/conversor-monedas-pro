@@ -1,6 +1,6 @@
 {
   "id": "/conversor-monedas-pro/",
-  "name": "Conversor de Monedas Pro",
+  "name": "Conversor Pro",
   "short_name": "Conversor Pro",
   "description": "Convierte divisas y oro al instante con tasas BCV, Paralelo y TRM en tiempo real.",
   "start_url": "./index.html",

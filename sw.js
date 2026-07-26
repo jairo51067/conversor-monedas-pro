@@ -1,4 +1,4 @@
-const CACHE_NAME = 'app-cache-v2'; // Incrementado a v2 por los nuevos cambios
+const CACHE_NAME = 'app-cache-v2';
 const STATIC_ASSETS = [
     './',
     './index.html',
@@ -30,7 +30,6 @@ const STATIC_ASSETS = [
     'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
-// 1. Instalar e Iniciar Caché
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
@@ -40,7 +39,6 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// 2. Activar y Limpiar Cachés Antiguos
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((keys) => {
@@ -56,11 +54,8 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// 3. Estrategia de Intercepción de Peticiones (Híbrida Pro)
 self.addEventListener('fetch', (event) => {
     const request = event.request;
-
-    // Solo procesar peticiones GET
     if (request.method !== 'GET') return;
 
     // Estrategia A: Navegación HTML (Network First -> Cache -> Offline Page)
