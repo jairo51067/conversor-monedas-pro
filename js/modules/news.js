@@ -1,84 +1,214 @@
 export class News {
   constructor() {
-    this.api = "https://jairo-news-api.jairocardenas05.workers.dev/";
+    this.api = "https://jairo-news-api.jairocardenas05.workers.dev";
+
+    this.cacheKey = "currency-news-cache";
   }
 
   async fetchNews() {
+    const cached = localStorage.getItem(this.cacheKey);
+
+    if (cached) {
+      const data = JSON.parse(cached);
+
+      const age = Date.now() - data.timestamp;
+
+      if (age < 900000) {
+        return data.news;
+      }
+    }
+
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 8000);
+
     try {
-      const response = await fetch(this.api);
+      const response = await fetch(this.api, {
+        signal: controller.signal,
+      });
 
-      if (!response.ok) throw new Error();
+      clearTimeout(timeout);
 
-      return await response.json();
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+
+      const data = await response.json();
+
+      console.log("[News API]", data.version);
+
+      const news = data.news || [];
+
+      localStorage.setItem(
+        this.cacheKey,
+
+        JSON.stringify({
+          timestamp: Date.now(),
+
+          news,
+        }),
+      );
+
+      return news;
     } catch (error) {
       console.error("[News]", error);
+
+      if (cached) {
+        return JSON.parse(cached).news;
+      }
 
       return [];
     }
   }
 
-  async init() {
+  createCard(item) {
+    const card = document.createElement("article");
+
+    card.className = "news-card";
+
+    const image = item.image
+      ? `
+<img 
+class="news-image"
+src="${item.image}"
+loading="lazy"
+alt="${item.title}">
+`
+      : "";
+
+    card.innerHTML = `
+
+
+<a href="${item.link}"
+target="_blank"
+rel="noopener noreferrer">
+
+
+
+${image}
+
+
+
+<div class="news-content">
+
+
+<span class="news-category">
+
+${item.category}
+
+</span>
+
+
+
+<h3 class="news-title">
+
+${item.title}
+
+</h3>
+
+
+
+<p class="news-description">
+
+${item.description}
+
+</p>
+
+
+
+<div class="news-meta">
+
+
+<span>
+
+${item.source}
+
+</span>
+
+
+<span>
+
+${new Date(item.date).toLocaleDateString("es-VE", {
+  day: "numeric",
+  month: "short",
+})}
+
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</a>
+
+
+`;
+
+    return card;
+  }
+
+  async render() {
     const container = document.getElementById("news-container");
 
     if (!container) return;
 
     container.innerHTML = `
-<div class="loading-state">
-Cargando noticias...
-</div>
-`;
+
+    <div class="news-loading">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </div>
+
+    `;
 
     const news = await this.fetchNews();
 
-    if (news.length === 0) {
+    console.log("Noticias cargadas:", news);
+
+    if (!news.length) {
       container.innerHTML = `
-<p>
-No hay noticias disponibles
-</p>
-`;
+
+        <div class="news-empty">
+
+        No hay noticias disponibles
+
+        </div>
+
+        `;
 
       return;
     }
 
-    container.innerHTML = "";
-
-    const list = document.createElement("div");
-
-    list.className = "news-list";
+    const fragment = document.createDocumentFragment();
 
     news.forEach((item) => {
-      const card = document.createElement("a");
-
-      card.className = "news-card";
-
-      card.href = item.link;
-
-      card.target = "_blank";
-
-      card.rel = "noopener noreferrer";
-
-      card.innerHTML = `
-
-<div class="news-source">
-${item.source}
-</div>
-
-<h4 class="news-title">
-${item.title}
-</h4>
-
-<div class="news-date">
-${new Date(item.date).toLocaleDateString("es-VE", {
-  day: "numeric",
-  month: "short",
-})}
-</div>
-
-`;
-
-      list.appendChild(card);
+      fragment.appendChild(this.createCard(item));
     });
 
-    container.appendChild(list);
+    container.innerHTML = "";
+
+    container.appendChild(fragment);
+  }
+
+  async init() {
+    await this.render();
+
+    const refresh = document.getElementById("refresh-news");
+
+    if (refresh) {
+      refresh.addEventListener("click", async () => {
+        localStorage.removeItem(this.cacheKey);
+
+        await this.render();
+      });
+    }
   }
 }

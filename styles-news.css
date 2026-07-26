@@ -1,160 +1,150 @@
-/* ===== SECCIÓN DE NOTICIAS - MEJORADA ===== */
+/* ===== SECCIÓN DE NOTICIAS - PERFECTAMENTE ALINEADA ===== */
 .news-section {
     margin: 3.5rem 0;
     width: 100%;
     position: relative;
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.section-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(var(--primary-rgb, 79, 70, 229), 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
 .news-section h2 {
     font-size: clamp(1.25rem, 2.5vw, 1.5rem);
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.01em;
+}
+
+.news-section p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.news-refresh {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.25rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    letter-spacing: -0.01em;
-    position: relative;
-    padding-bottom: 0.5rem;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 
-.news-section h2::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 40px;
-    height: 3px;
+.news-refresh:hover {
     background: var(--primary);
-    border-radius: 3px;
+    color: white;
+    border-color: var(--primary);
+    transform: rotate(180deg);
 }
 
-.news-section h2 i {
-    color: var(--primary);
-    background: rgba(var(--primary-rgb, 59, 130, 246), 0.1);
-    padding: 0.5rem;
-    border-radius: var(--radius-sm, 8px);
-    font-size: 1.25rem;
-    transition: all 0.2s ease;
-}
-
-.news-section h2:hover i {
-    transform: scale(1.1);
-    background: rgba(var(--primary-rgb, 59, 130, 246), 0.15);
-}
-
-/* El div inyectado dinámicamente por tu JS */
-.news-list {
+/* Grid Responsivo */
+.news-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
     width: 100%;
-    margin: 0;
-    padding: 0;
+    padding: 1%;
 }
 
-/* Responsivo para 2 y 3 columnas */
 @media (min-width: 640px) {
-    .news-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.75rem;
-    }
+    .news-container { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; }
 }
-
 @media (min-width: 1024px) {
-    .news-list {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-    }
+    .news-container { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+}
+@media (min-width: 1400px) {
+    .news-container { grid-template-columns: repeat (4, 1fr); gap: 2rem; }
 }
 
-/* Tarjeta de Noticia */
+/* Tarjeta de Noticia (Ajustada para funcionar con la etiqueta <a> del JS) */
 .news-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: var(--radius-md, 12px);
-    padding: 1.25rem 1.5rem;
-    text-decoration: none;
-    color: var(--text-primary);
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    min-height: 220px;
-    position: relative;
-    overflow: hidden;
-    transition: 
-        transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    will-change: transform, box-shadow;
-    border-bottom: 4px solid transparent;
 }
 
-/* Hover estilizado */
+.news-card a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    padding: 1.25rem;
+}
+
 .news-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 25px -6px rgba(0, 0, 0, 0.15);
     border-color: var(--primary);
-    border-bottom-color: var(--primary);
 }
 
-/* Efecto de sombra para tarjetas */
-.news-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, 
-        var(--primary) 0%, 
-        rgba(var(--primary-rgb, 59, 130, 246), 0.5) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+/* Imagen de la noticia (si la API la proporciona) */
+.news-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: -1.25rem -1.25rem 1rem -1.25rem; /* Para que toque los bordes superiores */
+    width: calc(100% + 2.5rem);
 }
 
-.news-card:hover::before {
-    opacity: 1;
+/* Contenido de la tarjeta */
+.news-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
-/* Indicador de Fuente (Banco y Negocios, CriptoNoticias, etc.) */
-.news-source {
+.news-category {
     align-self: flex-start;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
     color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    background: rgba(var(--primary-rgb, 59, 130, 246), 0.08);
+    background: rgba(var(--primary-rgb, 79, 70, 229), 0.1);
     padding: 0.25rem 0.65rem;
     border-radius: 20px;
-    border: 1px solid rgba(var(--primary-rgb, 59, 130, 246), 0.18);
     margin-bottom: 0.85rem;
-    transition: all 0.2s ease;
 }
 
-.news-card:hover .news-source {
-    background: rgba(var(--primary-rgb, 59, 130, 246), 0.12);
-    border-color: rgba(var(--primary-rgb, 59, 130, 246), 0.25);
-}
-
-/* Título de la Noticia (h4 generado en JS) */
 .news-title {
     font-size: clamp(1rem, 1.5vw, 1.15rem);
-    font-weight: 600;
-    line-height: 1.45;
+    font-weight: 700;
+    line-height: 1.4;
     color: var(--text-primary);
-    margin: 0 0 1rem 0;
-    transition: 
-        color 0.2s ease,
-        transform 0.2s ease;
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
-    -ms-hyphens: auto;
-    hyphens: auto;
+    margin: 0 0 0.75rem 0;
+    transition: color 0.2s ease;
     
-    /* Truncado limpio a 3 líneas */
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -163,117 +153,69 @@
 
 .news-card:hover .news-title {
     color: var(--primary);
-    transform: translateX(2px);
 }
 
-/* Fecha (formato 'es-VE') */
-.news-date {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-tertiary, #718096);
+.news-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+    flex-grow: 1;
+    
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Meta datos (Fuente y Fecha) */
+.news-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: auto;
     padding-top: 0.75rem;
     border-top: 1px dashed var(--border);
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    transition: color 0.2s ease;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-tertiary, #718096);
 }
 
-.news-date::before {
-    content: "•";
-    color: var(--primary);
-    font-weight: bold;
-}
-
-.news-card:hover .news-date {
-    color: var(--text-secondary);
-}
-
-/* Estado de Carga (coincide con .loading-state de tu JS) */
-.loading-state {
+/* Estado de Carga */
+.news-loading {
+    grid-column: 1 / -1;
     text-align: center;
     padding: 3rem 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md, 12px);
+    border: 1px dashed var(--border);
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.news-loading span {
+    width: 12px;
+    height: 12px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.news-loading span:nth-child(1) { animation-delay: -0.32s; }
+.news-loading span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+.news-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
     color: var(--text-secondary);
     background: var(--bg-secondary);
     border-radius: var(--radius-md, 12px);
     border: 1px dashed var(--border);
-    font-weight: 500;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.loading-state::before {
-    content: "";
-    width: 28px;
-    height: 28px;
-    border: 3px solid rgba(var(--primary-rgb, 59, 130, 246), 0.2);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    will-change: transform;
-}
-
-.loading-state span {
-    font-size: 0.9rem;
-    color: var(--text-tertiary);
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* Añadimos estados de foco para accesibilidad */
-.news-card:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 59, 130, 246), 0.4);
-    transform: translateY(-4px);
-}
-
-/* Mejoramos la presentación para pantallas muy pequeñas */
-@media (max-width: 480px) {
-    .news-list {
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
-    }
-    
-    .news-section h2 {
-        font-size: 1.25rem;
-    }
-    
-    .news-card {
-        min-height: 190px;
-    }
-}
-
-/* Para pantallas grandes */
-@media (min-width: 1400px) {
-    .news-list {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 2rem;
-    }
-    
-    .news-card {
-        min-height: 240px;
-    }
-}
-
-/* Efecto de sombra para tarjetas en el estado de foco */
-.news-card:focus::before {
-    opacity: 1;
-}
-
-/* Añadimos transiciones suaves para mejor UX */
-.news-card, 
-.news-source,
-.news-title,
-.news-date {
-    transition: 
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
 }

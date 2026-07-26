@@ -1,844 +1,1044 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO Básico -->
-    <title>Conversor Pro | BCV, Paralelo, TRM, Oro y Estadísticas en Tiempo Real</title>
-    <meta name="description"
-        content="Convierte divisas y oro al instante con tasas oficiales del BCV, Dólar Paralelo Binance y TRM de Colombia. App rápida, precisa y sin anuncios.">
-    <meta name="keywords"
-        content="conversor de monedas, dolar bcv, dolar paralelo, trm colombia, calculadora de oro, convertir bolivares a pesos">
-    <meta name="author" content="Jairo Cárdenas">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://jairo51067.github.io/conversor-monedas-pro/">
+    <title>
+      Conversor Pro | BCV, Paralelo, TRM, Oro y Estadísticas en Tiempo Real
+    </title>
+    <meta
+      name="description"
+      content="Convierte divisas y oro al instante con tasas oficiales del BCV, Dólar Paralelo Binance y TRM de Colombia. App rápida, precisa y sin anuncios."
+    />
+    <meta
+      name="keywords"
+      content="conversor de monedas, dolar bcv, dolar paralelo, trm colombia, calculadora de oro, convertir bolivares a pesos"
+    />
+    <meta name="author" content="Jairo Cárdenas" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://jairo51067.github.io/conversor-monedas-pro/"
+    />
 
     <!-- Resource Hints -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
 
     <!-- PWA & Mobile Native Integration -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4F46E5">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Conversor Pro">
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Conversor Pro" />
 
     <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
-    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/images/favicon-32x32.png"
+    />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
 
     <!-- Open Graph & Social Cards -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jairo51067.github.io/conversor-monedas-pro/">
-    <meta property="og:title" content="Conversor Pro | BCV, Paralelo, TRM, Oro">
-    <meta property="og:description" content="Tasas de cambio en tiempo real y calculadora de oro educativa.">
-    <meta property="og:image" content="https://jairo51067.github.io/conversor-monedas-pro/assets/images/og-image.png">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://jairo51067.github.io/conversor-monedas-pro/"
+    />
+    <meta
+      property="og:title"
+      content="Conversor Pro | BCV, Paralelo, TRM, Oro"
+    />
+    <meta
+      property="og:description"
+      content="Tasas de cambio en tiempo real y calculadora de oro educativa."
+    />
+    <meta
+      property="og:image"
+      content="https://jairo51067.github.io/conversor-monedas-pro/assets/images/og-image.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Conversor Pro">
-    <meta name="twitter:description" content="Tasas de cambio en tiempo real: BCV, Paralelo, TRM y Oro.">
-    <meta name="twitter:image" content="https://jairo51067.github.io/conversor-monedas-pro/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Conversor Pro" />
+    <meta
+      name="twitter:description"
+      content="Tasas de cambio en tiempo real: BCV, Paralelo, TRM y Oro."
+    />
+    <meta
+      name="twitter:image"
+      content="https://jairo51067.github.io/conversor-monedas-pro/assets/images/og-image.png"
+    />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles-news.css">
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles-news.css" />
 
     <!-- Iconos (CRÍTICO: No eliminar) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
 
     <!-- Non-blocking Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <!-- HEADER -->
     <header class="app-header">
-        <div class="header-container">
-            <div class="header-content">
-                <div class="header-left">
-                    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación">
-                        <i class="fas fa-bars" aria-hidden="true"></i>
-                    </button>
+      <div class="header-container">
+        <div class="header-content">
+          <div class="header-left">
+            <button
+              class="menu-toggle"
+              id="menu-toggle"
+              aria-label="Abrir menú de navegación"
+            >
+              <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
 
-                    <div class="header-title">
-                        <h1>💰 Conversor Pro</h1>
-                        <p>BCV · Paralelo · TRM · Oro · Estadísticas</p>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar entre modo claro y oscuro">
-                        <i class="fas fa-moon theme-toggle-icon" aria-hidden="true"></i>
-                        <span class="theme-toggle-label">Oscuro</span>
-                    </button>
-                </div>
+            <div class="header-title">
+              <h1>💰 Conversor Pro</h1>
+              <p>BCV · Paralelo · TRM · Oro · Estadísticas</p>
             </div>
+          </div>
+          <div class="header-right">
+            <button
+              id="theme-toggle"
+              class="theme-toggle"
+              aria-label="Cambiar entre modo claro y oscuro"
+            >
+              <i class="fas fa-moon theme-toggle-icon" aria-hidden="true"></i>
+              <span class="theme-toggle-label">Oscuro</span>
+            </button>
+          </div>
         </div>
+      </div>
     </header>
 
     <!-- MENÚ LATERAL (SIDEBAR) -->
     <aside class="app-sidebar" id="app-sidebar">
-        <div class="sidebar-overlay" id="sidebar-overlay"></div>
-        <div class="sidebar-content">
-            <div class="sidebar-header">
-                <h2>Menú</h2>
-                <button class="sidebar-close" id="sidebar-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <nav class="sidebar-nav">
-                <div class="sidebar-section">
-                    <div class="sidebar-section-title">Herramientas</div>
-                    <a href="calculadora.html" class="sidebar-item">
-                        <i class="fas fa-calculator"></i>
-                        <span>Calculadora</span>
-                    </a>
-
-                    <button class="sidebar-item" id="menu-show-gold">
-                        <i class="fas fa-coins" style="color: #F59E0B;"></i>
-                        <span>Calculadora de Oro</span>
-                    </button>
-
-                    <button class="sidebar-item" id="menu-show-history">
-                        <i class="fas fa-history"></i>
-                        <span>Historial de Conversiones</span>
-                    </button>
-                </div>
-
-                <!-- Sección: Análisis -->
-                <div class="sidebar-section">
-                    <div class="sidebar-section-title">Análisis</div>
-                    <button class="sidebar-item" id="menu-show-stats">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Estadísticas y Tendencias</span>
-                    </button>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-section-title">Acciones</div>
-                    <button class="sidebar-item" id="menu-refresh-all">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Actualizar Todas las Tasas</span>
-                    </button>
-                    <button class="sidebar-item" id="menu-share">
-                        <i class="fas fa-share-alt"></i>
-                        <span>Compartir App</span>
-                    </button>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-section-title">Configuración</div>
-                    <button class="sidebar-item" id="menu-theme">
-                        <i class="fas fa-moon"></i>
-                        <span id="menu-theme-label">Cambiar a Modo Oscuro</span>
-                    </button>
-                    <button class="sidebar-item" id="menu-clear-cache">
-                        <i class="fas fa-trash-alt"></i>
-                        <span>Limpiar Caché</span>
-                    </button>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-section-title">Información</div>
-                    <button class="sidebar-item" id="menu-about">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Acerca de</span>
-                    </button>
-                </div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <p>© 2026 Conversor de Monedas Pro</p>
-                <p class="sidebar-version">v3.0.0</p>
-            </div>
+      <div class="sidebar-overlay" id="sidebar-overlay"></div>
+      <div class="sidebar-content">
+        <div class="sidebar-header">
+          <h2>Menú</h2>
+          <button class="sidebar-close" id="sidebar-close">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+
+        <nav class="sidebar-nav">
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">Herramientas</div>
+            <a href="calculadora.html" class="sidebar-item">
+              <i class="fas fa-calculator"></i>
+              <span>Calculadora</span>
+            </a>
+
+            <button class="sidebar-item" id="menu-show-gold">
+              <i class="fas fa-coins" style="color: #f59e0b"></i>
+              <span>Calculadora de Oro</span>
+            </button>
+
+            <button class="sidebar-item" id="menu-show-history">
+              <i class="fas fa-history"></i>
+              <span>Historial de Conversiones</span>
+            </button>
+          </div>
+
+          <!-- Sección: Análisis -->
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">Análisis</div>
+            <button class="sidebar-item" id="menu-show-stats">
+              <i class="fas fa-chart-line"></i>
+              <span>Estadísticas y Tendencias</span>
+            </button>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">Acciones</div>
+            <button class="sidebar-item" id="menu-refresh-all">
+              <i class="fas fa-sync-alt"></i>
+              <span>Actualizar Todas las Tasas</span>
+            </button>
+            <button class="sidebar-item" id="menu-share">
+              <i class="fas fa-share-alt"></i>
+              <span>Compartir App</span>
+            </button>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">Configuración</div>
+            <button class="sidebar-item" id="menu-theme">
+              <i class="fas fa-moon"></i>
+              <span id="menu-theme-label">Cambiar a Modo Oscuro</span>
+            </button>
+            <button class="sidebar-item" id="menu-clear-cache">
+              <i class="fas fa-trash-alt"></i>
+              <span>Limpiar Caché</span>
+            </button>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">Información</div>
+            <button class="sidebar-item" id="menu-about">
+              <i class="fas fa-info-circle"></i>
+              <span>Acerca de</span>
+            </button>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <p>© 2026 Conversor de Monedas Pro</p>
+          <p class="sidebar-version">v3.0.0</p>
+        </div>
+      </div>
     </aside>
 
     <!-- MODAL DE HISTORIAL -->
     <div class="modal-custom" id="modal-history">
-        <div class="modal-custom-overlay"></div>
-        <div class="modal-custom-content">
-            <div class="modal-custom-header">
-                <h3>📜 Historial de Conversiones</h3>
-                <button class="modal-custom-close" data-modal="modal-history">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-custom-body">
-                <div id="modal-history-list"></div>
-            </div>
-            <div class="modal-custom-footer">
-                <button class="btn btn-danger" id="btn-clear-history">
-                    <i class="fas fa-trash-alt"></i> Limpiar Historial
-                </button>
-            </div>
+      <div class="modal-custom-overlay"></div>
+      <div class="modal-custom-content">
+        <div class="modal-custom-header">
+          <h3>📜 Historial de Conversiones</h3>
+          <button class="modal-custom-close" data-modal="modal-history">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+        <div class="modal-custom-body">
+          <div id="modal-history-list"></div>
+        </div>
+        <div class="modal-custom-footer">
+          <button class="btn btn-danger" id="btn-clear-history">
+            <i class="fas fa-trash-alt"></i> Limpiar Historial
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- MODAL ACERCA DE -->
     <div class="modal-custom" id="modal-about">
-        <div class="modal-custom-overlay"></div>
-        <div class="modal-custom-content">
-            <div class="modal-custom-header">
-                <h3>ℹ️ Acerca de</h3>
-                <button class="modal-custom-close" data-modal="modal-about">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-custom-body">
-                <div class="about-content">
-                    <div class="about-logo">💰</div>
-                    <h4>Conversor de Monedas Pro</h4>
-                    <p class="about-version">Versión 3.0.0</p>
-                    <p>Aplicación profesional para conversión de monedas con tasas oficiales y paralelas de Venezuela y
-                        Colombia en tiempo real.</p>
-
-                    <div class="about-features">
-                        <div class="about-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Tasas BCV oficiales</span>
-                        </div>
-                        <div class="about-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Dólar paralelo Binance</span>
-                        </div>
-                        <div class="about-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>TRM Colombia</span>
-                        </div>
-                        <div class="about-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Conversión en tiempo real</span>
-                        </div>
-                        <div class="about-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Historial persistente</span>
-                        </div>
-                    </div>
-
-                    <div class="about-author">
-                        <p><strong>Autor:</strong> Jairo Cárdenas</p>
-                        <a href="mailto:jairo.cardenas.dev@gmail.com">
-                            <i class="fas fa-envelope"></i> jairo.cardenas.dev@gmail.com
-                        </a>
-                    </div>
-                </div>
-            </div>
+      <div class="modal-custom-overlay"></div>
+      <div class="modal-custom-content">
+        <div class="modal-custom-header">
+          <h3>ℹ️ Acerca de</h3>
+          <button class="modal-custom-close" data-modal="modal-about">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+        <div class="modal-custom-body">
+          <div class="about-content">
+            <div class="about-logo">💰</div>
+            <h4>Conversor de Monedas Pro</h4>
+            <p class="about-version">Versión 3.0.0</p>
+            <p>
+              Aplicación profesional para conversión de monedas con tasas
+              oficiales y paralelas de Venezuela y Colombia en tiempo real.
+            </p>
+
+            <div class="about-features">
+              <div class="about-feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Tasas BCV oficiales</span>
+              </div>
+              <div class="about-feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Dólar paralelo Binance</span>
+              </div>
+              <div class="about-feature">
+                <i class="fas fa-check-circle"></i>
+                <span>TRM Colombia</span>
+              </div>
+              <div class="about-feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Conversión en tiempo real</span>
+              </div>
+              <div class="about-feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Historial persistente</span>
+              </div>
+            </div>
+
+            <div class="about-author">
+              <p><strong>Autor:</strong> Jairo Cárdenas</p>
+              <a href="mailto:jairo.cardenas.dev@gmail.com">
+                <i class="fas fa-envelope"></i> jairo.cardenas.dev@gmail.com
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- MAIN CONTAINER -->
     <main class="app-main">
-        <div class="container">
+      <div class="container">
+        <!-- WIDGET FECHA Y CLIMA -->
+        <section class="widget-datetime">
+          <div class="datetime-content">
+            <div class="datetime-info">
+              <div class="day-name" id="day-name">Cargando...</div>
+              <div class="date-text" id="date">Cargando fecha...</div>
+              <div class="time-text" id="time">00:00:00</div>
+            </div>
+            <div class="weather-info">
+              <div class="weather-status">
+                <i id="day-icon" class="fas fa-sun"></i>
+                <span id="day-status">Día</span>
+              </div>
+              <div class="weather-temp">
+                <i class="fas fa-thermometer-half"></i>
+                <span id="temperature">--°C</span>
+              </div>
+              <div class="weather-desc" id="weather-description">
+                Cargando clima...
+              </div>
+            </div>
+          </div>
+        </section>
 
-            <!-- WIDGET FECHA Y CLIMA -->
-            <section class="widget-datetime">
-                <div class="datetime-content">
-                    <div class="datetime-info">
-                        <div class="day-name" id="day-name">Cargando...</div>
-                        <div class="date-text" id="date">Cargando fecha...</div>
-                        <div class="time-text" id="time">00:00:00</div>
-                    </div>
-                    <div class="weather-info">
-                        <div class="weather-status">
-                            <i id="day-icon" class="fas fa-sun"></i>
-                            <span id="day-status">Día</span>
-                        </div>
-                        <div class="weather-temp">
-                            <i class="fas fa-thermometer-half"></i>
-                            <span id="temperature">--°C</span>
-                        </div>
-                        <div class="weather-desc" id="weather-description">Cargando clima...</div>
-                    </div>
+        <!-- GRID DE TASAS PRINCIPALES -->
+        <section class="rates-grid">
+          <!-- Dólar BCV -->
+          <div class="rate-card rate-card-bcv">
+            <div class="rate-header">
+              <div class="rate-icon"><i class="fas fa-landmark"></i></div>
+              <div class="rate-title">
+                <h2>Dólar BCV</h2>
+                <span>Banco Central de Venezuela</span>
+              </div>
+            </div>
+            <div class="rate-value" id="resultadoBcv">
+              <span class="loading-state">Cargando...</span>
+            </div>
+            <div class="rate-footer">
+              <a
+                href="https://www.bcv.org.ve/"
+                target="_blank"
+                class="rate-link"
+              >
+                <i class="fas fa-external-link-alt"></i> Sitio oficial
+              </a>
+              <button id="actualizar" class="btn-refresh">
+                <i class="fas fa-sync-alt"></i> Actualizar
+              </button>
+            </div>
+          </div>
+
+          <!-- Euro BCV -->
+          <div class="rate-card rate-card-eur">
+            <div class="rate-header">
+              <div class="rate-icon"><i class="fas fa-euro-sign"></i></div>
+              <div class="rate-title">
+                <h2>Euro BCV</h2>
+                <span>Banco Central de Venezuela</span>
+              </div>
+            </div>
+            <div class="rate-value" id="resultadoEuroOficial">
+              <span class="loading-state">Cargando...</span>
+            </div>
+            <div class="rate-footer">
+              <a
+                href="https://www.bcv.org.ve/"
+                target="_blank"
+                class="rate-link"
+              >
+                <i class="fas fa-external-link-alt"></i> Sitio oficial
+              </a>
+              <button id="actualizarEuro" class="btn-refresh">
+                <i class="fas fa-sync-alt"></i> Actualizar
+              </button>
+            </div>
+          </div>
+
+          <!-- Dólar Paralelo -->
+          <div class="rate-card rate-card-paralelo">
+            <div class="rate-header">
+              <div class="rate-icon"><i class="fas fa-chart-line"></i></div>
+              <div class="rate-title">
+                <h2>Dólar Paralelo</h2>
+                <span>Binance P2P</span>
+              </div>
+            </div>
+            <div class="rate-value" id="resultadoParalelo">
+              <span class="loading-state">Cargando...</span>
+            </div>
+            <div class="rate-footer">
+              <button id="actualizarParalelo" class="btn-refresh">
+                <i class="fas fa-sync-alt"></i> Actualizar
+              </button>
+            </div>
+          </div>
+
+          <!-- TRM Colombia -->
+          <div class="rate-card rate-card-trm">
+            <div class="rate-header">
+              <div class="rate-icon">
+                <i class="fas fa-money-bill-wave"></i>
+              </div>
+              <div class="rate-title">
+                <h2>TRM Colombia</h2>
+                <span>Tasa Representativa del Mercado</span>
+              </div>
+            </div>
+            <div class="rate-value" id="valorDolarTRM">
+              <span class="loading-state">Cargando...</span>
+            </div>
+            <div class="rate-footer">
+              <a
+                href="https://www.fastforex.io/"
+                target="_blank"
+                class="rate-link"
+              >
+                <i class="fas fa-external-link-alt"></i> Sitio oficial
+              </a>
+              <button id="actualizarTRM" class="btn-refresh">
+                <i class="fas fa-sync-alt"></i> Actualizar
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- FACTORES DE CONVERSIÓN -->
+        <section class="factors-section">
+          <h2 class="section-title">
+            <i class="fas fa-calculator"></i>
+            Factores de Conversión
+          </h2>
+          <div class="factors-grid">
+            <div class="factor-card factor-1">
+              <div class="factor-label">TRM / Paralelo</div>
+              <div class="factor-value" id="factor-value">
+                <span class="loading-state">...</span>
+              </div>
+            </div>
+            <div class="factor-card factor-2">
+              <div class="factor-label">TRM / Oficial</div>
+              <div class="factor-value" id="factor-value-2">
+                <span class="loading-state">...</span>
+              </div>
+            </div>
+            <div class="factor-card factor-3">
+              <div class="factor-label">TRM / Euro</div>
+              <div class="factor-value" id="factor-value-3">
+                <span class="loading-state">...</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BOTONES DE CONVERSORES -->
+        <section class="converters-buttons">
+          <button
+            id="show-converter"
+            class="btn-converter btn-converter-primary"
+          >
+            <i class="fas fa-exchange-alt"></i>
+            <span>Conversor Tasas Oficiales</span>
+          </button>
+          <button
+            id="show-converter-paralelo"
+            class="btn-converter btn-converter-secondary"
+          >
+            <i class="fas fa-coins"></i>
+            <span>Conversor Bs ↔ COP</span>
+          </button>
+        </section>
+
+        <!-- CONVERSOR OFICIAL -->
+        <section
+          id="converter-container"
+          class="converter-section"
+          style="display: none"
+        >
+          <div class="converter-card">
+            <div class="converter-header">
+              <h2>Conversor Multi-Moneda</h2>
+              <button id="close-converter" class="btn-close-converter">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <form id="currency-form" class="converter-form">
+              <div class="form-group">
+                <label for="amount">Cantidad</label>
+                <input
+                  type="number"
+                  id="amount"
+                  class="form-control"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                  required
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="from">De</label>
+                  <select id="from" class="form-control"></select>
                 </div>
-            </section>
-
-            <!-- GRID DE TASAS PRINCIPALES -->
-            <section class="rates-grid">
-                <!-- Dólar BCV -->
-                <div class="rate-card rate-card-bcv">
-                    <div class="rate-header">
-                        <div class="rate-icon"><i class="fas fa-landmark"></i></div>
-                        <div class="rate-title">
-                            <h2>Dólar BCV</h2>
-                            <span>Banco Central de Venezuela</span>
-                        </div>
-                    </div>
-                    <div class="rate-value" id="resultadoBcv">
-                        <span class="loading-state">Cargando...</span>
-                    </div>
-                    <div class="rate-footer">
-                        <a href="https://www.bcv.org.ve/" target="_blank" class="rate-link">
-                            <i class="fas fa-external-link-alt"></i> Sitio oficial
-                        </a>
-                        <button id="actualizar" class="btn-refresh">
-                            <i class="fas fa-sync-alt"></i> Actualizar
-                        </button>
-                    </div>
+                <div class="form-group">
+                  <label for="to">A</label>
+                  <select id="to" class="form-control"></select>
                 </div>
-
-                <!-- Euro BCV -->
-                <div class="rate-card rate-card-eur">
-                    <div class="rate-header">
-                        <div class="rate-icon"><i class="fas fa-euro-sign"></i></div>
-                        <div class="rate-title">
-                            <h2>Euro BCV</h2>
-                            <span>Banco Central de Venezuela</span>
-                        </div>
-                    </div>
-                    <div class="rate-value" id="resultadoEuroOficial">
-                        <span class="loading-state">Cargando...</span>
-                    </div>
-                    <div class="rate-footer">
-                        <a href="https://www.bcv.org.ve/" target="_blank" class="rate-link">
-                            <i class="fas fa-external-link-alt"></i> Sitio oficial
-                        </a>
-                        <button id="actualizarEuro" class="btn-refresh">
-                            <i class="fas fa-sync-alt"></i> Actualizar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Dólar Paralelo -->
-                <div class="rate-card rate-card-paralelo">
-                    <div class="rate-header">
-                        <div class="rate-icon"><i class="fas fa-chart-line"></i></div>
-                        <div class="rate-title">
-                            <h2>Dólar Paralelo</h2>
-                            <span>Binance P2P</span>
-                        </div>
-                    </div>
-                    <div class="rate-value" id="resultadoParalelo">
-                        <span class="loading-state">Cargando...</span>
-                    </div>
-                    <div class="rate-footer">
-                        <button id="actualizarParalelo" class="btn-refresh">
-                            <i class="fas fa-sync-alt"></i> Actualizar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- TRM Colombia -->
-                <div class="rate-card rate-card-trm">
-                    <div class="rate-header">
-                        <div class="rate-icon"><i class="fas fa-money-bill-wave"></i></div>
-                        <div class="rate-title">
-                            <h2>TRM Colombia</h2>
-                            <span>Tasa Representativa del Mercado</span>
-                        </div>
-                    </div>
-                    <div class="rate-value" id="valorDolarTRM">
-                        <span class="loading-state">Cargando...</span>
-                    </div>
-                    <div class="rate-footer">
-                        <a href="https://www.fastforex.io/" target="_blank" class="rate-link">
-                            <i class="fas fa-external-link-alt"></i> Sitio oficial
-                        </a>
-                        <button id="actualizarTRM" class="btn-refresh">
-                            <i class="fas fa-sync-alt"></i> Actualizar
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FACTORES DE CONVERSIÓN -->
-            <section class="factors-section">
-                <h2 class="section-title">
-                    <i class="fas fa-calculator"></i>
-                    Factores de Conversión
-                </h2>
-                <div class="factors-grid">
-                    <div class="factor-card factor-1">
-                        <div class="factor-label">TRM / Paralelo</div>
-                        <div class="factor-value" id="factor-value">
-                            <span class="loading-state">...</span>
-                        </div>
-                    </div>
-                    <div class="factor-card factor-2">
-                        <div class="factor-label">TRM / Oficial</div>
-                        <div class="factor-value" id="factor-value-2">
-                            <span class="loading-state">...</span>
-                        </div>
-                    </div>
-                    <div class="factor-card factor-3">
-                        <div class="factor-label">TRM / Euro</div>
-                        <div class="factor-value" id="factor-value-3">
-                            <span class="loading-state">...</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- BOTONES DE CONVERSORES -->
-            <section class="converters-buttons">
-                <button id="show-converter" class="btn-converter btn-converter-primary">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Conversor Tasas Oficiales</span>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-arrow-right"></i> Convertir
                 </button>
-                <button id="show-converter-paralelo" class="btn-converter btn-converter-secondary">
-                    <i class="fas fa-coins"></i>
-                    <span>Conversor Bs ↔ COP</span>
+                <button type="button" id="refresh" class="btn btn-secondary">
+                  <i class="fas fa-sync-alt"></i> Actualizar
                 </button>
-            </section>
+              </div>
+            </form>
+            <div class="converter-result">
+              <h3>Resultado</h3>
+              <p id="result">--</p>
+            </div>
+            <div class="converter-history">
+              <h3>Historial Reciente</h3>
+              <ul id="history-list"></ul>
+            </div>
+          </div>
+        </section>
 
-            <!-- CONVERSOR OFICIAL -->
-            <section id="converter-container" class="converter-section" style="display: none;">
-                <div class="converter-card">
-                    <div class="converter-header">
-                        <h2>Conversor Multi-Moneda</h2>
-                        <button id="close-converter" class="btn-close-converter">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <form id="currency-form" class="converter-form">
-                        <div class="form-group">
-                            <label for="amount">Cantidad</label>
-                            <input type="number" id="amount" class="form-control" placeholder="0.00" step="0.01" min="0"
-                                required>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="from">De</label>
-                                <select id="from" class="form-control"></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="to">A</label>
-                                <select id="to" class="form-control"></select>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-arrow-right"></i> Convertir
-                            </button>
-                            <button type="button" id="refresh" class="btn btn-secondary">
-                                <i class="fas fa-sync-alt"></i> Actualizar
-                            </button>
-                        </div>
-                    </form>
-                    <div class="converter-result">
-                        <h3>Resultado</h3>
-                        <p id="result">--</p>
-                    </div>
-                    <div class="converter-history">
-                        <h3>Historial Reciente</h3>
-                        <ul id="history-list"></ul>
-                    </div>
-                </div>
-            </section>
+        <!-- CONVERSOR PARALELO -->
+        <section
+          id="convertir-a-paralelo"
+          class="converter-section"
+          style="display: none"
+        >
+          <div class="converter-card">
+            <div class="converter-header">
+              <h2>Conversor Bs ↔ COP</h2>
+              <button id="close-converter-paralelo" class="btn-close-converter">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
 
-            <!-- CONVERSOR PARALELO -->
-            <section id="convertir-a-paralelo" class="converter-section" style="display: none;">
-                <div class="converter-card">
-                    <div class="converter-header">
-                        <h2>Conversor Bs ↔ COP</h2>
-                        <button id="close-converter-paralelo" class="btn-close-converter">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+            <div class="parallel-converter">
+              <h3>Bolívares a Pesos</h3>
+              <div class="form-group">
+                <label for="input-bolivares">Cantidad en Bolívares (VES)</label>
+                <input
+                  type="number"
+                  id="input-bolivares"
+                  class="form-control"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+              <div class="result-display result-cop">
+                <span class="result-label">Recibes:</span>
+                <span id="resultado-cop" class="result-value">$ 0,00</span>
+                <span class="result-currency">COP</span>
+              </div>
+            </div>
 
-                    <div class="parallel-converter">
-                        <h3>Bolívares a Pesos</h3>
-                        <div class="form-group">
-                            <label for="input-bolivares">Cantidad en Bolívares (VES)</label>
-                            <input type="number" id="input-bolivares" class="form-control" placeholder="0.00"
-                                step="0.01" min="0">
-                        </div>
-                        <div class="result-display result-cop">
-                            <span class="result-label">Recibes:</span>
-                            <span id="resultado-cop" class="result-value">$ 0,00</span>
-                            <span class="result-currency">COP</span>
-                        </div>
-                    </div>
+            <div class="parallel-converter">
+              <h3>Pesos a Bolívares</h3>
+              <div class="form-group">
+                <label for="input-pesos">Cantidad en Pesos (COP)</label>
+                <input
+                  type="number"
+                  id="input-pesos"
+                  class="form-control"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+              <div class="result-display result-bs">
+                <span class="result-label">Recibes:</span>
+                <span id="resultado-bs" class="result-value">Bs. 0,00</span>
+                <span class="result-currency">VES</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                    <div class="parallel-converter">
-                        <h3>Pesos a Bolívares</h3>
-                        <div class="form-group">
-                            <label for="input-pesos">Cantidad en Pesos (COP)</label>
-                            <input type="number" id="input-pesos" class="form-control" placeholder="0.00" step="0.01"
-                                min="0">
-                        </div>
-                        <div class="result-display result-bs">
-                            <span class="result-label">Recibes:</span>
-                            <span id="resultado-bs" class="result-value">Bs. 0,00</span>
-                            <span class="result-currency">VES</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <!-- SECCIÓN DE NOTICIAS -->
+        <section class="news-section" id="news">
+          <div class="section-header">
+            <div>
+              <span class="section-badge"> Actualidad </span>
 
-             <!-- SECCIÓN DE NOTICIAS -->
-            <section class="news-section">
-                <h2><i class="fas fa-newspaper"></i> Últimas Noticias</h2>
-                <div id="news-container" class="news-grid">
-                    <!-- Las noticias se cargarán aquí dinámicamente -->
-                </div>
-            </section>
+              <h2>Noticias financieras</h2>
 
-        </div>
+              <p>Información económica y mercados en tiempo real.</p>
+            </div>
+
+            <button
+              class="news-refresh"
+              id="refresh-news"
+              aria-label="Actualizar noticias"
+            >
+              ↻
+            </button>
+          </div>
+
+          <div id="news-container" class="news-container">
+            <div class="news-loading">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
     <!-- FOOTER -->
     <footer class="app-footer">
-        <div class="footer-content">
-            <spam class="title-app">&copy; 2026 Conversor de Monedas Pro v3.0.0</spam>
-            <p>Autor: Jairo Cárdenas</p>
-            <a href="mailto:jairo.cardenas.dev@gmail.com">jairo.cardenas.dev@gmail.com</a>
-        </div>
+      <div class="footer-content">
+        <spam class="title-app"
+          >&copy; 2026 Conversor de Monedas Pro v3.0.0</spam
+        >
+        <p>Autor: Jairo Cárdenas</p>
+        <a href="mailto:jairo.cardenas.dev@gmail.com"
+          >jairo.cardenas.dev@gmail.com</a
+        >
+      </div>
     </footer>
 
     <!-- MODAL DE ESTADÍSTICAS -->
     <div class="modal-custom" id="modal-stats">
-        <div class="modal-custom-overlay"></div>
-        <div class="modal-custom-content stats-modal-content">
-            <div class="modal-custom-header">
-                <h3>📈 Estadísticas</h3>
-                <button class="modal-custom-close" data-modal="modal-stats">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-custom-body">
-                <!-- Selector de Moneda -->
-                <div class="stats-tabs">
-                    <button class="stats-tab" data-currency="bcv">BCV</button>
-                    <button class="stats-tab" data-currency="euro">Euro</button>
-                    <button class="stats-tab active" data-currency="paralelo">Paralelo</button>
-                    <button class="stats-tab" data-currency="trm">TRM</button>
-
-                </div>
-
-                <!-- Resumen de Variación -->
-                <div class="stats-summary">
-                    <div class="summary-item">
-                        <span class="summary-label">Valor Actual</span>
-                        <span class="summary-value" id="stat-current-value">--</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Variación (24h)</span>
-                        <span class="summary-value" id="stat-variation">--</span>
-                    </div>
-                </div>
-
-                <!-- Selector de Tiempo -->
-                <div class="timeframe-selector">
-                    <button class="time-btn active" data-days="7">7 Días</button>
-                    <button class="time-btn" data-days="30">30 Días</button>
-                    <button class="time-btn" data-days="365">Año</button>
-                </div>
-
-                <!-- Contenedor del Gráfico -->
-                <div class="chart-container">
-                    <canvas id="statsChart"></canvas>
-                </div>
-            </div>
+      <div class="modal-custom-overlay"></div>
+      <div class="modal-custom-content stats-modal-content">
+        <div class="modal-custom-header">
+          <h3>📈 Estadísticas</h3>
+          <button class="modal-custom-close" data-modal="modal-stats">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+        <div class="modal-custom-body">
+          <!-- Selector de Moneda -->
+          <div class="stats-tabs">
+            <button class="stats-tab" data-currency="bcv">BCV</button>
+            <button class="stats-tab" data-currency="euro">Euro</button>
+            <button class="stats-tab active" data-currency="paralelo">
+              Paralelo
+            </button>
+            <button class="stats-tab" data-currency="trm">TRM</button>
+          </div>
+
+          <!-- Resumen de Variación -->
+          <div class="stats-summary">
+            <div class="summary-item">
+              <span class="summary-label">Valor Actual</span>
+              <span class="summary-value" id="stat-current-value">--</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Variación (24h)</span>
+              <span class="summary-value" id="stat-variation">--</span>
+            </div>
+          </div>
+
+          <!-- Selector de Tiempo -->
+          <div class="timeframe-selector">
+            <button class="time-btn active" data-days="7">7 Días</button>
+            <button class="time-btn" data-days="30">30 Días</button>
+            <button class="time-btn" data-days="365">Año</button>
+          </div>
+
+          <!-- Contenedor del Gráfico -->
+          <div class="chart-container">
+            <canvas id="statsChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- MODAL CALCULADORA DE ORO EDUCATIVA -->
     <div class="modal-custom" id="modal-gold">
-        <div class="modal-custom-overlay"></div>
-        <div class="modal-custom-content gold-modal-content">
-            <div class="modal-custom-header">
-                <h3>🏆 Calculadora de Oro</h3>
-                <button class="modal-custom-close" data-modal="modal-gold">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <div class="modal-custom-body">
-
-                <!-- Precio de Mercado (Automático) -->
-                <div class="market-price-banner">
-                    <i class="fas fa-globe-americas"></i>
-                    <div>
-                        <span class="banner-label">Precio internacional del Oro (24k):</span>
-                        <span class="banner-value" id="market-gold-price">Cargando...</span>
-                    </div>
-                    <small class="banner-update" id="market-gold-time"></small>
-                </div>
-
-                <p class="gold-intro">Sigue estos 3 pasos para obtener una estimación realista. La onza troy (31.1035g)
-                    es el estándar mundial y su precio base siempre se calcula sobre oro puro (24k).</p>
-
-                <!-- Paso 1: Cantidad -->
-                <div class="step-container">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <label>Ingresa cuánto oro tienes que deseas adquirir o vender:</label>
-                        <div class="input-group">
-                            <input type="number" id="gold-amount" class="form-control" placeholder="Ej: 5" value="5"
-                                step="0.1" min="0.1">
-                            <select id="gold-unit" class="form-control gold-unit-select">
-                                <option value="g">Gramos (g)</option>
-                                <option value="oz">Onzas Troy (oz)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Paso 2: Pureza (Tarjetas Visuales) -->
-                <div class="step-container step-purity">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <label>Escoge o determina cuál es la pureza (kilates) de la pieza:</label>
-                        <div class="purity-cards">
-                            <label class="purity-card">
-                                <input type="radio" name="gold-purity" value="24">
-                                <div class="purity-card-content">
-                                    <span class="purity-k">24k</span>
-                                    <span class="purity-pct">99.9% Oro</span>
-                                    <span class="purity-desc">Lingotes y monedas de inversión</span>
-                                </div>
-                            </label>
-                            <label class="purity-card">
-                                <input type="radio" name="gold-purity" value="22">
-                                <div class="purity-card-content">
-                                    <span class="purity-k">22k</span>
-                                    <span class="purity-pct">91.6% Oro</span>
-                                    <span class="purity-desc">Joyería de alta ley</span>
-                                </div>
-                            </label>
-                            <label class="purity-card">
-                                <input type="radio" name="gold-purity" value="18" checked>
-                                <div class="purity-card-content">
-                                    <span class="purity-k">18k</span>
-                                    <span class="purity-pct">75.0% Oro</span>
-                                    <span class="purity-desc">Joyería fina y anillos</span>
-                                </div>
-                            </label>
-                            <label class="purity-card">
-                                <input type="radio" name="gold-purity" value="14">
-                                <div class="purity-card-content">
-                                    <span class="purity-k">14k</span>
-                                    <span class="purity-pct">58.3% Oro</span>
-                                    <span class="purity-desc">Joyería común resistente</span>
-                                </div>
-                            </label>
-                            <label class="purity-card">
-                                <input type="radio" name="gold-purity" value="10">
-                                <div class="purity-card-content">
-                                    <span class="purity-k">10k</span>
-                                    <span class="purity-pct">41.7% Oro</span>
-                                    <span class="purity-desc">Mínimo legal para ser "oro"</span>
-                                </div>
-                            </label>
-                        </div>
-                        <small class="form-hint" id="purity-hint">El 75% del peso es oro puro. El 25% restante son otros
-                            metales (cobre, plata, etc.) que le dan dureza y durabilidad.</small>
-                    </div>
-                </div>
-
-                <!-- Paso 3: Operación -->
-                <div class="step-container">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <label>¿Cuál es tu objetivo con esta pieza?</label>
-                        <div class="operation-cards">
-                            <label class="op-card">
-                                <input type="radio" name="gold-operation" value="venta" checked>
-                                <div class="op-card-content">
-                                    <i class="fas fa-hand-holding-usd"></i>
-                                    <span>Quiero <strong>VENDER</strong> mi oro</span>
-                                    <small>(La casa de compra retiene un margen por refinación y ganancia)</small>
-                                </div>
-                            </label>
-                            <label class="op-card">
-                                <input type="radio" name="gold-operation" value="compra">
-                                <div class="op-card-content">
-                                    <i class="fas fa-shopping-bag"></i>
-                                    <span>Quiero <strong>COMPRAR</strong> oro</span>
-                                    <small>(La joyería agrega un margen por diseño, fabricación y venta)</small>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Resultado Narrativo y Desglose -->
-                <div class="gold-results-narrative" id="gold-result-box" style="display: none;">
-                    <!-- Cabecera narrativa con ícono explicativo -->
-                    <div class="narrative-main-wrapper">
-                        <div class="narrative-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
-                        <div class="narrative-main" id="narrative-text"></div>
-                    </div>
-
-                    <!-- Desglose numérico -->
-                    <div class="narrative-breakdown">
-                        <div class="breakdown-row">
-                            <span class="breakdown-label">Valor base del oro puro (por gramo):</span>
-                            <span class="breakdown-value" id="break-base">$0.00</span>
-                        </div>
-
-                        <div class="breakdown-row">
-                            <span class="breakdown-label">
-                                Valor ajustado por pureza (<span id="break-purity-pct">75%</span>):
-                            </span>
-                            <span class="breakdown-value" id="break-adjusted">$0.00</span>
-                        </div>
-
-                        <!-- Banner destacado para la cifra final -->
-                        <div class="breakdown-row highlight-row">
-                            <span class="breakdown-label" id="break-margin-label">Margen de la casa de compra
-                                (-15%):</span>
-                            <span class="breakdown-value highlight-value" id="break-final">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- NUEVA SECCIÓN: Conoce más sobre el Oro -->
-                <div class="gold-education-section">
-                    <h4 class="education-title"><i class="fas fa-graduation-cap"></i> Conoce más sobre el Oro</h4>
-
-                    <div class="education-tips">
-                        <div class="edu-tip">
-                            <div class="edu-tip-icon">
-                                <i class="fas fa-ring"></i>
-                            </div>
-                            <div class="edu-tip-content">
-                                <strong class="edu-tip-title">¿Qué significan los Kilates (K)?</strong>
-                                <p>
-                                    Indican la pureza. <span class="num-badge highlight">24K</span> es oro puro (99.9%),
-                                    pero es muy blando.
-                                    Por eso la joyería usa <span class="num-badge">18K</span> (75%) o
-                                    <span class="num-badge">14K</span> (58.3%), mezclándolo con otros metales para darle
-                                    resistencia.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="edu-tip">
-                            <div class="edu-tip-icon">
-                                <i class="fas fa-weight-hanging"></i>
-                            </div>
-                            <div class="edu-tip-content">
-                                <strong class="edu-tip-title">Onza Troy vs. Onza Normal</strong>
-                                <p>
-                                    El mercado de metales usa la <strong>Onza Troy</strong>
-                                    <span class="num-badge highlight">31.1035 g</span>, más pesada que la onza común de
-                                    cocina
-                                    <span class="num-badge">28.35 g</span>.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="edu-tip">
-                            <div class="edu-tip-icon">
-                                <i class="fas fa-balance-scale"></i>
-                            </div>
-                            <div class="edu-tip-content">
-                                <strong class="edu-tip-title">¿Por qué cambia el precio al Comprar o Vender?</strong>
-                                <p>
-                                    Existe un <span class="num-badge highlight">spread</span> o margen.
-                                    Al <strong>vender</strong>, las casas de compra retienen un % por costos de
-                                    refinación.
-                                    Al <strong>comprar</strong>, las joyerías agregan un % por diseño y fabricación.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="education-links">
-                        <p class="links-title">🔗 Fuentes confiables para ampliar tu conocimiento:</p>
-                        <div class="link-buttons">
-                            <a href="https://www.gold.org/" target="_blank" class="edu-link-btn">
-                                <i class="fas fa-globe"></i> Consejo Mundial del Oro
-                            </a>
-                            <a href="https://www.tradingview.com/symbols/XAUUSD/" target="_blank" class="edu-link-btn">
-                                <i class="fas fa-chart-line"></i> Precio del Oro en Tiempo Real
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+      <div class="modal-custom-overlay"></div>
+      <div class="modal-custom-content gold-modal-content">
+        <div class="modal-custom-header">
+          <h3>🏆 Calculadora de Oro</h3>
+          <button class="modal-custom-close" data-modal="modal-gold">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+
+        <div class="modal-custom-body">
+          <!-- Precio de Mercado (Automático) -->
+          <div class="market-price-banner">
+            <i class="fas fa-globe-americas"></i>
+            <div>
+              <span class="banner-label"
+                >Precio internacional del Oro (24k):</span
+              >
+              <span class="banner-value" id="market-gold-price"
+                >Cargando...</span
+              >
+            </div>
+            <small class="banner-update" id="market-gold-time"></small>
+          </div>
+
+          <p class="gold-intro">
+            Sigue estos 3 pasos para obtener una estimación realista. La onza
+            troy (31.1035g) es el estándar mundial y su precio base siempre se
+            calcula sobre oro puro (24k).
+          </p>
+
+          <!-- Paso 1: Cantidad -->
+          <div class="step-container">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <label
+                >Ingresa cuánto oro tienes que deseas adquirir o vender:</label
+              >
+              <div class="input-group">
+                <input
+                  type="number"
+                  id="gold-amount"
+                  class="form-control"
+                  placeholder="Ej: 5"
+                  value="5"
+                  step="0.1"
+                  min="0.1"
+                />
+                <select id="gold-unit" class="form-control gold-unit-select">
+                  <option value="g">Gramos (g)</option>
+                  <option value="oz">Onzas Troy (oz)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paso 2: Pureza (Tarjetas Visuales) -->
+          <div class="step-container step-purity">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <label
+                >Escoge o determina cuál es la pureza (kilates) de la
+                pieza:</label
+              >
+              <div class="purity-cards">
+                <label class="purity-card">
+                  <input type="radio" name="gold-purity" value="24" />
+                  <div class="purity-card-content">
+                    <span class="purity-k">24k</span>
+                    <span class="purity-pct">99.9% Oro</span>
+                    <span class="purity-desc"
+                      >Lingotes y monedas de inversión</span
+                    >
+                  </div>
+                </label>
+                <label class="purity-card">
+                  <input type="radio" name="gold-purity" value="22" />
+                  <div class="purity-card-content">
+                    <span class="purity-k">22k</span>
+                    <span class="purity-pct">91.6% Oro</span>
+                    <span class="purity-desc">Joyería de alta ley</span>
+                  </div>
+                </label>
+                <label class="purity-card">
+                  <input type="radio" name="gold-purity" value="18" checked />
+                  <div class="purity-card-content">
+                    <span class="purity-k">18k</span>
+                    <span class="purity-pct">75.0% Oro</span>
+                    <span class="purity-desc">Joyería fina y anillos</span>
+                  </div>
+                </label>
+                <label class="purity-card">
+                  <input type="radio" name="gold-purity" value="14" />
+                  <div class="purity-card-content">
+                    <span class="purity-k">14k</span>
+                    <span class="purity-pct">58.3% Oro</span>
+                    <span class="purity-desc">Joyería común resistente</span>
+                  </div>
+                </label>
+                <label class="purity-card">
+                  <input type="radio" name="gold-purity" value="10" />
+                  <div class="purity-card-content">
+                    <span class="purity-k">10k</span>
+                    <span class="purity-pct">41.7% Oro</span>
+                    <span class="purity-desc">Mínimo legal para ser "oro"</span>
+                  </div>
+                </label>
+              </div>
+              <small class="form-hint" id="purity-hint"
+                >El 75% del peso es oro puro. El 25% restante son otros metales
+                (cobre, plata, etc.) que le dan dureza y durabilidad.</small
+              >
+            </div>
+          </div>
+
+          <!-- Paso 3: Operación -->
+          <div class="step-container">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <label>¿Cuál es tu objetivo con esta pieza?</label>
+              <div class="operation-cards">
+                <label class="op-card">
+                  <input
+                    type="radio"
+                    name="gold-operation"
+                    value="venta"
+                    checked
+                  />
+                  <div class="op-card-content">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Quiero <strong>VENDER</strong> mi oro</span>
+                    <small
+                      >(La casa de compra retiene un margen por refinación y
+                      ganancia)</small
+                    >
+                  </div>
+                </label>
+                <label class="op-card">
+                  <input type="radio" name="gold-operation" value="compra" />
+                  <div class="op-card-content">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Quiero <strong>COMPRAR</strong> oro</span>
+                    <small
+                      >(La joyería agrega un margen por diseño, fabricación y
+                      venta)</small
+                    >
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resultado Narrativo y Desglose -->
+          <div
+            class="gold-results-narrative"
+            id="gold-result-box"
+            style="display: none"
+          >
+            <!-- Cabecera narrativa con ícono explicativo -->
+            <div class="narrative-main-wrapper">
+              <div class="narrative-icon">
+                <i class="fas fa-calculator"></i>
+              </div>
+              <div class="narrative-main" id="narrative-text"></div>
+            </div>
+
+            <!-- Desglose numérico -->
+            <div class="narrative-breakdown">
+              <div class="breakdown-row">
+                <span class="breakdown-label"
+                  >Valor base del oro puro (por gramo):</span
+                >
+                <span class="breakdown-value" id="break-base">$0.00</span>
+              </div>
+
+              <div class="breakdown-row">
+                <span class="breakdown-label">
+                  Valor ajustado por pureza (<span id="break-purity-pct"
+                    >75%</span
+                  >):
+                </span>
+                <span class="breakdown-value" id="break-adjusted">$0.00</span>
+              </div>
+
+              <!-- Banner destacado para la cifra final -->
+              <div class="breakdown-row highlight-row">
+                <span class="breakdown-label" id="break-margin-label"
+                  >Margen de la casa de compra (-15%):</span
+                >
+                <span class="breakdown-value highlight-value" id="break-final"
+                  >$0.00</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- NUEVA SECCIÓN: Conoce más sobre el Oro -->
+          <div class="gold-education-section">
+            <h4 class="education-title">
+              <i class="fas fa-graduation-cap"></i> Conoce más sobre el Oro
+            </h4>
+
+            <div class="education-tips">
+              <div class="edu-tip">
+                <div class="edu-tip-icon">
+                  <i class="fas fa-ring"></i>
+                </div>
+                <div class="edu-tip-content">
+                  <strong class="edu-tip-title"
+                    >¿Qué significan los Kilates (K)?</strong
+                  >
+                  <p>
+                    Indican la pureza.
+                    <span class="num-badge highlight">24K</span> es oro puro
+                    (99.9%), pero es muy blando. Por eso la joyería usa
+                    <span class="num-badge">18K</span> (75%) o
+                    <span class="num-badge">14K</span> (58.3%), mezclándolo con
+                    otros metales para darle resistencia.
+                  </p>
+                </div>
+              </div>
+
+              <div class="edu-tip">
+                <div class="edu-tip-icon">
+                  <i class="fas fa-weight-hanging"></i>
+                </div>
+                <div class="edu-tip-content">
+                  <strong class="edu-tip-title"
+                    >Onza Troy vs. Onza Normal</strong
+                  >
+                  <p>
+                    El mercado de metales usa la <strong>Onza Troy</strong>
+                    <span class="num-badge highlight">31.1035 g</span>, más
+                    pesada que la onza común de cocina
+                    <span class="num-badge">28.35 g</span>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="edu-tip">
+                <div class="edu-tip-icon">
+                  <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="edu-tip-content">
+                  <strong class="edu-tip-title"
+                    >¿Por qué cambia el precio al Comprar o Vender?</strong
+                  >
+                  <p>
+                    Existe un <span class="num-badge highlight">spread</span> o
+                    margen. Al <strong>vender</strong>, las casas de compra
+                    retienen un % por costos de refinación. Al
+                    <strong>comprar</strong>, las joyerías agregan un % por
+                    diseño y fabricación.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="education-links">
+              <p class="links-title">
+                🔗 Fuentes confiables para ampliar tu conocimiento:
+              </p>
+              <div class="link-buttons">
+                <a
+                  href="https://www.gold.org/"
+                  target="_blank"
+                  class="edu-link-btn"
+                >
+                  <i class="fas fa-globe"></i> Consejo Mundial del Oro
+                </a>
+                <a
+                  href="https://www.tradingview.com/symbols/XAUUSD/"
+                  target="_blank"
+                  class="edu-link-btn"
+                >
+                  <i class="fas fa-chart-line"></i> Precio del Oro en Tiempo
+                  Real
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- MODAL DE BIENVENIDA (WELCOME DASHBOARD) -->
     <div id="modalSaludo" class="glass-modal">
-        <div class="glass-content welcome-dashboard">
-            <!-- Saludo Personalizado -->
-            <div class="welcome-header">
-                <h2 id="welcome-greeting">👋 ¡Hola!</h2>
-                <p class="welcome-subtitle">Resumen del mercado hoy</p>
-            </div>
-
-            <!-- Grid de Tasas Rápidas -->
-            <div class="rates-mini-grid">
-                <div class="rate-mini-card">
-                    <div class="rate-mini-label">BCV</div>
-                    <div class="rate-mini-value" id="welcome-bcv">--</div>
-                </div>
-                <div class="rate-mini-card">
-                    <div class="rate-mini-label">Paralelo</div>
-                    <div class="rate-mini-value" id="welcome-paralelo">--</div>
-                </div>
-                <div class="rate-mini-card">
-                    <div class="rate-mini-label">TRM</div>
-                    <div class="rate-mini-value" id="welcome-trm">--</div>
-                </div>
-            </div>
-
-            <!-- Insight del Día -->
-            <div class="welcome-insight">
-                <div class="insight-icon">💡</div>
-                <div class="insight-content">
-                    <div class="insight-title">Insight del día</div>
-                    <div class="insight-text" id="welcome-insight-text">Cargando...</div>
-                </div>
-            </div>
-
-            <!-- Tip Rotativo -->
-            <div class="welcome-tip">
-                <i class="fas fa-lightbulb"></i>
-                <span id="welcome-tip-text">Tip del día</span>
-            </div>
-
-            <!-- Estado de Actualización -->
-            <div class="welcome-footer">
-                <div class="update-status">
-                    <i class="fas fa-clock"></i>
-                    <span id="welcome-last-update">Actualizado: --</span>
-                </div>
-            </div>
-
-            <!-- Botón de Cierre -->
-            <button class="welcome-close-btn">¡Entendido!</button>
+      <div class="glass-content welcome-dashboard">
+        <!-- Saludo Personalizado -->
+        <div class="welcome-header">
+          <h2 id="welcome-greeting">👋 ¡Hola!</h2>
+          <p class="welcome-subtitle">Resumen del mercado hoy</p>
         </div>
+
+        <!-- Grid de Tasas Rápidas -->
+        <div class="rates-mini-grid">
+          <div class="rate-mini-card">
+            <div class="rate-mini-label">BCV</div>
+            <div class="rate-mini-value" id="welcome-bcv">--</div>
+          </div>
+          <div class="rate-mini-card">
+            <div class="rate-mini-label">Paralelo</div>
+            <div class="rate-mini-value" id="welcome-paralelo">--</div>
+          </div>
+          <div class="rate-mini-card">
+            <div class="rate-mini-label">TRM</div>
+            <div class="rate-mini-value" id="welcome-trm">--</div>
+          </div>
+        </div>
+
+        <!-- Insight del Día -->
+        <div class="welcome-insight">
+          <div class="insight-icon">💡</div>
+          <div class="insight-content">
+            <div class="insight-title">Insight del día</div>
+            <div class="insight-text" id="welcome-insight-text">
+              Cargando...
+            </div>
+          </div>
+        </div>
+
+        <!-- Tip Rotativo -->
+        <div class="welcome-tip">
+          <i class="fas fa-lightbulb"></i>
+          <span id="welcome-tip-text">Tip del día</span>
+        </div>
+
+        <!-- Estado de Actualización -->
+        <div class="welcome-footer">
+          <div class="update-status">
+            <i class="fas fa-clock"></i>
+            <span id="welcome-last-update">Actualizado: --</span>
+          </div>
+        </div>
+
+        <!-- Botón de Cierre -->
+        <button class="welcome-close-btn">¡Entendido!</button>
+      </div>
     </div>
 
     <!-- Scripts de la App -->
     <!-- Font Awesome: cargar con preload + media trick -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
+    <link
+      rel="preload"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
     <noscript>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      />
     </noscript>
 
     <!-- Bootstrap JS: mover al final (ya está) y agregar defer -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
     <script type="module" src="js/app.js"></script>
 
     <!-- Registro del Service Worker (Estándar PWA Pro) -->
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('✅ SW registrado con éxito:', reg.scope))
-                    .catch(err => console.error('❌ Error al registrar SW:', err));
-            });
-        }
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./sw.js")
+            .then((reg) =>
+              console.log("✅ SW registrado con éxito:", reg.scope),
+            )
+            .catch((err) => console.error("❌ Error al registrar SW:", err));
+        });
+      }
     </script>
-</body>
-
-
+  </body>
 </html>
