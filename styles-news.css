@@ -1,11 +1,12 @@
-/* ===== SECCIÓN DE NOTICIAS ===== */
+/* ===== SECCIÓN DE NOTICIAS - MEJORADA ===== */
 .news-section {
     margin: 3.5rem 0;
     width: 100%;
+    position: relative;
 }
 
 .news-section h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 1.5rem;
@@ -13,6 +14,19 @@
     align-items: center;
     gap: 0.75rem;
     letter-spacing: -0.01em;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.news-section h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px;
 }
 
 .news-section h2 i {
@@ -21,26 +35,36 @@
     padding: 0.5rem;
     border-radius: var(--radius-sm, 8px);
     font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.news-section h2:hover i {
+    transform: scale(1.1);
+    background: rgba(var(--primary-rgb, 59, 130, 246), 0.15);
 }
 
 /* El div inyectado dinámicamente por tu JS */
 .news-list {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 /* Responsivo para 2 y 3 columnas */
 @media (min-width: 640px) {
     .news-list {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1.75rem;
     }
 }
 
 @media (min-width: 1024px) {
     .news-list {
         grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
     }
 }
 
@@ -56,25 +80,48 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    min-height: 160px; /* Asegura un tamaño consistente sin descripción */
+    min-height: 220px;
     position: relative;
     overflow: hidden;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: 
+        transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform, box-shadow;
+    border-bottom: 4px solid transparent;
 }
 
 /* Hover estilizado */
 .news-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.12);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px -6px rgba(0, 0, 0, 0.15);
     border-color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* Efecto de sombra para tarjetas */
+.news-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        var(--primary) 0%, 
+        rgba(var(--primary-rgb, 59, 130, 246), 0.5) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.news-card:hover::before {
+    opacity: 1;
 }
 
 /* Indicador de Fuente (Banco y Negocios, CriptoNoticias, etc.) */
 .news-source {
     align-self: flex-start;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     color: var(--primary);
     text-transform: uppercase;
@@ -84,16 +131,28 @@
     border-radius: 20px;
     border: 1px solid rgba(var(--primary-rgb, 59, 130, 246), 0.18);
     margin-bottom: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.news-card:hover .news-source {
+    background: rgba(var(--primary-rgb, 59, 130, 246), 0.12);
+    border-color: rgba(var(--primary-rgb, 59, 130, 246), 0.25);
 }
 
 /* Título de la Noticia (h4 generado en JS) */
 .news-title {
-    font-size: 1.05rem;
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
     font-weight: 600;
     line-height: 1.45;
     color: var(--text-primary);
     margin: 0 0 1rem 0;
-    transition: color 0.2s ease;
+    transition: 
+        color 0.2s ease,
+        transform 0.2s ease;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
     
     /* Truncado limpio a 3 líneas */
     display: -webkit-box;
@@ -104,11 +163,12 @@
 
 .news-card:hover .news-title {
     color: var(--primary);
+    transform: translateX(2px);
 }
 
 /* Fecha (formato 'es-VE') */
 .news-date {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: var(--text-tertiary, #718096);
     margin-top: auto;
@@ -117,12 +177,17 @@
     display: flex;
     align-items: center;
     gap: 0.35rem;
+    transition: color 0.2s ease;
 }
 
 .news-date::before {
     content: "•";
     color: var(--primary);
     font-weight: bold;
+}
+
+.news-card:hover .news-date {
+    color: var(--text-secondary);
 }
 
 /* Estado de Carga (coincide con .loading-state de tu JS) */
@@ -135,21 +200,80 @@
     border: 1px dashed var(--border);
     font-weight: 500;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
 .loading-state::before {
     content: "";
-    width: 20px;
-    height: 20px;
-    border: 2.5px solid rgba(var(--primary-rgb, 59, 130, 246), 0.2);
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(var(--primary-rgb, 59, 130, 246), 0.2);
     border-top-color: var(--primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+    will-change: transform;
+}
+
+.loading-state span {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
 }
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* Añadimos estados de foco para accesibilidad */
+.news-card:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 59, 130, 246), 0.4);
+    transform: translateY(-4px);
+}
+
+/* Mejoramos la presentación para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .news-list {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .news-section h2 {
+        font-size: 1.25rem;
+    }
+    
+    .news-card {
+        min-height: 190px;
+    }
+}
+
+/* Para pantallas grandes */
+@media (min-width: 1400px) {
+    .news-list {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+    
+    .news-card {
+        min-height: 240px;
+    }
+}
+
+/* Efecto de sombra para tarjetas en el estado de foco */
+.news-card:focus::before {
+    opacity: 1;
+}
+
+/* Añadimos transiciones suaves para mejor UX */
+.news-card, 
+.news-source,
+.news-title,
+.news-date {
+    transition: 
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
