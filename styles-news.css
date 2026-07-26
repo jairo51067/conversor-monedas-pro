@@ -1,7 +1,6 @@
 /* ===== SECCIÓN DE NOTICIAS ===== */
 .news-section {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin: 3.5rem 0;
     width: 100%;
 }
 
@@ -13,76 +12,92 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0 0.5rem;
+    letter-spacing: -0.01em;
 }
 
-.news-grid {
+.news-section h2 i {
+    color: var(--primary);
+    background: rgba(var(--primary-rgb, 59, 130, 246), 0.1);
+    padding: 0.5rem;
+    border-radius: var(--radius-sm, 8px);
+    font-size: 1.25rem;
+}
+
+/* El div inyectado dinámicamente por tu JS */
+.news-list {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
     width: 100%;
 }
 
-/* Tablet: 2 columnas */
-@media (min-width: 768px) {
-    .news-grid {
+/* Responsivo para 2 y 3 columnas */
+@media (min-width: 640px) {
+    .news-list {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* Desktop: 3 columnas */
 @media (min-width: 1024px) {
-    .news-grid {
+    .news-list {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-/* Desktop Grande: 4 columnas */
-@media (min-width: 1280px) {
-    .news-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
+/* Tarjeta de Noticia */
 .news-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
+    border-radius: var(--radius-md, 12px);
+    padding: 1.25rem 1.5rem;
     text-decoration: none;
     color: var(--text-primary);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    height: 100%; /* CLAVE: Fuerza a que todas las tarjetas de la misma fila tengan la misma altura */
+    justify-content: space-between;
+    height: 100%;
+    min-height: 160px; /* Asegura un tamaño consistente sin descripción */
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Hover estilizado */
 .news-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.12);
     border-color: var(--primary);
 }
 
+/* Indicador de Fuente (Banco y Negocios, CriptoNoticias, etc.) */
 .news-source {
-    font-size: 0.75rem;
-    font-weight: 700;
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 800;
     color: var(--primary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.75rem;
+    letter-spacing: 0.06em;
+    background: rgba(var(--primary-rgb, 59, 130, 246), 0.08);
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    border: 1px solid rgba(var(--primary-rgb, 59, 130, 246), 0.18);
+    margin-bottom: 0.85rem;
 }
 
+/* Título de la Noticia (h4 generado en JS) */
 .news-title {
-    font-size: 1.125rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    line-height: 1.4;
-    margin-bottom: 0.75rem;
+    line-height: 1.45;
     color: var(--text-primary);
+    margin: 0 0 1rem 0;
     transition: color 0.2s ease;
     
-    /* CLAVE: Limita el título a 2 líneas y añade "..." si es más largo */
+    /* Truncado limpio a 3 líneas */
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -91,49 +106,48 @@
     color: var(--primary);
 }
 
-.news-description {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
-    flex-grow: 1; /* CLAVE: Empuja la fecha hacia el fondo de la tarjeta */
-    
-    /* CLAVE: Limita la descripción a 3 líneas para mantener uniformidad */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
+/* Fecha (formato 'es-VE') */
 .news-date {
     font-size: 0.75rem;
-    color: var(--text-tertiary);
+    font-weight: 500;
+    color: var(--text-tertiary, #718096);
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border);
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    margin-top: auto; /* CLAVE: Alinea la fecha siempre al fondo, sin importar el texto de arriba */
+    gap: 0.35rem;
 }
 
-.news-loading, .news-error {
+.news-date::before {
+    content: "•";
+    color: var(--primary);
+    font-weight: bold;
+}
+
+/* Estado de Carga (coincide con .loading-state de tu JS) */
+.loading-state {
     text-align: center;
-    padding: 3rem;
+    padding: 3rem 1.5rem;
     color: var(--text-secondary);
-    grid-column: 1 / -1; /* Ocupa todas las columnas */
     background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 12px);
+    border: 1px dashed var(--border);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
 }
 
-.spinner {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border: 3px solid var(--border);
+.loading-state::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid rgba(var(--primary-rgb, 59, 130, 246), 0.2);
     border-top-color: var(--primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-    margin-right: 10px;
-    vertical-align: middle;
 }
 
 @keyframes spin {
