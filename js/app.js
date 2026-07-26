@@ -11,6 +11,7 @@ import { Greeting } from "./modules/greeting.js";
 import { Theme } from "./modules/theme.js";
 import { Stats } from "./modules/stats.js";
 import { GoldCalculator } from "./modules/gold.js";
+// import NewsModule from './modules/news.js'; // Descomentar cuando se implemente news.js
 
 class App {
   constructor() {
@@ -29,9 +30,11 @@ class App {
 
   async init() {
     try {
+      // 1. Inicializar tema primero para evitar parpadeos
       this.theme.apply();
       this.theme.setupListeners();
 
+      // 2. Cargar datos y configurar UI
       await this.loadAllData();
       this.loadCurrencies();
       this.setupEventListeners();
@@ -39,25 +42,24 @@ class App {
       this.startServices();
       this.loadConversionHistory();
 
+      // 3. Mostrar saludo de bienvenida
       this.greeting.show();
       this.greeting.setupListeners();
 
       console.log("✅ Aplicación inicializada correctamente");
+
+      // 4. Registrar Service Worker para modo offline (ÚNICA VEZ)
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./sw.js")
+            .then(() => console.log("✅ Service Worker registrado (Modo Offline listo)"))
+            .catch((err) => console.error("❌ Error SW:", err));
+        });
+      }
     } catch (error) {
       console.error("❌ Error al inicializar:", error);
       UI.showToast("Error al cargar algunos datos", "error");
-    }
-
-    // Registrar Service Worker para modo offline
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./sw.js")
-          .then(() =>
-            console.log("✅ Service Worker registrado (Modo Offline listo)"),
-          )
-          .catch((err) => console.error("❌ Error SW:", err));
-      });
     }
   }
 
@@ -119,7 +121,6 @@ class App {
   async loadConversionFactors() {
     try {
       this.factors = await API.getConversionFactors();
-
       UI.updateFactorDisplay("factor-value", this.factors.factor1);
       UI.updateFactorDisplay("factor-value-2", this.factors.factor2);
       UI.updateFactorDisplay("factor-value-3", this.factors.factor3);
@@ -151,8 +152,6 @@ class App {
 
     fromSelect.value = CONFIG.DEFAULT_CURRENCY.FROM;
     toSelect.value = CONFIG.DEFAULT_CURRENCY.TO;
-
-    console.log("✅ Currencies loaded in selectors");
   }
 
   setupEventListeners() {
@@ -164,51 +163,38 @@ class App {
     this.setupRefreshButton("refresh", () => this.loadExchangeRates());
     this.setupRefreshButton("actualizar", () => this.loadBCVData());
     this.setupRefreshButton("actualizarEuro", () => this.loadEuroData());
-    this.setupRefreshButton("actualizarParalelo", () =>
-      this.loadParaleloData(),
-    );
+    this.setupRefreshButton("actualizarParalelo", () => this.loadParaleloData());
     this.setupRefreshButton("actualizarTRM", () => this.loadTRMData());
 
-    this.setupToggle(
-      "show-converter",
-      "close-converter",
-      "converter-container",
-    );
-    this.setupToggle(
-      "show-converter-paralelo",
-      "close-converter-paralelo",
-      "convertir-a-paralelo",
-    );
+    this.setupToggle("show-converter", "close-converter", "converter-container");
+    this.setupToggle("show-converter-paralelo", "close-converter-paralelo", "convertir-a-paralelo");
 
     const inputBolivares = document.getElementById("input-bolivares");
     if (inputBolivares) {
-      inputBolivares.addEventListener(
-        "input",
-        Utils.debounce(() => {
-          this.convertBsToCopRealtime();
-        }, 300),
-      );
+      inputBolivares.addEventListener("input", Utils.debounce(() => {
+        this.convertBsToCopRealtime();
+      }, 300));
     }
 
     const inputPesos = document.getElementById("input-pesos");
     if (inputPesos) {
-      inputPesos.addEventListener(
-        "input",
-        Utils.debounce(() => {
-          this.convertCopToBsRealtime();
-        }, 300),
-      );
+      inputPesos.addEventListener("input", Utils.debounce(() => {
+        this.convertCopToBsRealtime();
+      }, 300));
     }
   }
 
-  /**
-   * Configura el menú lateral (sidebar)
-   */
   setupSidebarMenu() {
     const menuToggle = document.getElementById("menu-toggle");
     const sidebar = document.getElementById("app-sidebar");
     const sidebarClose = document.getElementById("sidebar-close");
     const sidebarOverlay = document.getElementById("sidebar-overlay");
+
+    // ✅ CORRECCIÓN: Definir closeSidebar ANTES de usarlo para evitar ReferenceError
+    const closeSidebar = () => {
+      if (sidebar) sidebar.classList.remove("active");
+      document.body.style.overflow = "";
+    };
 
     const showGoldBtn = document.getElementById("menu-show-gold");
     if (showGoldBtn) {
@@ -218,36 +204,27 @@ class App {
       });
     }
 
-    // Mostrar estadísticas
     const showStatsBtn = document.getElementById("menu-show-stats");
     if (showStatsBtn) {
       showStatsBtn.addEventListener("click", () => {
-        this.stats.init(); // Inicializa/actualiza el gráfico
+        this.stats.init();
         this.openModal("modal-stats");
         closeSidebar();
       });
     }
-    // Abrir menú
+
     if (menuToggle) {
       menuToggle.addEventListener("click", () => {
-        sidebar.classList.add("active");
+        if (sidebar) sidebar.classList.add("active");
         document.body.style.overflow = "hidden";
       });
     }
 
-    // Cerrar menú
-    const closeSidebar = () => {
-      sidebar.classList.remove("active");
-      document.body.style.overflow = "";
-    };
-
     if (sidebarClose) sidebarClose.addEventListener("click", closeSidebar);
     if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
 
-    // Actualizar label del tema en el menú
     this.updateMenuThemeLabel();
 
-    // Botón de tema en menú
     const menuThemeBtn = document.getElementById("menu-theme");
     if (menuThemeBtn) {
       menuThemeBtn.addEventListener("click", () => {
@@ -257,7 +234,6 @@ class App {
       });
     }
 
-    // Actualizar todas las tasas
     const refreshAllBtn = document.getElementById("menu-refresh-all");
     if (refreshAllBtn) {
       refreshAllBtn.addEventListener("click", async () => {
@@ -268,7 +244,6 @@ class App {
       });
     }
 
-    // Compartir app
     const shareBtn = document.getElementById("menu-share");
     if (shareBtn) {
       shareBtn.addEventListener("click", async () => {
@@ -277,7 +252,6 @@ class App {
           text: "Convierte monedas con tasas en tiempo real",
           url: window.location.href,
         };
-
         try {
           if (navigator.share) {
             await navigator.share(shareData);
@@ -292,7 +266,6 @@ class App {
       });
     }
 
-    // Limpiar caché
     const clearCacheBtn = document.getElementById("menu-clear-cache");
     if (clearCacheBtn) {
       clearCacheBtn.addEventListener("click", () => {
@@ -302,7 +275,6 @@ class App {
       });
     }
 
-    // Mostrar historial
     const showHistoryBtn = document.getElementById("menu-show-history");
     if (showHistoryBtn) {
       showHistoryBtn.addEventListener("click", () => {
@@ -311,7 +283,6 @@ class App {
       });
     }
 
-    // Mostrar acerca de
     const aboutBtn = document.getElementById("menu-about");
     if (aboutBtn) {
       aboutBtn.addEventListener("click", () => {
@@ -320,7 +291,6 @@ class App {
       });
     }
 
-    // Limpiar historial
     const clearHistoryBtn = document.getElementById("btn-clear-history");
     if (clearHistoryBtn) {
       clearHistoryBtn.addEventListener("click", () => {
@@ -331,7 +301,6 @@ class App {
       });
     }
 
-    // Cerrar modales
     document.querySelectorAll(".modal-custom-close").forEach((btn) => {
       btn.addEventListener("click", () => {
         const modalId = btn.getAttribute("data-modal");
@@ -339,7 +308,6 @@ class App {
       });
     });
 
-    // Cerrar modal al hacer clic en overlay
     document.querySelectorAll(".modal-custom-overlay").forEach((overlay) => {
       overlay.addEventListener("click", (e) => {
         const modal = e.target.closest(".modal-custom");
@@ -383,39 +351,28 @@ class App {
   showHistoryModal() {
     const history = Storage.getConversionHistory();
     const list = document.getElementById("modal-history-list");
-
     if (!list) return;
 
     list.innerHTML = "";
-
     if (history.length === 0) {
-      list.innerHTML =
-        '<p style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay conversiones en el historial</p>';
+      list.innerHTML = '<p style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay conversiones en el historial</p>';
     } else {
       history.forEach((item) => {
         const div = document.createElement("div");
         div.className = "history-item";
-
         const date = new Date(item.timestamp).toLocaleString("es-ES", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
+          day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit",
         });
-
         div.innerHTML = `
-                    <div>
-                        <strong>${Utils.formatNumber(item.amount)} ${item.from}</strong>
-                        <br>
-                        <small style="color: var(--text-secondary);">= ${Utils.formatNumber(item.result)} ${item.to}</small>
-                    </div>
-                    <div class="history-date">${date}</div>
-                `;
+          <div>
+            <strong>${Utils.formatNumber(item.amount)} ${item.from}</strong><br>
+            <small style="color: var(--text-secondary);">= ${Utils.formatNumber(item.result)} ${item.to}</small>
+          </div>
+          <div class="history-date">${date}</div>
+        `;
         list.appendChild(div);
       });
     }
-
     this.openModal("modal-history");
   }
 
@@ -433,23 +390,12 @@ class App {
   setupToggle(showId, hideId, containerId) {
     const showBtn = document.getElementById(showId);
     const hideBtn = document.getElementById(hideId);
-
-    if (showBtn) {
-      showBtn.addEventListener("click", () => {
-        UI.toggleVisibility(containerId, true);
-      });
-    }
-
-    if (hideBtn) {
-      hideBtn.addEventListener("click", () => {
-        UI.toggleVisibility(containerId, false);
-      });
-    }
+    if (showBtn) showBtn.addEventListener("click", () => UI.toggleVisibility(containerId, true));
+    if (hideBtn) hideBtn.addEventListener("click", () => UI.toggleVisibility(containerId, false));
   }
 
   async handleConversion(event) {
     event.preventDefault();
-
     const amountInput = document.getElementById("amount");
     const fromSelect = document.getElementById("from");
     const toSelect = document.getElementById("to");
@@ -466,21 +412,12 @@ class App {
 
     try {
       const result = await Converter.convert(amount, fromCurrency, toCurrency);
-      UI.updateConversionResult(
-        "result",
-        amount,
-        fromCurrency,
-        result,
-        toCurrency,
-      );
-
+      UI.updateConversionResult("result", amount, fromCurrency, result, toCurrency);
       Converter.saveToHistory(amount, fromCurrency, result, toCurrency);
       this.loadConversionHistory();
-
       UI.showToast("Conversión exitosa", "success");
     } catch (error) {
-      resultParagraph.textContent =
-        "Error al obtener la tasa de conversión. Intenta de nuevo más tarde.";
+      resultParagraph.textContent = "Error al obtener la tasa de conversión. Intenta de nuevo más tarde.";
       UI.showToast("Error en la conversión", "error");
     }
   }
@@ -488,14 +425,11 @@ class App {
   convertBsToCopRealtime() {
     const input = document.getElementById("input-bolivares");
     const result = document.getElementById("resultado-cop");
-
     if (!input || !result) return;
 
     const bolivares = parseFloat(input.value);
-
     if (this.factors.factor1 > 0 && !isNaN(bolivares) && bolivares >= 0) {
-      const cop = Converter.convertBsToCop(bolivares, this.factors.factor1);
-      result.innerText = Utils.formatCurrency(cop, "COP");
+      result.innerText = Utils.formatCurrency(Converter.convertBsToCop(bolivares, this.factors.factor1), "COP");
     } else {
       result.innerText = "$ 0,00";
     }
@@ -504,14 +438,11 @@ class App {
   convertCopToBsRealtime() {
     const input = document.getElementById("input-pesos");
     const result = document.getElementById("resultado-bs");
-
     if (!input || !result) return;
 
     const pesos = parseFloat(input.value);
-
     if (this.factors.factor1 > 0 && !isNaN(pesos) && pesos >= 0) {
-      const bs = Converter.convertCopToBs(pesos, this.factors.factor1);
-      result.innerText = Utils.formatCurrency(bs, "VES", "es-VE");
+      result.innerText = Utils.formatCurrency(Converter.convertCopToBs(pesos, this.factors.factor1), "VES", "es-VE");
     } else {
       result.innerText = "Bs. 0,00";
     }
@@ -520,20 +451,16 @@ class App {
   loadConversionHistory() {
     const history = Storage.getConversionHistory();
     const list = document.getElementById("history-list");
-
     if (!list) return;
 
     list.innerHTML = "";
-
     if (history.length === 0) {
-      list.innerHTML =
-        '<li style="text-align: center; color: var(--text-tertiary);">Sin conversiones recientes</li>';
+      list.innerHTML = '<li style="text-align: center; color: var(--text-tertiary);">Sin conversiones recientes</li>';
       return;
     }
 
     history.slice(0, 5).forEach((item) => {
-      const text = `${Utils.formatNumber(item.amount)} ${item.from} = ${Utils.formatNumber(item.result)} ${item.to}`;
-      UI.addHistoryItem("history-list", text);
+      UI.addHistoryItem("history-list", `${Utils.formatNumber(item.amount)} ${item.from} = ${Utils.formatNumber(item.result)} ${item.to}`);
     });
   }
 
@@ -543,7 +470,7 @@ class App {
   }
 }
 
-// Inicializar cuando el DOM esté listo
+// ✅ Inicialización ÚNICA y correcta
 document.addEventListener("DOMContentLoaded", () => {
   const app = new App();
   app.init();
