@@ -1,102 +1,120 @@
 // js/modules/news.js
-
 export class News {
     constructor() {
-        this.containerId = 'news-container';
-        // Fuentes de noticias confiables con RSS público
-        this.sources = [
-            { name: 'Banca y Negocios', url: 'https://www.bancaynegocios.com/feed/' },
+        this.feeds = [
+            { name: 'Banco y Negocios', url: 'https://www.bancaynegocios.com/feed/' },
+            { name: 'El Nacional', url: 'https://www.elnacional.com/feed/' },
             { name: 'CriptoNoticias', url: 'https://www.criptonoticias.com/feed/' }
         ];
     }
 
-    async init() {
-        const container = document.getElementById(this.containerId);
-        if (!container) return;
-
-        container.innerHTML = '<div class="news-loading"><div class="spinner"></div> Cargando noticias...</div>';
-
-        try {
-            const articles = await this.fetchNews();
-            this.renderNews(articles, container);
-        } catch (error) {
-            console.error('Error al cargar noticias:', error);
-            container.innerHTML = '<div class="news-error">No se pudieron cargar las noticias. Intenta más tarde.</div>';
-        }
-    }
-
     async fetchNews() {
-        const allArticles = [];
+        const allNews = [];
         
-        for (const source of this.sources) {
+        for (const feed of this.feeds) {
             try {
-                // Usamos allorigins para evitar problemas de CORS al obtener el RSS XML
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(source.url)}`;
-                const response = await fetch(proxyUrl);
-                const data = await response.json();
+                // Intento 1: rss2json (el más estable y diseñado específicamente para RSS)
+                let response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`);
+                let data = await response.json();
                 
-                if (data.contents) {
+                if (data.status !== 'ok') {
+                    throw new Error('rss2json failed');
+                }
+
+                const items = data.items.slice(0, 3).map(item => ({
+                    title: item.title,
+                    link: item.link,
+                    pubDate: new Date(item.pubDate),
+                    source: feed.name
+                }));
+                
+                allNews.push(...items);
+            } catch (error) {
+                console.warn(`Usando respaldo para ${feed.name}:`, error);
+                try {
+                    // Intento 2: corsproxy.io (excelente respaldo para CORS)
+                    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(feed.url)}`;
+                    const response = await fetch(proxyUrl);
+                    const text = await response.text();
+                    
                     const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+                    const xmlDoc = parser.parseFromString(text, "text/xml");
+                    
+                    // Verificar si hay errores de parsing XML
+                    const parseError = xmlDoc.querySelector("parsererror");
+                    if (parseError) throw new Error('XML parsing error');
+
                     const items = xmlDoc.querySelectorAll("item");
                     
-                    items.forEach((item, index) => {
-                        if (index < 3) { // Tomamos solo las 3 más recientes de cada fuente
-                            const title = item.querySelector("title")?.textContent || "Sin título";
-                            const link = item.querySelector("link")?.textContent || "#";
-                            const description = item.querySelector("description")?.textContent || "";
-                            const pubDate = item.querySelector("pubDate")?.textContent || "";
-                            
-                            // Limpiar descripción de etiquetas HTML
-                            const tempDiv = document.createElement("div");
-                            tempDiv.innerHTML = description;
-                            const cleanDescription = tempDiv.textContent || tempDiv.innerText || "";
-
-                            allArticles.push({
-                                title: title,
-                                link: link,
-                                description: cleanDescription.substring(0, 110) + "...",
-                                date: new Date(pubDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
-                                source: source.name
-                            });
-                        }
+                    const parsedItems = Array.from(items).slice(0, 3).map(item => {
+                        const title = item.querySelector("title")?.textContent || "Sin título";
+                        const link = item.querySelector("link")?.textContent || "#";
+                        const pubDateStr = item.querySelector("pubDate")?.textContent || new Date().toISOString();
+                        
+                        return {
+                            title: title,
+                            link: link,
+                            pubDate: new Date(pubDateStr),
+                            source: feed.name
+                        };
                     });
+                    
+                    allNews.push(...parsedItems);
+                } catch (fallbackError) {
+                    console.error(`No se pudo cargar el feed de ${feed.name}:`, fallbackError);
                 }
-            } catch (error) {
-                console.warn(`Error al obtener noticias de ${source.name}:`, error);
             }
         }
 
-        return allArticles;
+        // Ordenar por fecha (más reciente primero) y tomar las 6 más recientes
+        return allNews
+            .sort((a, b) => b.pubDate - a.pubDate)
+            .slice(0, 6);
     }
 
-    renderNews(articles, container) {
-        if (articles.length === 0) {
-            container.innerHTML = '<div class="news-error">No hay noticias disponibles en este momento.</div>';
-            return;
+    async init() {
+        const container = document.getElementById('news-container');
+        if (!container) return;
+
+        container.innerHTML = '<div class="loading-state">Cargando noticias...</div>';
+
+        try {
+            const news = await this.fetchNews();
+            
+            if (news.length === 0) {
+                container.innerHTML = '<p class="text-center" style="color: var(--text-tertiary);">No se pudieron cargar las noticias en este momento.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            const list = document.createElement('div');
+            list.className = 'news-list';
+
+            news.forEach(item => {
+                const dateStr = item.pubDate.toLocaleDateString('es-VE', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+
+                const card = document.createElement('a');
+                card.className = 'news-card';
+                card.href = item.link;
+                card.target = '_blank';
+                card.rel = 'noopener noreferrer';
+                card.innerHTML = `
+                    <div class="news-source">${item.source}</div>
+                    <h4 class="news-title">${item.title}</h4>
+                    <div class="news-date">${dateStr}</div>
+                `;
+                list.appendChild(card);
+            });
+
+            container.appendChild(list);
+        } catch (error) {
+            console.error('Error al cargar noticias:', error);
+            container.innerHTML = '<p class="text-center" style="color: var(--text-tertiary);">Error al cargar las noticias.</p>';
         }
-
-        container.innerHTML = '';
-        const grid = document.createElement('div');
-        grid.className = 'news-grid';
-
-        articles.forEach(article => {
-            const card = document.createElement('a');
-            card.className = 'news-card';
-            card.href = article.link;
-            card.target = '_blank';
-            card.rel = 'noopener noreferrer';
-            
-            card.innerHTML = `
-                <div class="news-source">${article.source}</div>
-                <h3 class="news-title">${article.title}</h3>
-                <p class="news-description">${article.description}</p>
-                <div class="news-date"><i class="far fa-clock"></i> ${article.date}</div>
-            `;
-            
-            grid.appendChild(card);
-        });
-
-        container.appendChild(grid);
     }
 }
