@@ -1,364 +1,227 @@
 /**
- * Módulo de Noticias Financieras
- * Combina NewsAPI.org + RSS Feeds
+ * Módulo de Noticias Financieras (Versión Robusta para GitHub Pages)
+ * Utiliza RSS Feeds con fallback de proxy CORS para evitar bloqueos.
  */
 
-const NewsModule = (() => {
-    // Configuración
-    const CONFIG = {
-        NEWSAPI_KEY: 'fb98581019a54258bd249f25b15a0e62', // Reemplazar con tu key de NewsAPI.org
-        CACHE_DURATION: 30 * 60 * 1000, // 30 minutos
-        MAX_NEWS: 20,
-        SOURCES: {
-            rss: [
-                {
-                    name: 'El Nacional - Economía',
-                    url: 'https://www.elnacional.com/economia/feed/',
-                    category: 'economia',
-                    country: 'VE'
-                },
-                {
-                    name: 'Banca y Negocios',
-                    url: 'https://www.bancaynegocios.com/feed/',
-                    category: 'finanzas',
-                    country: 'VE'
-                },
-                {
-                    name: 'CriptoNoticias',
-                    url: 'https://www.criptonoticias.com/feed/',
-                    category: 'crypto',
-                    country: 'VE'
-                },
-                {
-                    name: 'Bloomberg Línea',
-                    url: 'https://www.bloomberglinea.com/feed/',
-                    category: 'finanzas',
-                    country: 'LATAM'
-                }
-            ],
-            newsapi: {
-                baseUrl: 'https://newsapi.org/v2',
-                sources: [
-                    'bloomberg',
-                    'financial-times',
-                    'reuters',
-                    'cnbc'
-                ],
-                keywords: [
-                    'dólar Venezuela',
-                    'euro Venezuela',
-                    'bolívar',
-                    'tasas de cambio',
-                    'criptomonedas',
-                    'bitcoin',
-                    'economía Venezuela'
-                ]
-            }
-        }
-    };
+const CONFIG = {
+    CACHE_DURATION: 30 * 60 * 1000, // 30 minutos
+    MAX_NEWS: 15,
+    SOURCES: [
+        { name: 'El Nacional', url: 'https://www.elnacional.com/economia/feed/' },
+        { name: 'Banca y Negocios', url: 'https://www.bancaynegocios.com/feed/' },
+        { name: 'CriptoNoticias', url: 'https://www.criptonoticias.com/feed/' },
+        { name: 'El Pitazo', url: 'https://elpitazo.net/category/economia/feed/' },
+        { name: 'Bloomberg Línea', url: 'https://www.bloomberglinea.com/feed/' }
+    ]
+};
 
-    // Estado
-    let newsCache = {
-        data: [],
-        timestamp: 0
-    };
+let newsCache = { data: [], timestamp: 0 };
 
-    // Utilidades
-    const utils = {
-        /**
-         * Verifica si el caché es válido
-         */
-        isCacheValid() {
-            return Date.now() - newsCache.timestamp < CONFIG.CACHE_DURATION;
-        },
+const utils = {
+    stripHtml(html) {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html || '';
+        return tmp.textContent || tmp.innerText || '';
+    },
 
-        /**
-         * Limpia HTML de los feeds RSS
-         */
-        stripHtml(html) {
-            const tmp = document.createElement('div');
-            tmp.innerHTML = html;
-            return tmp.textContent || tmp.innerText || '';
-        },
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        const diff = Date.now() - date.getTime();
+        
+        if (diff < 60 * 60 * 1000) return `Hace ${Math.floor(diff / (60 * 1000))} min`;
+        if (diff < 24 * 60 * 60 * 1000) return `Hace ${Math.floor(diff / (60 * 60 * 1000))} h`;
+        
+        return date.toLocaleDateString('es-VE', { day: '2-digit', month: 'short', year: 'numeric' });
+    },
 
-        /**
-         * Formatea fecha
-         */
-        formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diff = now - date;
-            
-            // Menos de 1 hora
-            if (diff < 60 * 60 * 1000) {
-                const minutes = Math.floor(diff / (60 * 1000));
-                return `Hace ${minutes} min`;
-            }
-            
-            // Menos de 24 horas
-            if (diff < 24 * 60 * 60 * 1000) {
-                const hours = Math.floor(diff / (60 * 60 * 1000));
-                return `Hace ${hours} h`;
-            }
-            
-            // Más de 24 horas
-            return date.toLocaleDateString('es-VE', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            });
-        },
+    categorize(title, content) {
+        const text = (title + ' ' + content).toLowerCase();
+        if (text.includes('bitcoin') || text.includes('crypto') || text.includes('cripto')) return 'crypto';
+        if (text.includes('dólar') || text.includes('euro') || text.includes('tasa') || text.includes('bcv')) return 'divisas';
+        if (text.includes('banco') || text.includes('financiero') || text.includes('inversión')) return 'finanzas';
+        return 'economia';
+    },
 
-        /**
-         * Extrae imagen del contenido
-         */
-        extractImage(content, url) {
-            // Intentar encontrar imagen en el contenido
-            const imgRegex = /<img[^>]+src="([^">]+)"/;
-            const match = content.match(imgRegex);
-            
-            if (match && match[1]) {
-                return match[1];
-            }
-            
-            // Imagen por defecto basada en categoría
-            return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzFhNzMxYyIvPjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm90aWNpYXM8L3RleHQ+PC9zdmc+';
-        },
+    // Imagen por defecto profesional en base64
+    getDefaultImage() {
+        return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzEzMjA0MCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Ob3RpY2lhcyBGaW5hbmNpZXJhczwvdGV4dD48L3N2Zz4=';
+    }
+};
 
-        /**
-         * Categoriza la noticia
-         */
-        categorize(title, content) {
-            const text = (title + ' ' + content).toLowerCase();
+const rssParser = {
+    async fetchFeed(feedConfig) {
+        try {
+            // Intentamos con rss2json primero
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedConfig.url)}`;
+            const response = await fetch(proxyUrl);
             
-            if (text.includes('bitcoin') || text.includes('crypto') || text.includes('blockchain')) {
-                return 'crypto';
-            }
-            if (text.includes('dólar') || text.includes('euro') || text.includes('tasa') || text.includes('cambio')) {
-                return 'divisas';
-            }
-            if (text.includes('banco') || text.includes('financiero') || text.includes('inversión')) {
-                return 'finanzas';
-            }
+            if (!response.ok) throw new Error('rss2json failed');
             
-            return 'economia';
-        }
-    };
+            const data = await response.json();
+            if (data.status !== 'ok') throw new Error('Invalid RSS data');
 
-    // API NewsAPI.org
-    const newsAPI = {
-        async fetchNews() {
+            return data.items.slice(0, 3).map(item => ({
+                title: item.title,
+                summary: utils.stripHtml(item.description).substring(0, 150) + '...',
+                url: item.link,
+                source: feedConfig.name,
+                publishedAt: item.pubDate,
+                image: item.thumbnail || utils.getDefaultImage(),
+                category: utils.categorize(item.title, item.description)
+            }));
+        } catch (error) {
+            console.warn(`⚠️ Fallo al cargar RSS de ${feedConfig.name}:`, error.message);
+            
+            // Fallback: Intentar con AllOrigins si rss2json falla o tiene límite
             try {
-                const queries = CONFIG.SOURCES.newsapi.keywords.join(' OR ');
-                const url = `${CONFIG.SOURCES.newsapi.baseUrl}/everything?` +
-                    `q=${encodeURIComponent(queries)}&` +
-                    `language=es&` +
-                    `sortBy=publishedAt&` +
-                    `pageSize=10&` +
-                    `apiKey=${CONFIG.NEWSAPI_KEY}`;
-
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`NewsAPI error: ${response.status}`);
-                }
-
+                const fallbackUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feedConfig.url)}`;
+                const response = await fetch(fallbackUrl);
                 const data = await response.json();
                 
-                return data.articles.map(article => ({
-                    title: article.title,
-                    summary: article.description || utils.stripHtml(article.content).substring(0, 200),
-                    url: article.url,
-                    source: article.source.name,
-                    publishedAt: article.publishedAt,
-                    image: article.urlToImage,
-                    category: utils.categorize(article.title, article.description || ''),
-                    type: 'newsapi'
-                }));
-            } catch (error) {
-                console.error('Error fetching NewsAPI:', error);
+                if (!data.contents) throw new Error('No content');
+
+                // Parseo manual básico del XML
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+                const items = xmlDoc.querySelectorAll("item");
+                
+                return Array.from(items).slice(0, 3).map(item => {
+                    const title = item.querySelector("title")?.textContent || "Sin título";
+                    const desc = item.querySelector("description")?.textContent || "";
+                    const link = item.querySelector("link")?.textContent || "#";
+                    const pubDate = item.querySelector("pubDate")?.textContent || new Date().toISOString();
+                    
+                    // Intentar extraer imagen del contenido o usar default
+                    const imgMatch = desc.match(/<img[^>]+src="([^">]+)"/);
+                    const image = imgMatch ? imgMatch[1] : utils.getDefaultImage();
+
+                    return {
+                        title,
+                        summary: utils.stripHtml(desc).substring(0, 150) + '...',
+                        url: link,
+                        source: feedConfig.name,
+                        publishedAt: pubDate,
+                        image,
+                        category: utils.categorize(title, desc)
+                    };
+                });
+            } catch (fallbackError) {
+                console.error(`❌ Fallo total en ${feedConfig.name}:`, fallbackError.message);
                 return [];
             }
         }
-    };
+    },
 
-    // RSS Parser
-    const rssParser = {
-        async fetchFeed(feedConfig) {
-            try {
-                // Usar un proxy CORS para RSS (rss2json o similar)
-                const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedConfig.url)}`;
-                
-                const response = await fetch(proxyUrl);
-                
-                if (!response.ok) {
-                    throw new Error(`RSS error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                return data.items.slice(0, 5).map(item => ({
-                    title: item.title,
-                    summary: utils.stripHtml(item.description).substring(0, 200),
-                    url: item.link,
-                    source: feedConfig.name,
-                    publishedAt: item.pubDate,
-                    image: utils.extractImage(item.content || item.description, item.link),
-                    category: feedConfig.category,
-                    country: feedConfig.country,
-                    type: 'rss'
-                }));
-            } catch (error) {
-                console.error(`Error fetching RSS ${feedConfig.name}:`, error);
-                return [];
-            }
-        },
-
-        async fetchAllFeeds() {
-            const promises = CONFIG.SOURCES.rss.map(feed => this.fetchFeed(feed));
-            const results = await Promise.all(promises);
-            return results.flat();
-        }
-    };
-
-    // Funciones principales
-    async function fetchAllNews() {
-        const [newsApiNews, rssNews] = await Promise.all([
-            newsAPI.fetchNews(),
-            rssParser.fetchAllFeeds()
-        ]);
-
-        // Combinar y ordenar por fecha
-        const allNews = [...newsApiNews, ...rssNews]
+    async fetchAllFeeds() {
+        // Ejecutar todas las peticiones en paralelo
+        const promises = CONFIG.SOURCES.map(feed => this.fetchFeed(feed));
+        const results = await Promise.all(promises);
+        
+        // Aplanar, eliminar duplicados por URL, ordenar por fecha y limitar
+        return results
+            .flat()
+            .filter((item, index, self) => index === self.findIndex((t) => t.url === item.url))
             .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
             .slice(0, CONFIG.MAX_NEWS);
+    }
+};
 
-        // Actualizar caché
-        newsCache = {
-            data: allNews,
-            timestamp: Date.now()
-        };
+async function fetchAllNews() {
+    const allNews = await rssParser.fetchAllFeeds();
+    
+    newsCache = {
+        data: allNews,
+        timestamp: Date.now()
+    };
 
-        return allNews;
+    return allNews;
+}
+
+async function getNews(forceRefresh = false) {
+    const isCacheValid = (Date.now() - newsCache.timestamp) < CONFIG.CACHE_DURATION;
+    
+    if (!forceRefresh && isCacheValid && newsCache.data.length > 0) {
+        return newsCache.data;
     }
 
-    async function getNews(forceRefresh = false) {
-        if (!forceRefresh && utils.isCacheValid() && newsCache.data.length > 0) {
-            return newsCache.data;
-        }
+    return await fetchAllNews();
+}
 
-        return await fetchAllNews();
+function renderNews(news, containerId = 'news-container') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (news.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                <i class="fas fa-newspaper" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <p>No se pudieron cargar las noticias en este momento.</p>
+            </div>
+        `;
+        return;
     }
 
-    // UI Functions
-    function renderNews(news, container) {
-        if (!container) {
-            container = document.getElementById('news-container');
-        }
+    const categoryIcons = {
+        'divisas': 'fa-dollar-sign',
+        'crypto': 'fa-bitcoin',
+        'finanzas': 'fa-chart-line',
+        'economia': 'fa-briefcase'
+    };
 
-        if (!container) {
-            console.warn('News container not found');
-            return;
-        }
-
-        container.innerHTML = '';
-
-        if (news.length === 0) {
-            container.innerHTML = `
-                <div class="news-empty">
-                    <i class="fas fa-newspaper"></i>
-                    <p>No hay noticias disponibles</p>
-                </div>
-            `;
-            return;
-        }
-
-        news.forEach((item, index) => {
-            const newsCard = createNewsCard(item, index);
-            container.appendChild(newsCard);
-        });
-    }
-
-    function createNewsCard(news, index) {
+    news.forEach((item, index) => {
         const card = document.createElement('article');
-        card.className = `news-card news-card--${news.category}`;
-        card.style.animationDelay = `${index * 0.1}s`;
+        card.className = `news-card news-card--${item.category}`;
+        card.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.1}s`;
+        card.style.opacity = '0'; // Para la animación
 
-        const categoryIcons = {
-            'divisas': 'fa-dollar-sign',
-            'crypto': 'fa-bitcoin',
-            'finanzas': 'fa-chart-line',
-            'economia': 'fa-briefcase'
-        };
-
-        const icon = categoryIcons[news.category] || 'fa-newspaper';
+        const icon = categoryIcons[item.category] || 'fa-newspaper';
 
         card.innerHTML = `
             <div class="news-card__image">
-                <img src="${news.image}" alt="${news.title}" loading="lazy" 
-                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzFhNzMxYyIvPjwvc3ZnPg=='">
+                <img src="${item.image}" alt="${item.title}" loading="lazy" 
+                     onerror="this.src='${utils.getDefaultImage()}'">
                 <span class="news-card__category">
-                    <i class="fas ${icon}"></i>
-                    ${news.category}
+                    <i class="fas ${icon}"></i> ${item.category}
                 </span>
             </div>
             <div class="news-card__content">
-                <h3 class="news-card__title">${news.title}</h3>
-                <p class="news-card__summary">${news.summary}</p>
+                <h3 class="news-card__title">${item.title}</h3>
+                <p class="news-card__summary">${item.summary}</p>
                 <div class="news-card__meta">
                     <span class="news-card__source">
-                        <i class="fas fa-building"></i>
-                        ${news.source}
+                        <i class="fas fa-building"></i> ${item.source}
                     </span>
                     <span class="news-card__date">
-                        <i class="fas fa-clock"></i>
-                        ${utils.formatDate(news.publishedAt)}
-                    </span>
+                        <i class="fas fa-clock"></i> ${utils.formatDate(item.publishedAt)}
+                    </span
                 </div>
-                <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="news-card__link">
+                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="news-card__link">
                     Leer más <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         `;
 
-        return card;
-    }
-
-    // Inicialización
-    async function init() {
-        try {
-            const news = await getNews();
-            const container = document.getElementById('news-container');
-            
-            if (container) {
-                renderNews(news, container);
-            }
-
-            // Actualizar cada 30 minutos
-            setInterval(async () => {
-                const freshNews = await getNews(true);
-                if (container) {
-                    renderNews(freshNews, container);
-                }
-            }, CONFIG.CACHE_DURATION);
-
-        } catch (error) {
-            console.error('Error initializing news module:', error);
-        }
-    }
-
-    // Public API
-    return {
-        init,
-        getNews,
-        renderNews,
-        CONFIG
-    };
-})();
-
-// Exportar para uso global
-if (typeof window !== 'undefined') {
-    window.NewsModule = NewsModule;
+        container.appendChild(card);
+    });
 }
 
-export default NewsModule;
+async function init() {
+    try {
+        const news = await getNews();
+        renderNews(news);
+
+        // Actualizar en segundo plano cada 30 minutos
+        setInterval(async () => {
+            const freshNews = await getNews(true);
+            renderNews(freshNews);
+        }, CONFIG.CACHE_DURATION);
+
+    } catch (error) {
+        console.error('❌ Error inicializando módulo de noticias:', error);
+    }
+}
+
+// Exportar para uso como módulo ES6
+export default { init, getNews, renderNews };

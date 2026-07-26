@@ -11,7 +11,7 @@ import { Greeting } from "./modules/greeting.js";
 import { Theme } from "./modules/theme.js";
 import { Stats } from "./modules/stats.js";
 import { GoldCalculator } from "./modules/gold.js";
-// import NewsModule from './modules/news.js'; // Descomentar cuando se implemente news.js
+import NewsModule from './modules/news.js';
 
 class App {
   constructor() {
