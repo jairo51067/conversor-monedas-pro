@@ -1,3 +1,23 @@
+/* Font display swap para Font Awesome */
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2') format('woff2');
+}
+
+/* Contraste accesible para botones de actualización */
+.btn-refresh {
+  background: #047857 !important;  /* Verde oscuro accesible */
+  color: white !important;
+  font-weight: 700;
+}
+
+.btn-refresh:hover {
+  background: #065F46 !important;
+}
+
 /* ===== RESET Y VARIABLES ===== */
 *,
 *::before,
@@ -505,13 +525,13 @@ body {
 }
 
 .btn-refresh {
-    background: var(--money);
+     background: #047857;  /* Verde oscuro accesible */
     color: white;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: var(--radius-md);
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: var(--transition);
     display: flex;

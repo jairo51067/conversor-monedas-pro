@@ -3,12 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- SEO Básico -->
     <title>Conversor Pro | BCV, Paralelo, TRM, Oro y Estadísticas en Tiempo Real</title>
-    <meta name="description" content="Convierte divisas y oro al instante con tasas oficiales del BCV, Dólar Paralelo Binance y TRM de Colombia. App rápida, precisa y sin anuncios.">
-    <meta name="keywords" content="conversor de monedas, dolar bcv, dolar paralelo, trm colombia, calculadora de oro, convertir bolivares a pesos">
+    <meta name="description"
+        content="Convierte divisas y oro al instante con tasas oficiales del BCV, Dólar Paralelo Binance y TRM de Colombia. App rápida, precisa y sin anuncios.">
+    <meta name="keywords"
+        content="conversor de monedas, dolar bcv, dolar paralelo, trm colombia, calculadora de oro, convertir bolivares a pesos">
     <meta name="author" content="Jairo Cárdenas">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://jairo51067.github.io/conversor-monedas-pro/">
@@ -47,10 +49,10 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
-    
+
     <!-- Iconos (CRÍTICO: No eliminar) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Non-blocking Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
@@ -61,8 +63,8 @@
         <div class="header-container">
             <div class="header-content">
                 <div class="header-left">
-                    <button class="menu-toggle" id="menu-toggle">
-                        <i class="fas fa-bars"></i>
+                    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
 
                     <div class="header-title">
@@ -71,8 +73,8 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <button id="theme-toggle" class="theme-toggle">
-                        <i class="fas fa-moon theme-toggle-icon"></i>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar entre modo claro y oscuro">
+                        <i class="fas fa-moon theme-toggle-icon" aria-hidden="true"></i>
                         <span class="theme-toggle-label">Oscuro</span>
                     </button>
                 </div>
@@ -265,7 +267,7 @@
                     <div class="rate-header">
                         <div class="rate-icon"><i class="fas fa-landmark"></i></div>
                         <div class="rate-title">
-                            <h3>Dólar BCV</h3>
+                            <h2>Dólar BCV</h2>
                             <span>Banco Central de Venezuela</span>
                         </div>
                     </div>
@@ -287,7 +289,7 @@
                     <div class="rate-header">
                         <div class="rate-icon"><i class="fas fa-euro-sign"></i></div>
                         <div class="rate-title">
-                            <h3>Euro BCV</h3>
+                            <h2>Euro BCV</h2>
                             <span>Banco Central de Venezuela</span>
                         </div>
                     </div>
@@ -309,7 +311,7 @@
                     <div class="rate-header">
                         <div class="rate-icon"><i class="fas fa-chart-line"></i></div>
                         <div class="rate-title">
-                            <h3>Dólar Paralelo</h3>
+                            <h2>Dólar Paralelo</h2>
                             <span>Binance P2P</span>
                         </div>
                     </div>
@@ -328,7 +330,7 @@
                     <div class="rate-header">
                         <div class="rate-icon"><i class="fas fa-money-bill-wave"></i></div>
                         <div class="rate-title">
-                            <h3>TRM Colombia</h3>
+                            <h2>TRM Colombia</h2>
                             <span>Tasa Representativa del Mercado</span>
                         </div>
                     </div>
@@ -805,8 +807,16 @@
         </div>
     </div>
 
-       <!-- Scripts de la App -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts de la App -->
+    <!-- Font Awesome: cargar con preload + media trick -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    </noscript>
+
+    <!-- Bootstrap JS: mover al final (ya está) y agregar defer -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <script type="module" src="js/app.js"></script>
 
     <!-- Registro del Service Worker (Estándar PWA Pro) -->
