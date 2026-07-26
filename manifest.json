@@ -1,24 +1,42 @@
 {
+  "id": "/conversor-monedas-pro/",
   "name": "Conversor de Monedas Pro",
   "short_name": "Conversor Pro",
-  "description": "Convierte divisas al instante con tasas BCV, Paralelo y TRM en tiempo real.",
-  "start_url": "./",
+  "description": "Convierte divisas y oro al instante con tasas BCV, Paralelo y TRM en tiempo real.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#F8FAFC",
   "theme_color": "#4F46E5",
-  "orientation": "portrait-primary",
+  "categories": ["finance", "utilities"],
   "icons": [
     {
       "src": "./assets/images/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "./assets/images/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/images/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./assets/images/screenshot-mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Pantalla principal de la aplicación"
     }
   ]
 }
