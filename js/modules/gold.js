@@ -30,10 +30,16 @@ export class GoldCalculator {
     }
 
     async init() {
-        await this.fetchRealGoldPrice();
-        this.attachListeners();
-        this.calculate(); // Cálculo inicial
+
+    if (!this.inputs.amount || !this.inputs.unit) {
+        console.warn("GoldCalculator: elementos HTML no encontrados.");
+        return;
     }
+
+    await this.fetchRealGoldPrice();
+    this.attachListeners();
+    this.calculate();
+}
 
     async fetchRealGoldPrice() {
         try {
@@ -56,16 +62,24 @@ export class GoldCalculator {
 
     attachListeners() {
         // Recalcular en tiempo real ante cualquier cambio
-        Object.values(this.inputs).forEach(input => {
-            if (input instanceof NodeList) {
-                // Si es una lista de nodos (radio buttons), agregar listener a cada uno
-                input.forEach(radio => radio.addEventListener('change', () => this.calculate()));
-            } else {
-                // Si es un input normal (texto o select)
-                input.addEventListener('input', () => this.calculate());
-                input.addEventListener('change', () => this.calculate());
-            }
-        });
+       Object.values(this.inputs)
+    .filter(Boolean)
+    .forEach(input => {
+
+        if (input instanceof NodeList) {
+
+            input.forEach(radio =>
+                radio.addEventListener("change", () => this.calculate())
+            );
+
+        } else {
+
+            input.addEventListener("input", () => this.calculate());
+            input.addEventListener("change", () => this.calculate());
+
+        }
+
+    });
     }
 
     calculate() {
@@ -76,7 +90,12 @@ export class GoldCalculator {
         const selectedPurityRadio = document.querySelector('input[name="gold-purity"]:checked');
         const purityK = selectedPurityRadio ? parseInt(selectedPurityRadio.value) : 18; // Fallback a 18k
         
-        const operation = document.querySelector('input[name="gold-operation"]:checked').value;
+       const selectedOperation =
+    document.querySelector('input[name="gold-operation"]:checked');
+
+const operation = selectedOperation
+    ? selectedOperation.value
+    : "venta";
 
         if (amount <= 0) {
             this.ui.resultBox.style.display = 'none';
@@ -109,9 +128,12 @@ export class GoldCalculator {
 
         // 6. Actualizar UI Educativa
         // ← CORRECCIÓN CLAVE: Obtener el texto descriptivo directamente de la tarjeta seleccionada
-        const purityDesc = selectedPurityRadio 
-            ? selectedPurityRadio.parentElement.querySelector('.purity-desc').textContent.trim() 
-            : 'Joyería';
+        const purityDesc =
+    selectedPurityRadio
+        ?.parentElement
+        ?.querySelector(".purity-desc")
+        ?.textContent
+        ?.trim() || "Joyería";
         
         this.ui.purityHint.textContent = `${purityPct}% del peso es oro puro. El ${100 - purityPct}% restante son otros metales. Uso típico: ${purityDesc.toLowerCase()}.`;
         

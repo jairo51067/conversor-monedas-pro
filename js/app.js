@@ -25,7 +25,9 @@ class App {
     this.greeting = new Greeting();
     this.theme = new Theme();
     this.stats = new Stats();
+    if (document.getElementById("gold-amount")) {
     this.goldCalc = new GoldCalculator();
+}
     this.news = new News(); // ✅ Inicializado en el constructor
   }
 

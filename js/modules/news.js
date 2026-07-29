@@ -1,8 +1,8 @@
 export class News {
   constructor() {
     this.api = "https://jairo-news-api.jairocardenas05.workers.dev";
-
     this.cacheKey = "currency-news-cache";
+     this.initialized = false;
   }
 
   async fetchNews() {
@@ -171,7 +171,9 @@ ${new Date(item.date).toLocaleDateString("es-VE", {
 
     const news = await this.fetchNews();
 
+   if (window.location.hostname === "localhost") {
     console.log("Noticias cargadas:", news);
+}
 
     if (!news.length) {
       container.innerHTML = `
@@ -198,17 +200,27 @@ ${new Date(item.date).toLocaleDateString("es-VE", {
     container.appendChild(fragment);
   }
 
-  async init() {
+ async init() {
+
     await this.render();
+
+    if (this.initialized) return;
+
+    this.initialized = true;
 
     const refresh = document.getElementById("refresh-news");
 
     if (refresh) {
-      refresh.addEventListener("click", async () => {
-        localStorage.removeItem(this.cacheKey);
 
-        await this.render();
-      });
+        refresh.addEventListener("click", async () => {
+
+            localStorage.removeItem(this.cacheKey);
+
+            await this.render();
+
+        });
+
     }
-  }
+
+}
 }
