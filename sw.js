@@ -1,51 +1,46 @@
-const CACHE_NAME = 'app-cache-v2';
+const CACHE_NAME = 'app-cache-v2'; // ⚠️ IMPORTANTE: Cambiamos a v2 para forzar la actualización del SW en los dispositivos
+
 const STATIC_ASSETS = [
     './',
     './index.html',
     './calculadora.html',
-    './offline.html',
     './styles.css',
     './manifest.json',
     './js/app.js',
     './js/config.js',
     './js/modules/api.js',
-    './js/modules/clock.js',
     './js/modules/converter.js',
-    './js/modules/gold.js',
-    './js/modules/greeting.js',
-    './js/modules/stats.js',
-    './js/modules/storage.js',
-    './js/modules/theme.js',
     './js/modules/ui.js',
+    './js/modules/storage.js',
     './js/modules/utils.js',
+    './js/modules/clock.js',
     './js/modules/weather.js',
-    './assets/images/favicon.ico',
-    './assets/images/apple-touch-icon.png',
-    './assets/images/android-chrome-192x192.png',
-    './assets/images/android-chrome-512x512.png',
-    './assets/images/maskable-icon-512x512.png',
+    './js/modules/greeting.js',
+    './js/modules/theme.js',
+    './js/modules/stats.js',
+    './js/modules/gold.js',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
     'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
+// 1. Instalar
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('[SW] Precacheando recursos estáticos');
             return cache.addAll(STATIC_ASSETS);
         }).then(() => self.skipWaiting())
     );
 });
 
+// 2. Activar y limpiar cachés viejas (v1)
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
                 keys.map((key) => {
                     if (key !== CACHE_NAME) {
-                        console.log('[SW] Eliminando caché antigua:', key);
                         return caches.delete(key);
                     }
                 })
@@ -54,44 +49,49 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+// 3. Interceptar peticiones
 self.addEventListener('fetch', (event) => {
     const request = event.request;
     if (request.method !== 'GET') return;
 
-    // Estrategia A: Navegación HTML (Network First -> Cache -> Offline Page)
-    if (request.mode === 'navigate' || (request.method === 'GET' && request.headers.get('accept').includes('text/html'))) {
+    // Identificar si es una petición a una API de datos (tasas, clima, etc.)
+    const isApiRequest = request.url.includes('dolarapi.com') || 
+                         request.url.includes('open-meteo.com') || 
+                         request.url.includes('gold-api.com') ||
+                         request.url.includes('exchangerate-api.com');
+
+    if (isApiRequest || request.mode === 'navigate') {
+        // ESTRATEGIA: Network First (Red primero) para datos dinámicos
         event.respondWith(
-            fetch(request)
+            fetch(request, { cache: 'no-cache' }) // Forzamos ir a la red
                 .then((networkResponse) => {
+                    // Si la red funciona, guardamos la nueva respuesta en caché
                     return caches.open(CACHE_NAME).then((cache) => {
                         cache.put(request, networkResponse.clone());
                         return networkResponse;
                     });
                 })
                 .catch(() => {
-                    return caches.match(request).then((cachedResponse) => {
-                        if (cachedResponse) return cachedResponse;
-                        return caches.match('./offline.html');
-                    });
+                    // Si NO hay internet, caemos al caché guardado
+                    return caches.match(request);
                 })
         );
-        return;
-    }
-
-    // Estrategia B: CSS, JS, Imágenes y CDN (Stale-While-Revalidate)
-    event.respondWith(
-        caches.match(request).then((cachedResponse) => {
-            const fetchPromise = fetch(request)
-                .then((networkResponse) => {
+    } else {
+        // ESTRATEGIA: Stale-While-Revalidate para archivos estáticos (CSS, JS, Imágenes)
+        event.respondWith(
+            caches.match(request).then((cachedResponse) => {
+                const fetchPromise = fetch(request).then((networkResponse) => {
                     if (networkResponse && networkResponse.status === 200) {
-                        const responseToCache = networkResponse.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(request, networkResponse.clone());
+                        });
                     }
                     return networkResponse;
-                })
-                .catch((err) => console.log('[SW] Fetch falló en segundo plano:', err));
-
-            return cachedResponse || fetchPromise;
-        })
-    );
+                }).catch(() => cachedResponse);
+                
+                // Devolvemos el caché inmediatamente (velocidad), y actualizamos en segundo plano
+                return cachedResponse || fetchPromise;
+            })
+        );
+    }
 });

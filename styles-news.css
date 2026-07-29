@@ -10,6 +10,7 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1.5rem;
+    padding: 13px;
 }
 
 .section-badge {

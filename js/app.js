@@ -64,16 +64,26 @@ class App {
     }
   }
 
-  async loadAllData() {
-    await Promise.all([
-      this.loadExchangeRates(),
-      this.loadBCVData(),
-      this.loadParaleloData(),
-      this.loadEuroData(),
-      this.loadTRMData(),
-      this.loadConversionFactors(),
-    ]);
-  }
+    // 1. En el método loadAllData, guarda la marca de tiempo al finalizar:
+    async loadAllData() {
+        try {
+            await Promise.all([
+                this.loadExchangeRates(),
+                this.loadBCVData(),
+                this.loadParaleloData(),
+                this.loadEuroData(),
+                this.loadTRMData(),
+                this.loadConversionFactors()
+            ]);
+            // GUARDAR TIMESTAMP: Registra cuándo se actualizó con éxito
+            localStorage.setItem('last_rates_update', Date.now().toString());
+        } catch (error) {
+            console.error("Error cargando datos:", error);
+        }
+    }
+
+
+
 
   async loadExchangeRates() {
     try {
@@ -472,8 +482,30 @@ class App {
   }
 }
 
-// ✅ Inicialización ÚNICA y correcta
-document.addEventListener("DOMContentLoaded", () => {
-  const app = new App();
-  app.init();
+// 2. Al final del archivo, fuera de la clase App, agrega este detector global:
+document.addEventListener('visibilitychange', async () => {
+    // Cuando la app vuelve a estar en primer plano
+    if (document.visibilityState === 'visible') {
+        const lastUpdate = localStorage.getItem('last_rates_update');
+        const now = Date.now();
+        const FIVE_MINUTES = 5 * 60 * 1000; // 300,000 milisegundos
+
+        // Si no hay registro o han pasado más de 5 minutos, actualiza
+        if (!lastUpdate || (now - parseInt(lastUpdate)) > FIVE_MINUTES) {
+            console.log('🔄 App en primer plano: Actualizando tasas frescas...');
+            
+            // Instanciamos App temporalmente solo para llamar al método, 
+            // o mejor, exponemos una función global de actualización.
+            // La forma más limpia es llamar al método si la instancia existe:
+            if (window.appInstance) {
+                await window.appInstance.loadAllData();
+            }
+        }
+    }
+});
+
+// ✅ Inicialización ÚNICA y correcta -  Al final del todo, donde inicializas, guarda la instancia en window:
+document.addEventListener('DOMContentLoaded', () => {
+    window.appInstance = new App();
+    window.appInstance.init();
 });
