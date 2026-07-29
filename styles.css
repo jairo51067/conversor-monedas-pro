@@ -632,6 +632,7 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
+    padding: 13px;
 }
 
 .btn-converter {
