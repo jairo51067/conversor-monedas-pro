@@ -569,15 +569,20 @@
           </div>
         </section>
 
-        <!-- SECCIÓN DE PUBLICIDAD (Lazy Load para no afectar Performance) -->
-        <section class="ad-section" id="ad-container" role="complementary" aria-label="Espacio publicitario">
-          <div class="ad-placeholder" id="ad-placeholder">
-            <span class="ad-label">Publicidad</span>
-            <div class="ad-content">
-              <!-- Aquí se inyectará el script/iframe de publicidad vía JS después de la carga inicial -->
-              <p>Espacio disponible para patrocinadores</p>
-              <a href="mailto:jairo.cardenas.dev@gmail.com?subject=Publicidad en Conversor Pro" class="ad-cta">Anúnciate aquí</a>
+        <!-- SECCIÓN DE PUBLICIDAD (Banner Premium de Afiliado) -->
+        <section class="ad-section" role="complementary" aria-label="Recomendación patrocinada">
+          <div class="ad-wrapper ad-wrapper-premium">
+            <span class="ad-label">Recomendado</span>
+            
+            <!-- El contenido se inyecta vía JS (news.js) para no bloquear el renderizado inicial -->
+            <div class="ad-slot ad-slot-mobile-banner" id="ad-container">
+              <!-- Fallback visual mientras JS se ejecuta (evita CLS) -->
+              <div class="ad-fallback">
+                <i class="fas fa-bullhorn"></i>
+                <p>Cargando recomendación...</p>
+              </div>
             </div>
+            
           </div>
         </section>
 

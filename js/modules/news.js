@@ -134,19 +134,39 @@ export class News {
     }
   }
 
-  injectAd() {
-    const adContainer = document.getElementById("ad-placeholder");
+    injectAd() {
+    const adContainer = document.getElementById("ad-container");
     if (!adContainer) return;
-    
-    // AQUÍ PEGAS EL CÓDIGO DE TU PROVEEDOR DE PUBLICIDAD (Google AdSense, etc.)
-    // Ejemplo de inyección segura:
+
+    // ⚠️ REEMPLAZA ESTE LINK con tu URL de referido real de Binance
+    const affiliateLink = "https://accounts.binance.com/register?ref=TU_CODIGO_DE_REFERIDO";
+
     adContainer.innerHTML = `
-      <span class="ad-label">Publicidad</span>
-      <div class="ad-content">
-        <!-- Reemplaza esto con tu script de publicidad real -->
-        <p>🚀 Potencia tu negocio con Conversor Pro</p>
-        <a href="#" class="ad-cta">Más información</a>
-      </div>
+      <a href="${affiliateLink}" 
+         target="_blank" 
+         rel="noopener noreferrer sponsored" 
+         class="binance-banner-link"
+         aria-label="Regístrate en Binance y obtén un bono de bienvenida (enlace de afiliado)">
+        
+        <div class="binance-banner">
+          <div class="binance-icon">
+            <!-- Logo de Binance en SVG inline (Cero peticiones de red, máximo rendimiento) -->
+            <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 0L9.6 6.4L16 12.8L22.4 6.4L16 0ZM4.8 11.2L0 16L4.8 20.8L9.6 16L4.8 11.2ZM16 19.2L9.6 25.6L16 32L22.4 25.6L16 19.2ZM27.2 11.2L22.4 16L27.2 20.8L32 16L27.2 11.2ZM16 14.4L11.2 19.2L16 24L20.8 19.2L16 14.4Z"/>
+            </svg>
+          </div>
+          
+          <div class="binance-content">
+            <h3 class="binance-title">Opera Cripto con Seguridad</h3>
+            <p class="binance-text">Regístrate en Binance y obtén un bono de bienvenida exclusivo para nuevos usuarios.</p>
+          </div>
+          
+          <div class="binance-cta">
+            <span>Crear Cuenta</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+      </a>
     `;
   }
 }
