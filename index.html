@@ -569,35 +569,44 @@
           </div>
         </section>
 
+        <!-- SECCIÓN DE PUBLICIDAD (Lazy Load para no afectar Performance) -->
+        <section class="ad-section" id="ad-container" role="complementary" aria-label="Espacio publicitario">
+          <div class="ad-placeholder" id="ad-placeholder">
+            <span class="ad-label">Publicidad</span>
+            <div class="ad-content">
+              <!-- Aquí se inyectará el script/iframe de publicidad vía JS después de la carga inicial -->
+              <p>Espacio disponible para patrocinadores</p>
+              <a href="mailto:jairo.cardenas.dev@gmail.com?subject=Publicidad en Conversor Pro" class="ad-cta">Anúnciate aquí</a>
+            </div>
+          </div>
+        </section>
+
         <!-- SECCIÓN DE NOTICIAS -->
         <section class="news-section" id="news">
           <div class="section-header">
             <div>
-              <span class="section-badge"> En Tendencia </span>
-
+              <span class="section-badge">En Tendencia</span>
               <h2>Últimas Noticias</h2>
-
-              <p>Información al instante para mantenerte al día con lo más relevante.</p>
+              <p>Información al instante: Cripto, Regional y Finanzas.</p>
             </div>
-
-            <button
-              class="news-refresh"
-              id="refresh-news"
-              aria-label="Actualizar noticias"
-            >
-              ↻
+            <button class="news-refresh" id="refresh-news" aria-label="Actualizar noticias">
+              <i class="fas fa-sync-alt"></i>
             </button>
+          </div>
+
+          <!-- NUEVO: Filtros de Categoría (Accesibles) -->
+          <div class="news-filters" role="tablist" aria-label="Filtrar noticias por categoría">
+            <button class="filter-btn active" data-category="all" role="tab" aria-selected="true">Todas</button>
+            <button class="filter-btn" data-category="Cripto" role="tab" aria-selected="false">Cripto (Binance)</button>
+            <button class="filter-btn" data-category="Regional" role="tab" aria-selected="false">Regional</button>
           </div>
 
           <div id="news-container" class="news-container">
             <div class="news-loading">
-              <span></span>
-              <span></span>
-              <span></span>
+              <span></span><span></span><span></span>
             </div>
           </div>
         </section>
-      </div>
     </main>
 
     <!-- FOOTER -->
