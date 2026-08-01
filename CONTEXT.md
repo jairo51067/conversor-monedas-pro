@@ -27,9 +27,17 @@ Todo nuevo código debe mantener o superar las siguientes métricas de auditorí
 
 *Ver `STATUS.md` para el reporte de auditoría más reciente y oportunidades de mejora específicas.*
 
+## REGLAS DE ORO
+- ✅ **Mobile-First:** Todo cambio debe verse perfecto en móvil (cards apiladas, sin scroll horizontal)
+- ✅ **No romper lo que funciona:** Si vas a modificar lógica existente, pídemel el código actual primero
+- ✅ **Cero adivinanzas:** Si necesitas ver un archivo, pídemelo antes de proponer cambios
+- ✅ **Modularidad:** Mantén el código limpio, comentado y siguiendo la estructura actual
+- ✅ **Commits descriptivos:** Cada cambio importante debe tener su commit
+- ✅ **CSS Consolidado:** Eliminar duplicaciones y estilos inline, usar clases reutilizables
+
 
 ## 📂 Estructura de Directorios
-```text
+
 ├── assets/images/          # Activos PWA (Iconos, OG Image, Screenshots para instalabilidad)
 ├── calculadora.html        # Página dedicada a la calculadora científica/financiera
 ├── index.html              # Punto de entrada principal (SPA-like)
@@ -56,8 +64,19 @@ Todo nuevo código debe mantener o superar las siguientes métricas de auditorí
 ├── styles.css              # Hoja de estilos principal (Variables CSS, Grid, Flexbox)
 └── sw.js                   # Service Worker (Estrategia: Network First con fallback a Cache)
 
-🌐 Despliegue
+## SESIÓN ANTERIOR 
+
+## SESIÓN ACTUAL 
+
+## QUE QUEDO O ESTA PENDIENTE 
+
+## PRÓXIMO PASO EXACTO 🎯 OBJETIVO DE LA PRÓXIMA SESIÓN: 
+
+## NOTAS IMPORTANTES
+
+## 🌐 DESPLIEGUE
 Plataforma: GitHub Pages
 URL: https://jairo51067.github.io/conversor-monedas-pro/
 Dominio: Personalizado (si aplica en el futuro).
 
+¿Listo para empezar? Confírmame que entendiste el contexto y dime qué archivo necesitas ver primero." Es primordial que entiendas en contexto y si necesitas ver el STATUS piedemelo y al final del dia este CONTEXT y STATUS lo actualizamos me lo pasas para sustituirlo y tenerlo al dia y mantener la trazabilidad completa del proyecto. De acuerdo. ¿COMO QUIERES INCIAR HOY?...
