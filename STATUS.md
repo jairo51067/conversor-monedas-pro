@@ -16,7 +16,12 @@ Backend/Serverless: Cloudflare Worker personalizado (https://jairo-news-api.jair
 **Estado del Despliegue:** ✅ Activo en GitHub Pages  
 **URL de Producción:** https://jairo51067.github.io/conversor-monedas-pro/
 
----
+## 📜 Mini-Changelog Semántico
+| Versión | Fecha | Cambios Clave |
+|---------|-------|---------------|
+| **3.1.0** | 2026-08-02 | Integración de noticias RSS vía Cloudflare Worker, filtros accesibles y sistema de publicidad dual con carga diferida. |
+| **3.0.0** | 2026-07-XX | Consolidación de arquitectura modular, PWA offline-first y calculadora de oro. |
+| **2.0.0** | 2026-07-26 | Versión base con tasas BCV, Paralelo, TRM y métricas Lighthouse base. |
 
 ## 🏆 Métricas de Lighthouse (Auditoría Reciente)
 
@@ -73,3 +78,11 @@ Las siguientes optimizaciones son de **baja prioridad** pero pueden llevar el re
 - Cualquier nueva característica debe mantener la puntuación de Accesibilidad y Best Practices en 100.
 - **NUEVO:** La gestión de la publicidad es 100% dinámica desde `js/config.js` (`AD_CONFIG`). No es necesario tocar la lógica de `news.js` para cambiar entre un cliente pagando y el enlace de afiliado.
 - **NUEVO:** El código del Cloudflare Worker está respaldado. Cualquier adición de nuevas fuentes de noticias se realiza exclusivamente en el Worker.
+
+## ✅ Checklist de Validación Pre-Deploy
+*Marcar antes de hacer `git push` a la rama principal:*
+- [ ] **Lighthouse:** Ejecutar auditoría y verificar Performance ≥ 90, Accessibility/Best Practices/SEO = 100.
+- [ ] **CLS Check:** Verificar en modo incógnito que no hay saltos visuales al cargar los banners de publicidad.
+- [ ] **Limpieza de Código:** Asegurar que no queden `console.log()` de depuración en los módulos JS.
+- [ ] **Enlaces Patrocinados:** Confirmar que todos los banners de ads tienen el atributo `rel="noopener noreferrer sponsored"`.
+- [ ] **Mobile-First:** Probar la interacción de los filtros de noticias y los banners en un dispositivo móv

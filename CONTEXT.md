@@ -13,6 +13,17 @@
 - **Backend/Serverless:** Cloudflare Worker personalizado (`jairo-news-api`) para agregación, limpieza y conversión de feeds RSS (Binance, CriptoNoticias, El Nacional, Diario Los Andes, La Nación) a JSON, evitando problemas de CORS y mejorando el rendimiento.
 - **Arquitectura:** Modular (Separación de responsabilidades en `js/modules/`).
 
+##  Diagrama de Arquitectura (Flujo de Datos)
+mermaid
+graph TD
+    User((Usuario)) -->|Interactúa| Frontend[Frontend PWA / HTML5+JS]
+    Frontend -->|Fetch Rates| APIs[APIs Externas: DolarAPI, Gold-API, etc.]
+    Frontend -->|Fetch News| CF[Cloudflare Worker: jairo-news-api]
+    CF -->|Parse RSS| RSS[Feeds RSS: Binance, El Nacional, etc.]
+    CF -->|JSON Limpio| Frontend
+    Frontend -->|Cache/Offline| SW[Service Worker / LocalStorage]
+    Frontend -->|Ads Injection| Config[config.js: AD_CONFIG] 
+
 ## 🏗️ Principios de Arquitectura
 1. **Modularidad (ES6 Modules):** El código JavaScript está estrictamente separado por responsabilidades (UI, API, Lógica de Negocio, Utilidades) para facilitar el mantenimiento y las pruebas.
 2. **Offline-First:** Gracias al Service Worker (`sw.js`), la app es funcional sin conexión, mostrando datos en caché y una página de respaldo (`offline.html`).
