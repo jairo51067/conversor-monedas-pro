@@ -3,11 +3,30 @@
 ## 🎯 Propósito
 "Conversor de Monedas Pro" es una Aplicación Web Progresiva (PWA) de alto rendimiento diseñada para proporcionar conversiones de divisas en tiempo real, con un enfoque especial en las tasas de Venezuela (BCV, Paralelo) y Colombia (TRM), además de incluir herramientas avanzadas como calculadora de oro, estadísticas de mercado y noticias financieras.
 
+## 🏗️ Arquitectura y Stack Tecnológico
+- **Frontend:** HTML5, CSS3 (Custom Properties, Grid, Flexbox), Vanilla JavaScript (ES6+ Modules).
+- **Librerías Externas:** 
+  - Bootstrap 5.3.3 (solo utilidades básicas de grid/reset).
+  - Font Awesome 6.5.1 (Iconografía).
+  - Chart.js (Visualización de datos de tendencias).
+- **APIs Externas:** DolarAPI, Open-Meteo (Clima), Gold-API, ExchangeRate-API.
+- **Arquitectura:** Modular (Separación de responsabilidades en `js/modules/`).
+
 ## 🏗️ Principios de Arquitectura
 1. **Modularidad (ES6 Modules):** El código JavaScript está estrictamente separado por responsabilidades (UI, API, Lógica de Negocio, Utilidades) para facilitar el mantenimiento y las pruebas.
 2. **Offline-First:** Gracias al Service Worker (`sw.js`), la app es funcional sin conexión, mostrando datos en caché y una página de respaldo (`offline.html`).
 5. **Accesibilidad (a11y) y Rendimiento:** Diseñada para obtener puntuaciones de 100/100 en Lighthouse (Performance, Accessibility, Best Practices, SEO).
 6. **Mobile-First:** CSS diseñado prioritariamente para dispositivos móviles, escalando elegantemente a tablet y escritorio.
+
+## 📏 Estándares de Calidad y Línea Base (Lighthouse Baseline)
+Todo nuevo código debe mantener o superar las siguientes métricas de auditoría:
+- **Performance:** ≥ 90
+- **Accessibility:** 100
+- **Best Practices:** 100
+- **SEO:** 100
+
+*Ver `STATUS.md` para el reporte de auditoría más reciente y oportunidades de mejora específicas.*
+
 
 ## 📂 Estructura de Directorios
 ```text
@@ -42,7 +61,3 @@ Plataforma: GitHub Pages
 URL: https://jairo51067.github.io/conversor-monedas-pro/
 Dominio: Personalizado (si aplica en el futuro).
 
-🛠️ Stack Tecnológico
-Frontend: HTML5, CSS3 (Custom Properties, Grid, Flexbox), Vanilla JavaScript (ES6+).
-Librerías Externas: Chart.js (Gráficos), Font Awesome (Iconografía).
-APIs: DolarAPI, Open-Meteo (Clima), Gold-API, APIs de noticias financieras.

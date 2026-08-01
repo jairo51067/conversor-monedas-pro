@@ -1,68 +1,68 @@
-🌐 Despliegue
+# 🌐 Despliegue
 Plataforma: GitHub Pages
 URL: https://jairo51067.github.io/conversor-monedas-pro/
 Dominio: Personalizado (si aplica en el futuro).
 
-🛠️ Stack Tecnológico
+# 🛠️ Stack Tecnológico
 Frontend: HTML5, CSS3 (Custom Properties, Grid, Flexbox), Vanilla JavaScript (ES6+).
 Librerías Externas: Chart.js (Gráficos), Font Awesome (Iconografía).
 APIs: DolarAPI, Open-Meteo (Clima), Gold-API, APIs de noticias financieras.
+Usa tu propio Cloudflare Worker (https://jairo-news-api.jairocardenas05.workers.dev/), para obtener las nioticias.
 
-### 📄 2. Archivo `STATUS.md`
+# 📈 Estado del Proyecto (STATUS)
 
-_Este es un documento vivo. Se actualiza en cada sprint o cambio mayor para saber exactamente en qué punto está el desarrollo._
-
-# 📈 Estado del Proyecto (Status)
-
-**Última Actualización:** 2026-07-10  
-**Versión Actual:** v3.0.0 (Refactorización Profesional y PWA)  
-**Estado del Despliegue:** ✅ Activo en GitHub Pages
+**Última Actualización:** 2026-07-26  
+**Versión Actual:** 2.0.0  
+**Estado del Despliegue:** ✅ Activo en GitHub Pages  
+**URL de Producción:** https://jairo51067.github.io/conversor-monedas-pro/
 
 ---
 
-## ✅ Características Completadas (Done)
+## 🏆 Métricas de Lighthouse (Auditoría Reciente)
 
-- [x] **Arquitectura Modular:** Migración completa a ES6 Modules (`app.js` + carpeta `modules/`).
-- [x] **PWA Completa:** `manifest.json` configurado con iconos maskable, `sw.js` con estrategia _Network First_ y página `offline.html`.
-- [x] **Rendimiento y SEO:** Optimización para obtener 100/100 en Lighthouse (Auditoría de rendimiento, accesibilidad, SEO y mejores prácticas).
-- [x] **Módulo de Tasas:** Visualización en tiempo real de BCV, Paralelo, Euro y TRM con diseño de tarjetas profesional.
-- [x] **Calculadora de Oro:** Implementación completa con cálculo de pureza (Kilates), peso y márgenes de compra/venta.
-- [x] **Módulo de Estadísticas:** Gráficos interactivos con Chart.js para visualizar tendencias (7D, 30D, 1A).
-- [x] **Módulo de Noticias:** Integración de feed de noticias financieras con diseño responsivo y caché.
-- [x] **Accesibilidad (a11y):** Corrección de contrastes, atributos ARIA, y navegación por teclado.
-- [x] **Gestión de Estado:** Sistema robusto de `localStorage` para caché de tasas e historial de conversiones.
+| Categoría | Puntuación | Estado |
+|-----------|------------|--------|
+| **Performance** | **92/100** | 🟢 Excelente |
+| **Accessibility** | **100/100** | 🟢 Perfecto |
+| **Best Practices** | **100/100** | 🟢 Perfecto |
+| **SEO** | **100/100** | 🟢 Perfecto |
+| **Agentic Browsing** | **100/100** | 🟢 Perfecto |
 
----
-
-## 🚧 En Progreso / Enfoque Actual (In Progress)
-
-- [x] **Documentación y Trazabilidad:** Creación de `CONTEXT.md` y `STATUS.md` para estandarizar el flujo de trabajo.
-- [ ] **Refinamiento de Datos Históricos:** Actualmente, el módulo de estadísticas (`stats.js`) utiliza una simulación realista para el historial. _Próximo paso:_ Conectar con una API gratuita de series de tiempo (ej. ExchangeRate-API histórico o similar) para reemplazar la simulación por datos reales.
+### 📊 Métricas de Rendimiento Clave (Core Web Vitals)
+- **First Contentful Paint (FCP):** 2.1 s
+- **Largest Contentful Paint (LCP):** 3.0 s
+- **Total Blocking Time (TBT):** 60 ms
+- **Cumulative Layout Shift (CLS):** 0.000
 
 ---
 
-## 🐛 Problemas Conocidos / Deuda Técnica (Known Issues)
-
-1. **Límites de API:** Las APIs gratuitas (como Gold-API o las de noticias) tienen límites de rate-limit. El sistema de caché en `storage.js` mitiga esto, pero en uso masivo podría requerir un backend proxy propio.
-2. **Mapa de Sitio (Sitemap):** Falta generar un `sitemap.xml` para mejorar aún más el SEO en motores de búsqueda.
-
----
-
-## 🗺️ Hoja de Ruta (Roadmap) - Próximos Pasos
-
-1. **Corto Plazo:**
-   - Integrar una API de datos históricos real para el módulo de Estadísticas.
-   - Agregar un `sitemap.xml` y mejorar los metadatos de `robots.txt`.
-2. **Mediano Plazo:**
-   - Implementar un "Install Prompt" personalizado para animar al usuario a instalar la PWA en su pantalla de inicio.
-   - Agregar soporte para múltiples idiomas (i18n) usando un archivo JSON de traducciones.
-3. **Largo Plazo:**
-   - Migrar el almacenamiento de `localStorage` a `IndexedDB` (vía librería como `idb`) para manejar grandes volúmenes de historial de conversiones sin bloquear el hilo principal.
+## ✅ Tareas Completadas (Done)
+- [x] Arquitectura modular ES6 (API, UI, Storage, Utils, etc.).
+- [x] Implementación completa de PWA (Manifest, Service Worker con estrategia Network First + Stale While Revalidate).
+- [x] Interfaz 100% responsiva y optimizada para móviles (Mobile-First).
+- [x] Modo Oscuro/Claro con persistencia en `localStorage`.
+- [x] Calculadora de Oro con lógica de pureza y conversión en tiempo real.
+- [x] Gráficos de tendencias con Chart.js (con datos determinísticos para evitar parpadeos).
+- [x] Correcciones de Accesibilidad (ARIA labels, contraste de colores, orden de encabezados).
+- [x] Optimización de SEO (Meta tags, Open Graph, Twitter Cards, Canonical URL).
 
 ---
 
-## 📝 Notas para Desarrolladores
+## 🚧 Próximos Pasos (Oportunidades de Mejora detectadas por Lighthouse)
 
-- Al agregar un nuevo módulo, crear el archivo en `js/modules/`, registrarlo en `app.js` y actualizar este archivo `STATUS.md`.
-- Seguir la convención de nomenclatura: `camelCase` para variables/funciones, `PascalCase` para Clases.
-- Antes de hacer push a `main`, ejecutar una auditoría rápida de Lighthouse en localhost.
+Las siguientes optimizaciones son de **baja prioridad** pero pueden llevar el rendimiento de 92 a 98-100:
+
+1. **Minificación de CSS/JS:** Reducir ~31 KiB combinados de CSS y JS sin minificar.
+2. **Eliminar CSS/JS no utilizado:** 
+   - CSS no usado: ~38 KiB (principalmente de Bootstrap y estilos de animación no activos).
+   - JS no usado: ~63 KiB (principalmente `chart.js`, que podría cargarse de forma diferida o bajo demanda).
+3. **Optimización de Fuentes:** Asegurar que `font-display: swap` esté aplicado correctamente a Font Awesome para ahorrar ~930 ms en renderizado.
+4. **Compresión de Texto:** Habilitar compresión Brotli/Gzip en el servidor de GitHub Pages (generalmente automático, pero verificar configuración).
+5. **Eliminar recursos que bloquean el renderizado:** Diferir la carga de CSS/JS no crítico para ahorrar ~690 ms en el inicio.
+
+---
+
+## 📝 Notas para el Equipo
+- La app ya cumple con los estándares de accesibilidad (WCAG AA/AAA) y SEO básico.
+- El Service Worker está funcionando correctamente en modo offline.
+- Cualquier nueva característica debe mantener la puntuación de Accesibilidad y Best Practices en 100.
