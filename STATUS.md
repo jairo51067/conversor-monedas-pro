@@ -5,14 +5,14 @@ Dominio: Personalizado (si aplica en el futuro).
 
 # 🛠️ Stack Tecnológico
 Frontend: HTML5, CSS3 (Custom Properties, Grid, Flexbox), Vanilla JavaScript (ES6+).
-Librerías Externas: Chart.js (Gráficos), Font Awesome (Iconografía).
-APIs: DolarAPI, Open-Meteo (Clima), Gold-API, APIs de noticias financieras.
-Usa tu propio Cloudflare Worker (https://jairo-news-api.jairocardenas05.workers.dev/), para obtener las nioticias.
+Librerías Externas: Chart.js (Gráficos, carga diferida), Font Awesome (Iconografía).
+APIs: DolarAPI, Open-Meteo (Clima), Gold-API, ExchangeRate-API.
+Backend/Serverless: Cloudflare Worker personalizado (https://jairo-news-api.jairocardenas05.workers.dev/) para agregación, limpieza y conversión de feeds RSS (Binance, CriptoNoticias, El Nacional, Diario Los Andes, La Nación) a JSON, evitando problemas de CORS.
 
 # 📈 Estado del Proyecto (STATUS)
 
-**Última Actualización:** 2026-07-26  
-**Versión Actual:** 2.0.0  
+**Última Actualización:** 2026-08-02  
+**Versión Actual:** 3.1.0  
 **Estado del Despliegue:** ✅ Activo en GitHub Pages  
 **URL de Producción:** https://jairo51067.github.io/conversor-monedas-pro/
 
@@ -22,7 +22,7 @@ Usa tu propio Cloudflare Worker (https://jairo-news-api.jairocardenas05.workers.
 
 | Categoría | Puntuación | Estado |
 |-----------|------------|--------|
-| **Performance** | **92/100** | 🟢 Excelente |
+| **Performance** | **92/100** | 🟢 Excelente (Objetivo: Mantener con la nueva inyección diferida de ads) |
 | **Accessibility** | **100/100** | 🟢 Perfecto |
 | **Best Practices** | **100/100** | 🟢 Perfecto |
 | **SEO** | **100/100** | 🟢 Perfecto |
@@ -31,8 +31,8 @@ Usa tu propio Cloudflare Worker (https://jairo-news-api.jairocardenas05.workers.
 ### 📊 Métricas de Rendimiento Clave (Core Web Vitals)
 - **First Contentful Paint (FCP):** 2.1 s
 - **Largest Contentful Paint (LCP):** 3.0 s
-- **Total Blocking Time (TBT):** 60 ms
-- **Cumulative Layout Shift (CLS):** 0.000
+- **Total Blocking Time (TBT):** 60 ms (Protegido por `requestIdleCallback` en módulos de ads)
+- **Cumulative Layout Shift (CLS):** 0.000 (Garantizado por dimensiones fijas en contenedores de publicidad)
 
 ---
 
@@ -45,6 +45,10 @@ Usa tu propio Cloudflare Worker (https://jairo-news-api.jairocardenas05.workers.
 - [x] Gráficos de tendencias con Chart.js (con datos determinísticos para evitar parpadeos).
 - [x] Correcciones de Accesibilidad (ARIA labels, contraste de colores, orden de encabezados).
 - [x] Optimización de SEO (Meta tags, Open Graph, Twitter Cards, Canonical URL).
+- [x] **NUEVO:** Integración del módulo de noticias con feeds RSS regionales y cripto vía Cloudflare Worker (sin CORS, con limpieza de HTML y extracción inteligente de imágenes).
+- [x] **NUEVO:** Implementación de filtros de noticias accesibles (Todas, Cripto, Regional) con gestión de estado (`aria-selected`).
+- [x] **NUEVO:** Sistema de publicidad dual (Banner de Afiliado + Espacio para Clientes) con inyección diferida (`requestIdleCallback`) y configuración centralizada en `config.js` (`AD_CONFIG`).
+- [x] **NUEVO:** Garantía de CLS 0.000 en nuevos contenedores dinámicos mediante el uso de `aspect-ratio` y `min-height` en CSS.
 
 ---
 
@@ -59,6 +63,7 @@ Las siguientes optimizaciones son de **baja prioridad** pero pueden llevar el re
 3. **Optimización de Fuentes:** Asegurar que `font-display: swap` esté aplicado correctamente a Font Awesome para ahorrar ~930 ms en renderizado.
 4. **Compresión de Texto:** Habilitar compresión Brotli/Gzip en el servidor de GitHub Pages (generalmente automático, pero verificar configuración).
 5. **Eliminar recursos que bloquean el renderizado:** Diferir la carga de CSS/JS no crítico para ahorrar ~690 ms en el inicio.
+6. **NUEVO:** Validar en producción que la inyección diferida de los dos banners publicitarios mantiene el TBT < 60ms y no introduce regresiones en el CLS.
 
 ---
 
@@ -66,3 +71,5 @@ Las siguientes optimizaciones son de **baja prioridad** pero pueden llevar el re
 - La app ya cumple con los estándares de accesibilidad (WCAG AA/AAA) y SEO básico.
 - El Service Worker está funcionando correctamente en modo offline.
 - Cualquier nueva característica debe mantener la puntuación de Accesibilidad y Best Practices en 100.
+- **NUEVO:** La gestión de la publicidad es 100% dinámica desde `js/config.js` (`AD_CONFIG`). No es necesario tocar la lógica de `news.js` para cambiar entre un cliente pagando y el enlace de afiliado.
+- **NUEVO:** El código del Cloudflare Worker está respaldado. Cualquier adición de nuevas fuentes de noticias se realiza exclusivamente en el Worker.

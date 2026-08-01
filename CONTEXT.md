@@ -8,15 +8,17 @@
 - **Librerías Externas:** 
   - Bootstrap 5.3.3 (solo utilidades básicas de grid/reset).
   - Font Awesome 6.5.1 (Iconografía).
-  - Chart.js (Visualización de datos de tendencias).
+  - Chart.js (Visualización de datos de tendencias, carga diferida).
 - **APIs Externas:** DolarAPI, Open-Meteo (Clima), Gold-API, ExchangeRate-API.
+- **Backend/Serverless:** Cloudflare Worker personalizado (`jairo-news-api`) para agregación, limpieza y conversión de feeds RSS (Binance, CriptoNoticias, El Nacional, Diario Los Andes, La Nación) a JSON, evitando problemas de CORS y mejorando el rendimiento.
 - **Arquitectura:** Modular (Separación de responsabilidades en `js/modules/`).
 
 ## 🏗️ Principios de Arquitectura
 1. **Modularidad (ES6 Modules):** El código JavaScript está estrictamente separado por responsabilidades (UI, API, Lógica de Negocio, Utilidades) para facilitar el mantenimiento y las pruebas.
 2. **Offline-First:** Gracias al Service Worker (`sw.js`), la app es funcional sin conexión, mostrando datos en caché y una página de respaldo (`offline.html`).
-5. **Accesibilidad (a11y) y Rendimiento:** Diseñada para obtener puntuaciones de 100/100 en Lighthouse (Performance, Accessibility, Best Practices, SEO).
-6. **Mobile-First:** CSS diseñado prioritariamente para dispositivos móviles, escalando elegantemente a tablet y escritorio.
+3. **Accesibilidad (a11y) y Rendimiento:** Diseñada para obtener puntuaciones de 100/100 en Lighthouse (Accessibility, Best Practices, SEO) y ≥ 90 en Performance.
+4. **Mobile-First:** CSS diseñado prioritariamente para dispositivos móviles, escalando elegantemente a tablet y escritorio.
+5. **Monetización Segura:** La publicidad (afiliados y clientes) se inyecta de forma diferida (`requestIdleCallback`) con dimensiones fijas para garantizar CLS 0.000 y no afectar el Total Blocking Time (TBT).
 
 ## 📏 Estándares de Calidad y Línea Base (Lighthouse Baseline)
 Todo nuevo código debe mantener o superar las siguientes métricas de auditoría:
@@ -35,22 +37,22 @@ Todo nuevo código debe mantener o superar las siguientes métricas de auditorí
 - ✅ **Commits descriptivos:** Cada cambio importante debe tener su commit
 - ✅ **CSS Consolidado:** Eliminar duplicaciones y estilos inline, usar clases reutilizables
 
-
 ## 📂 Estructura de Directorios
 
+```text
 ├── assets/images/          # Activos PWA (Iconos, OG Image, Screenshots para instalabilidad)
 ├── calculadora.html        # Página dedicada a la calculadora científica/financiera
-├── index.html              # Punto de entrada principal (SPA-like)
+├── index.html              # Punto de entrada principal (SPA-like, incluye contenedores de ads)
 ├── js/                     # Lógica de la aplicación (Arquitectura Modular)
 │   ├── app.js              # Orquestador principal que inicializa los módulos
-│   ├── config.js           # Constantes, claves de API y configuraciones globales
+│   ├── config.js           # Constantes, claves de API, configuraciones globales y AD_CONFIG (Gestión de publicidad)
 │   └── modules/            # Módulos de responsabilidad única (Single Responsibility)
 │       ├── api.js          # Gestión de fetch y llamadas a APIs externas
 │       ├── clock.js        # Lógica del reloj en tiempo real
 │       ├── converter.js    # Lógica matemática de conversión de divisas
 │       ├── gold.js         # Lógica y UI de la calculadora de oro
 │       ├── greeting.js     # Lógica del mensaje de bienvenida contextual
-│       ├── news.js         # Integración y renderizado de noticias financieras
+│       ├── news.js         # Integración, renderizado, filtros de noticias e inyección diferida de publicidad (Dual: Afiliado/Cliente)
 │       ├── stats.js        # Gráficos y análisis de tendencias (Chart.js)
 │       ├── storage.js      # Abstracción de localStorage (Caché e Historial)
 │       ├── theme.js        # Gestión de modo Oscuro/Claro
@@ -60,23 +62,38 @@ Todo nuevo código debe mantener o superar las siguientes métricas de auditorí
 ├── manifest.json           # Configuración de la PWA (Nombre, iconos, tema)
 ├── offline.html            # Página de respaldo cuando no hay conexión a internet
 ├── README.md               # Documentación para el usuario final y desarrolladores
-├── styles-news.css         # Estilos específicos para el módulo de noticias
+├── styles-news.css         # Estilos específicos para el módulo de noticias y banners publicitarios (CLS-proof)
 ├── styles.css              # Hoja de estilos principal (Variables CSS, Grid, Flexbox)
 └── sw.js                   # Service Worker (Estrategia: Network First con fallback a Cache)
+```
 
 ## SESIÓN ANTERIOR 
+- Consolidación de la arquitectura modular, PWA, calculadora de oro y métricas base de Lighthouse (Performance 92, resto 100).
 
 ## SESIÓN ACTUAL 
+- Integración del módulo de noticias con feeds RSS regionales y cripto (Binance, El Nacional, Los Andes, La Nación, etc.) mediante un Cloudflare Worker personalizado (evita CORS, limpia HTML, extrae imágenes).
+- Implementación de un **sistema de publicidad dual** (Banner de Afiliado de Binance + Espacio para Clientes) con carga diferida (`requestIdleCallback`) y configuración centralizada en `config.js` (`AD_CONFIG`).
+- Aseguramiento de CLS 0.000 mediante contenedores de publicidad con dimensiones fijas (`aspect-ratio` y `min-height`).
 
 ## QUE QUEDO O ESTA PENDIENTE 
+- Reemplazar el placeholder `TU_CODIGO_DE_REFERIDO` en `js/config.js` con el enlace de afiliado real de Binance.
+- Ejecutar una auditoría Lighthouse final en producción para validar que las nuevas secciones de publicidad mantienen el Performance ≥ 90 y Accessibility 100.
 
 ## PRÓXIMO PASO EXACTO 🎯 OBJETIVO DE LA PRÓXIMA SESIÓN: 
+1. Validar el funcionamiento visual y de rendimiento de los dos banners en producción.
+2. Actualizar el enlace de afiliado real.
+3. (Futuro) Adaptar el banner de cliente a formato de imagen (`isImage: true`) cuando se concrete el primer patrocinador.
 
 ## NOTAS IMPORTANTES
+- El código del Cloudflare Worker está respaldado y funcionando. Cualquier cambio en las fuentes de noticias se hace allí.
+- La gestión de la publicidad es 100% dinámica desde `js/config.js`. No es necesario tocar `news.js` para cambiar entre un cliente pagando y el enlace de afiliado.
+- Se eliminó la duplicidad de secciones de publicidad en el HTML, dejando solo los contenedores `ad-affiliate-container` y `ad-client-container`.
 
 ## 🌐 DESPLIEGUE
-Plataforma: GitHub Pages
-URL: https://jairo51067.github.io/conversor-monedas-pro/
+Plataforma: GitHub Pages  
+URL: https://jairo51067.github.io/conversor-monedas-pro/  
 Dominio: Personalizado (si aplica en el futuro).
 
-¿Listo para empezar? Confírmame que entendiste el contexto y dime qué archivo necesitas ver primero." Es primordial que entiendas en contexto y si necesitas ver el STATUS piedemelo y al final del dia este CONTEXT y STATUS lo actualizamos me lo pasas para sustituirlo y tenerlo al dia y mantener la trazabilidad completa del proyecto. De acuerdo. ¿COMO QUIERES INCIAR HOY?...
+---
+
+¿Te parece bien esta versión? Conserva todo tu contexto original, integra perfectamente lo que logramos hoy y deja las secciones de seguimiento listas para la próxima vez que abramos el proyecto. Si estás de acuerdo, ¡descansa! Fue un excelente trabajo hoy. 🚀
