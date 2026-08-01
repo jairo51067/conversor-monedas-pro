@@ -459,3 +459,103 @@ body.dark-mode .binance-banner,
     margin-top: 0.25rem;
   }
 }
+
+/* =========================================
+   SEGUNDO BANNER: CLIENTES (Estilo diferente)
+   ========================================= */
+.ad-wrapper-client {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(var(--primary-rgb, 79, 70, 229), 0.3);
+}
+
+.client-banner-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.client-banner-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.client-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(79, 70, 229, 0.02) 100%);
+  border-left: 4px solid #4F46E5;
+  border-radius: 8px;
+}
+
+/* Ajuste para Modo Oscuro */
+body.dark-mode .client-banner,
+[data-theme="dark"] .client-banner {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.15) 0%, rgba(30, 35, 41, 0.6) 100%);
+}
+
+.client-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.client-content {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.client-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--news-text, #1f2937);
+  line-height: 1.3;
+}
+
+.client-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--news-text-muted, #6b7280);
+  line-height: 1.4;
+}
+
+.client-cta {
+  flex-shrink: 0;
+  padding: 0.6rem 1.1rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.client-banner-link:hover .client-cta {
+  opacity: 0.9;
+}
+
+/* Responsive para el banner de clientes */
+@media (max-width: 480px) {
+  .client-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+    border-left: none;
+    border-top: 4px solid #4F46E5;
+    padding: 1.25rem 1rem;
+  }
+
+  .client-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}

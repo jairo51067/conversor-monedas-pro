@@ -569,20 +569,33 @@
           </div>
         </section>
 
-        <!-- SECCIÓN DE PUBLICIDAD (Banner Premium de Afiliado) -->
-        <section class="ad-section" role="complementary" aria-label="Recomendación patrocinada">
+        <!-- =========================================
+             PRIMER BANNER: AFILIADO BINANCE (Activo siempre)
+             ========================================= -->
+        <section class="ad-section" role="complementary" aria-label="Publicidad de afiliado">
           <div class="ad-wrapper ad-wrapper-premium">
             <span class="ad-label">Recomendado</span>
-            
-            <!-- El contenido se inyecta vía JS (news.js) para no bloquear el renderizado inicial -->
-            <div class="ad-slot ad-slot-mobile-banner" id="ad-container">
-              <!-- Fallback visual mientras JS se ejecuta (evita CLS) -->
+            <div class="ad-slot ad-slot-mobile-banner" id="ad-affiliate-container">
               <div class="ad-fallback">
-                <i class="fas fa-bullhorn"></i>
-                <p>Cargando recomendación...</p>
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando...</p>
               </div>
             </div>
-            
+          </div>
+        </section>
+
+        <!-- =========================================
+             SEGUNDO BANNER: ESPacio PARA CLIENTES (Venta directa)
+             ========================================= -->
+        <section class="ad-section" role="complementary" aria-label="Espacio publicitario disponible">
+          <div class="ad-wrapper ad-wrapper-client">
+            <span class="ad-label">Publicidad</span>
+            <div class="ad-slot ad-slot-client-banner" id="ad-client-container">
+              <div class="ad-fallback">
+                <i class="fas fa-bullhorn"></i>
+                <p>Espacio disponible</p>
+              </div>
+            </div>
           </div>
         </section>
 
