@@ -105,6 +105,6 @@ Plataforma: GitHub Pages
 URL: https://jairo51067.github.io/conversor-monedas-pro/  
 Dominio: Personalizado (si aplica en el futuro).
 
----
 
-¿Te parece bien esta versión? Conserva todo tu contexto original, integra perfectamente lo que logramos hoy y deja las secciones de seguimiento listas para la próxima vez que abramos el proyecto. Si estás de acuerdo, ¡descansa! Fue un excelente trabajo hoy. 🚀
+## INSTRUCCIONES
+¿Listo para empezar? Confírmame que entendiste el contexto y dime qué archivo necesitas ver primero." Es primordial que entiendas en contexto y si necesitas ver el STATUS piedemelo y al final del dia este CONTEXT y STATUS lo actualizamos me lo pasas para sustituirlo y tenerlo al dia y mantener la trazabilidad completa del proyecto. De acuerdo. ¿COMO QUIERES INCIAR HOY?...
