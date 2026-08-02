@@ -1,3 +1,4 @@
+## 📄 ARCHIVO `STATUS` (Versión Actualizada)
 # 🌐 Despliegue
 Plataforma: GitHub Pages
 URL: https://jairo51067.github.io/conversor-monedas-pro/
@@ -10,9 +11,6 @@ APIs: DolarAPI, Open-Meteo (Clima), Gold-API, ExchangeRate-API.
 Backend/Serverless: Cloudflare Worker personalizado (https://jairo-news-api.jairocardenas05.workers.dev/) para agregación, limpieza y conversión de feeds RSS (Binance, CriptoNoticias, El Nacional, Diario Los Andes, La Nación) a JSON, evitando problemas de CORS.
 
 # Diagram
-
-mermaid
-graph TD
 
     base.cv::end_user["**End User**<br>[External]"]
     base.cv::exchange_rate_api["**ExchangeRate-API**<br>js/config.js `EXCHANGE_RATE: 'https://api.exchangerate-api.com/v4/latest/'`"]
@@ -40,14 +38,15 @@ graph TD
 
 # 📈 Estado del Proyecto (STATUS)
 
-**Última Actualización:** 2026-08-02  
-**Versión Actual:** 3.1.0  
+**Última Actualización:** 2026-08-03  
+**Versión Actual:** 3.1.1  
 **Estado del Despliegue:** ✅ Activo en GitHub Pages  
 **URL de Producción:** https://jairo51067.github.io/conversor-monedas-pro/
 
 ## 📜 Mini-Changelog Semántico
 | Versión | Fecha | Cambios Clave |
 |---------|-------|---------------|
+| **3.1.1** | 2026-08-03 | Corrección crítica del conversor oficial (`getConversionRate`), rediseño profesional del modal de bienvenida con variaciones reales, actualización del Service Worker a v3 y resolución de errores 404 de módulos. |
 | **3.1.0** | 2026-08-02 | Integración de noticias RSS vía Cloudflare Worker, filtros accesibles y sistema de publicidad dual con carga diferida. |
 | **3.0.0** | 2026-07-XX | Consolidación de arquitectura modular, PWA offline-first y calculadora de oro. |
 | **2.0.0** | 2026-07-26 | Versión base con tasas BCV, Paralelo, TRM y métricas Lighthouse base. |
@@ -79,10 +78,16 @@ graph TD
 - [x] Gráficos de tendencias con Chart.js (con datos determinísticos para evitar parpadeos).
 - [x] Correcciones de Accesibilidad (ARIA labels, contraste de colores, orden de encabezados).
 - [x] Optimización de SEO (Meta tags, Open Graph, Twitter Cards, Canonical URL).
-- [x] **NUEVO:** Integración del módulo de noticias con feeds RSS regionales y cripto vía Cloudflare Worker (sin CORS, con limpieza de HTML y extracción inteligente de imágenes).
-- [x] **NUEVO:** Implementación de filtros de noticias accesibles (Todas, Cripto, Regional) con gestión de estado (`aria-selected`).
-- [x] **NUEVO:** Sistema de publicidad dual (Banner de Afiliado + Espacio para Clientes) con inyección diferida (`requestIdleCallback`) y configuración centralizada en `config.js` (`AD_CONFIG`).
-- [x] **NUEVO:** Garantía de CLS 0.000 en nuevos contenedores dinámicos mediante el uso de `aspect-ratio` y `min-height` en CSS.
+- [x] **NUEVO (3.1.0):** Integración del módulo de noticias con feeds RSS regionales y cripto vía Cloudflare Worker (sin CORS, con limpieza de HTML y extracción inteligente de imágenes).
+- [x] **NUEVO (3.1.0):** Implementación de filtros de noticias accesibles (Todas, Cripto, Regional) con gestión de estado (`aria-selected`).
+- [x] **NUEVO (3.1.0):** Sistema de publicidad dual (Banner de Afiliado + Espacio para Clientes) con inyección diferida (`requestIdleCallback`) y configuración centralizada en `config.js` (`AD_CONFIG`).
+- [x] **NUEVO (3.1.0):** Garantía de CLS 0.000 en nuevos contenedores dinámicos mediante el uso de `aspect-ratio` y `min-height` en CSS.
+- [x] **🆕 NUEVO (3.1.1):** Corrección del método faltante `getConversionRate` en `api.js` (Conversor oficial 100% funcional).
+- [x] **🆕 NUEVO (3.1.1):** Corrección de rutas de importación relativas en `app.js` y `api.js` (Eliminación de errores 404).
+- [x] ** NUEVO (3.1.1):** Implementación de cálculo de variaciones reales (absolutas y porcentuales) en `storage.js` y `greeting.js`, con renderizado condicional (no muestra ceros en primera carga).
+- [x] **🆕 NUEVO (3.1.1):** Rediseño profesional del modal de bienvenida (layout en columna para todas las vistas, glassmorphism, colores de variación verde/rojo).
+- [x] **🆕 NUEVO (3.1.1):** Actualización del Service Worker a `v3` con validación `!bodyUsed` para evitar errores de clonación y inclusión de módulos de noticias.
+- [x] **🆕 NUEVO (3.1.1):** Limpieza de consola: Cero errores críticos de JavaScript en la inicialización.
 
 ---
 
@@ -97,7 +102,8 @@ Las siguientes optimizaciones son de **baja prioridad** pero pueden llevar el re
 3. **Optimización de Fuentes:** Asegurar que `font-display: swap` esté aplicado correctamente a Font Awesome para ahorrar ~930 ms en renderizado.
 4. **Compresión de Texto:** Habilitar compresión Brotli/Gzip en el servidor de GitHub Pages (generalmente automático, pero verificar configuración).
 5. **Eliminar recursos que bloquean el renderizado:** Diferir la carga de CSS/JS no crítico para ahorrar ~690 ms en el inicio.
-6. **NUEVO:** Validar en producción que la inyección diferida de los dos banners publicitarios mantiene el TBT < 60ms y no introduce regresiones en el CLS.
+6. **🆕 NUEVO:** Validar en producción que la inyección diferida de los dos banners publicitarios mantiene el TBT < 60ms y no introduce regresiones en el CLS tras el rediseño del modal.
+7. ** NUEVO:** Reemplazar el placeholder `TU_CODIGO_DE_REFERIDO` en `js/config.js` con el ID real de afiliado de Binance.
 
 ---
 
@@ -107,6 +113,8 @@ Las siguientes optimizaciones son de **baja prioridad** pero pueden llevar el re
 - Cualquier nueva característica debe mantener la puntuación de Accesibilidad y Best Practices en 100.
 - **NUEVO:** La gestión de la publicidad es 100% dinámica desde `js/config.js` (`AD_CONFIG`). No es necesario tocar la lógica de `news.js` para cambiar entre un cliente pagando y el enlace de afiliado.
 - **NUEVO:** El código del Cloudflare Worker está respaldado. Cualquier adición de nuevas fuentes de noticias se realiza exclusivamente en el Worker.
+- **🆕 NUEVO (3.1.1):** Las variaciones de tasas solo se muestran cuando hay datos históricos reales en caché (segunda apertura en adelante). Esto garantiza seriedad en los datos financieros mostrados.
+- **🆕 NUEVO (3.1.1):** El Service Worker ahora usa la estrategia `Network First` con validación de `bodyUsed` para evitar errores de clonación en respuestas de APIs externas.
 
 ## ✅ Checklist de Validación Pre-Deploy
 *Marcar antes de hacer `git push` a la rama principal:*
@@ -114,4 +122,7 @@ Las siguientes optimizaciones son de **baja prioridad** pero pueden llevar el re
 - [ ] **CLS Check:** Verificar en modo incógnito que no hay saltos visuales al cargar los banners de publicidad.
 - [ ] **Limpieza de Código:** Asegurar que no queden `console.log()` de depuración en los módulos JS.
 - [ ] **Enlaces Patrocinados:** Confirmar que todos los banners de ads tienen el atributo `rel="noopener noreferrer sponsored"`.
-- [ ] **Mobile-First:** Probar la interacción de los filtros de noticias y los banners en un dispositivo móv
+- [ ] **Mobile-First:** Probar la interacción de los filtros de noticias y los banners en un dispositivo móvil.
+- [ ] **🆕 NUEVO (3.1.1):** Verificar que el modal de bienvenida se muestre correctamente en columna en móvil, tablet y desktop.
+- [ ] ** NUEVO (3.1.1):** Confirmar que las variaciones de tasas NO se muestran en la primera apertura (caché vacío) y SÍ se muestran a partir de la segunda apertura.
+
