@@ -9,6 +9,35 @@ Librerías Externas: Chart.js (Gráficos, carga diferida), Font Awesome (Iconogr
 APIs: DolarAPI, Open-Meteo (Clima), Gold-API, ExchangeRate-API.
 Backend/Serverless: Cloudflare Worker personalizado (https://jairo-news-api.jairocardenas05.workers.dev/) para agregación, limpieza y conversión de feeds RSS (Binance, CriptoNoticias, El Nacional, Diario Los Andes, La Nación) a JSON, evitando problemas de CORS.
 
+# Diagram
+
+mermaid
+graph TD
+
+    base.cv::end_user["**End User**<br>[External]"]
+    base.cv::exchange_rate_api["**ExchangeRate-API**<br>js/config.js `EXCHANGE_RATE: 'https://api.exchangerate-api.com/v4/latest/'`"]
+    base.cv::dolar_api["**DolarAPI**<br>js/config.js `DOLAR_API: {`"]
+    base.cv::open_meteo_api["**Open-Meteo Weather API**<br>js/config.js `WEATHER: 'https://api.open-meteo.com/v1/forecast'`"]
+    base.cv::jairo_news_api["**Jairo News API**<br>js/modules/news.js `this.api = "https://jairo-news-api.jairocardenas05.workers.dev";`"]
+    base.cv::gold_api["**Gold-API.com**<br>js/modules/gold.js `https://api.gold-api.com/price/XAU`"]
+    subgraph base.cv::bolivar_converter_app["**Bolivar Converter Web Application**<br>[External]"]
+        base.cv::web_browser["**Web Browser**<br>[External]"]
+        base.cv::client_side_app["**Client-side Application**<br>index.html `<!DOCTYPE html>`, js/app.js `document.addEventListener('DOMContentLoaded', () => {`"]
+        %% Edges at this level (grouped by source)
+        base.cv::web_browser["**Web Browser**<br>[External]"] -->|"Runs"| base.cv::client_side_app["**Client-side Application**<br>index.html `<!DOCTYPE html>`, js/app.js `document.addEventListener('DOMContentLoaded', () => {`"]
+    end
+    %% Edges at this level (grouped by source)
+    base.cv::end_user["**End User**<br>[External]"] -->|"Uses"| base.cv::web_browser["**Web Browser**<br>[External]"]
+    base.cv::client_side_app["**Client-side Application**<br>index.html `<!DOCTYPE html>`, js/app.js `document.addEventListener('DOMContentLoaded', () => {`"] -->|"Gets exchange rates from"| base.cv::exchange_rate_api["**ExchangeRate-API**<br>js/config.js `EXCHANGE_RATE: 'https://api.exchangerate-api.com/v4/latest/'`"]
+    base.cv::client_side_app["**Client-side Application**<br>index.html `<!DOCTYPE html>`, js/app.js `document.addEventListener('DOMContentLoaded', () => {`"] -->|"Gets official/parallel dollar and euro rates from"| base.cv::dolar_api["**DolarAPI**<br>js/config.js `DOLAR_API: {`"]
+    base.cv::client_side_app["**Client-side Application**<br>index.html `<!DOCTYPE html>`, js/app.js `document.addEventListener('DOMContentLoaded', () => {`"] -->|"Gets weather forecast from"| base.cv::open_meteo_api["**Open-Meteo Weather API**<br>js/config.js `WEATHER: 'https://api.open-meteo.com/v1/forecast'`"]
+    base.cv::client_side_app["**Client-side Application**<br>index.html `<!DOCTYPE html>`, js/app.js `document.addEventListener('DOMContentLoaded', () => {`"] -->|"Gets news data from"| base.cv::jairo_news_api["**Jairo News API**<br>js/modules/news.js `this.api = "https://jairo-news-api.jairocardenas05.workers.dev";`"]
+    base.cv::client_side_app["**Client-side Application**<br>index.html `<!DOCTYPE html>`, js/app.js `document.addEventListener('DOMContentLoaded', () => {`"] -->|"Gets real-time gold prices from"| base.cv::gold_api["**Gold-API.com**<br>js/modules/gold.js `https://api.gold-api.com/price/XAU`"]
+
+
+*Generated 2/8/2026, 13:02:50*
+
+
 # 📈 Estado del Proyecto (STATUS)
 
 **Última Actualización:** 2026-08-02  
