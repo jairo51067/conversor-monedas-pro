@@ -315,6 +315,7 @@ body {
         padding: 0.4rem 1rem !important; /* Reducción drástica de padding */
         border-radius: 16px !important;  /* Bordes más limpios para móviles */
         box-shadow: var(--shadow-sm) !important; /* Sombra más sutil */
+        margin: 0.5rem !important; /* Espaciado vertical mínimo */
     }
 
     /* 2. Forzamos la alineación en una sola fila sin envoltura */
@@ -396,6 +397,7 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
+    margin: 0.5rem;
 }
 
 /* ===== RATE CARDS - MEJORADO ===== */
@@ -561,6 +563,7 @@ body {
     border-radius: var(--radius-lg);
     padding: 1.5rem;
     box-shadow: var(--shadow-md);
+    margin: 0.5rem;
 }
 
 .section-title {
@@ -940,11 +943,13 @@ body {
     color: var(--primary);
 }
 
+
+
 /* ===== FOOTER ===== */
 .app-footer {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    /* border-radius: var(--radius-lg); */
     padding: 0.5rem;
     text-align: center;
     box-shadow: var(--shadow-md);
@@ -1539,7 +1544,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
+    padding: 0.5rem;
     border-bottom: 1px solid var(--border);
 }
 

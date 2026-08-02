@@ -15,7 +15,7 @@
    SECCIÓN DE PUBLICIDAD (Optimizada para CLS 0)
    ========================================= */
 .ad-section {
-  margin: 1.5rem 0;
+  margin: 1.5rem 1rem;
   padding: 0;
 }
 
@@ -76,7 +76,7 @@
    SECCIÓN DE NOTICIAS
    ========================================= */
 .news-section {
-  margin-top: 2rem;
+  margin: 0.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--news-border);
 }
