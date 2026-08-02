@@ -1,209 +1,287 @@
-// Manejo del Welcome Dashboard
-import { API } from './api.js';
-import { Storage } from './storage.js';
-import { Utils } from './utils.js';
+// js/modules/greeting.js
+import { API } from "./api.js";
+import { Storage } from "./storage.js";
+import { Utils } from "./utils.js";
+import { CONFIG } from "../config.js"; // ✅ Importado correctamente al inicio
 
 export class Greeting {
-    constructor() {
-        this.modalId = 'modalSaludo';
-        this.storageKey = 'greetingShown';
-        this.tips = [
-            "💡 Tip: Revisa las estadísticas para ver tendencias de 7D, 30D y 1 año",
-            "📊 Tip: Usa el conversor Bs↔COP para transacciones rápidas en tiempo real",
-            "🌙 Tip: Activa el modo oscuro para mejor experiencia nocturna",
-            "🔄 Tip: Actualiza las tasas manualmente si necesitas datos frescos",
-            "📱 Tip: Agrega la app a tu pantalla de inicio para acceso rápido",
-            "💱 Tip: La brecha cambiaria te indica la diferencia entre BCV y Paralelo",
-            " Tip: Los factores de conversión te ayudan a calcular TRM vs tasas locales"
-        ];
+  constructor() {
+    this.modalId = "modalSaludo";
+    this.storageKey = "greetingShown";
+    this.tips = [
+      "💡 Tip: Revisa las estadísticas para ver tendencias de 7D, 30D y 1 año",
+      "📊 Tip: Usa el conversor Bs↔COP para transacciones rápidas en tiempo real",
+      "🌙 Tip: Activa el modo oscuro para mejor experiencia nocturna",
+      "🔄 Tip: Actualiza las tasas manualmente si necesitas datos frescos",
+      "📱 Tip: Agrega la app a tu pantalla de inicio para acceso rápido",
+      "💱 Tip: La brecha cambiaria te indica la diferencia entre BCV y Paralelo",
+      "📈 Tip: Los factores de conversión te ayudan a calcular TRM vs tasas locales",
+    ];
+  }
+
+  async show() {
+    const alreadyShown = sessionStorage.getItem(this.storageKey);
+    if (alreadyShown) return;
+
+    const modal = document.getElementById(this.modalId);
+    if (!modal) return;
+
+    await this.loadDashboardData();
+    modal.classList.add("active");
+    sessionStorage.setItem(this.storageKey, "true");
+  }
+
+  close() {
+    const modal = document.getElementById(this.modalId);
+    if (modal) modal.classList.remove("active");
+  }
+
+  setupListeners() {
+    const modal = document.getElementById(this.modalId);
+    if (!modal) return;
+
+    const closeBtn = modal.querySelector(".welcome-close-btn");
+    if (closeBtn) closeBtn.addEventListener("click", () => this.close());
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) this.close();
+    });
+  }
+
+  async loadDashboardData() {
+    try {
+      this.updateGreeting();
+
+      const [bcvData, paraleloData, euroData, trmData] = await Promise.all([
+        API.getDolarOficial().catch(() => null),
+        API.getDolarParalelo().catch(() => null),
+        API.getEuroOficial().catch(() => null),
+        API.getTRMColombia().catch(() => null),
+      ]);
+
+      if (bcvData)
+        this.updateRateWithVariation(
+          "welcome-bcv",
+          bcvData.promedio,
+          CONFIG.CACHE.KEYS.BCV,
+          "Bs.",
+        );
+      if (paraleloData)
+        this.updateRateWithVariation(
+          "welcome-paralelo",
+          paraleloData.promedio,
+          CONFIG.CACHE.KEYS.PARALELO,
+          "Bs.",
+        );
+      if (euroData)
+        this.updateRateWithVariation(
+          "welcome-euro",
+          euroData.promedio,
+          "euro_oficial_cache",
+          "Bs.",
+        );
+      if (trmData)
+        this.updateRateWithVariation(
+          "welcome-trm",
+          trmData.trm,
+          CONFIG.CACHE.KEYS.TRM,
+          "$",
+        );
+
+      if (bcvData && paraleloData)
+        this.updateInsight(bcvData.promedio, paraleloData.promedio);
+      this.updateTip();
+      this.updateLastUpdate();
+    } catch (error) {
+      console.error("❌ Error loading welcome dashboard:", error);
+    }
+  }
+
+  /**
+   * Actualiza un valor de tasa con su variación calculada
+   */
+  updateRateWithVariation(elementId, currentValue, cacheKey, prefix = "") {
+    const element = document.getElementById(elementId);
+    if (!element) {
+      console.warn(`⚠️ Elemento ${elementId} no encontrado`);
+      return;
     }
 
-    /**
-     * Muestra el saludo si no se ha mostrado antes en esta sesión
-     */
-    async show() {
-        const alreadyShown = sessionStorage.getItem(this.storageKey);
-        
-        if (alreadyShown) {
-            console.log('ℹ️ Greeting already shown in this session');
-            return;
-        }
+    // Obtener variación del almacenamiento
+    const variation = Storage.getRateVariation(currentValue, cacheKey);
 
-        const modal = document.getElementById(this.modalId);
-        if (!modal) {
-            console.warn('⚠️ Greeting modal not found in DOM');
-            return;
-        }
-
-        // Cargar datos del dashboard
-        await this.loadDashboardData();
-
-        modal.classList.add('active');
-        sessionStorage.setItem(this.storageKey, 'true');
-        console.log('✅ Welcome dashboard shown');
+    // Formatear valor principal
+    let formattedValue = prefix + " ";
+    if (prefix === "Bs.") {
+      formattedValue += Utils.formatNumber(currentValue, "es-VE", {
+        minimumFractionDigits: 2,
+      });
+    } else {
+      formattedValue += Utils.formatNumber(currentValue, "es-CO", {
+        minimumFractionDigits: 0,
+      });
     }
 
-    /**
-     * Cierra el modal
-     */
-    close() {
-        const modal = document.getElementById(this.modalId);
-        if (modal) {
-            modal.classList.remove('active');
-            console.log('✅ Welcome dashboard closed');
-        }
+    element.textContent = formattedValue;
+
+    // Si hay variación válida, mostrarla
+    if (variation) {
+      this.renderVariation(element, variation, prefix);
+    } else {
+      // Limpiar variación anterior si existe
+      const existingVariation =
+        element.parentElement.querySelector(".rate-variation");
+      if (existingVariation) {
+        existingVariation.remove();
+      }
+    }
+  }
+
+  /**
+   * Renderiza la variación (flecha + porcentaje)
+   */
+  renderVariation(element, variation, prefix) {
+    const parent = element.parentElement;
+    if (!parent) return;
+
+    // Eliminar variación anterior si existe
+    const existingVariation = parent.querySelector(".rate-variation");
+    if (existingVariation) {
+      existingVariation.remove();
     }
 
-    /**
-     * Configura event listeners
-     */
-    setupListeners() {
-        const modal = document.getElementById(this.modalId);
-        if (!modal) return;
+    // Crear elemento de variación
+    const variationEl = document.createElement("div");
+    variationEl.className = "rate-variation";
 
-        const closeBtn = modal.querySelector('.welcome-close-btn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.close());
-        }
+    const isUp = variation.direction === "up";
+    const arrowIcon = isUp ? "▲" : variation.direction === "down" ? "▼" : "─";
+    const colorClass = isUp
+      ? "variation-up"
+      : variation.direction === "down"
+        ? "variation-down"
+        : "variation-stable";
 
-        // Cerrar al hacer clic fuera del contenido
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                this.close();
-            }
-        });
+    const absValue = Utils.formatNumber(
+      variation.absolute,
+      prefix === "Bs." ? "es-VE" : "es-CO",
+      { minimumFractionDigits: 2 },
+    );
+    const pctValue = variation.percentage.toFixed(2);
+
+    variationEl.innerHTML = `
+        <span class="${colorClass}">
+            ${arrowIcon} ${absValue} (${pctValue}%)
+        </span>
+    `;
+
+    parent.appendChild(variationEl);
+  }
+
+  /**
+   * Renderiza la variación (flecha + porcentaje)
+   * Solo muestra si hay variación REAL (no 0.00)
+   */
+  renderVariation(element, variation, prefix) {
+    const parent = element.parentElement;
+    if (!parent) return;
+
+    // Eliminar variación anterior si existe
+    const existingVariation = parent.querySelector(".rate-variation");
+    if (existingVariation) {
+      existingVariation.remove();
     }
 
-    /**
-     * Carga todos los datos del dashboard
-     */
-    async loadDashboardData() {
-        try {
-            // Saludo personalizado
-            this.updateGreeting();
-
-            // Cargar tasas en paralelo
-            const [bcvData, paraleloData, trmData] = await Promise.all([
-                API.getDolarOficial().catch(() => null),
-                API.getDolarParalelo().catch(() => null),
-                API.getTRMColombia().catch(() => null)
-            ]);
-
-            // Actualizar valores en el modal
-            if (bcvData) {
-                document.getElementById('welcome-bcv').textContent = Utils.formatNumber(bcvData.promedio, 'es-VE', { minimumFractionDigits: 2 });
-            }
-            if (paraleloData) {
-                document.getElementById('welcome-paralelo').textContent = Utils.formatNumber(paraleloData.promedio, 'es-VE', { minimumFractionDigits: 2 });
-            }
-            if (trmData) {
-                document.getElementById('welcome-trm').textContent = Utils.formatNumber(trmData.trm, 'es-CO', { minimumFractionDigits: 0 });
-            }
-
-            // Calcular y mostrar insight
-            if (bcvData && paraleloData) {
-                this.updateInsight(bcvData.promedio, paraleloData.promedio);
-            }
-
-            // Tip rotativo
-            this.updateTip();
-
-            // Estado de actualización
-            this.updateLastUpdate();
-
-        } catch (error) {
-            console.error('❌ Error loading welcome dashboard:', error);
-            document.getElementById('welcome-insight-text').textContent = 'No se pudieron cargar los datos del mercado';
-        }
+    // ✅ NO MOSTRAR si la variación es 0 o muy pequeña (< 0.01)
+    if (variation.percentage < 0.01 && variation.absolute < 0.01) {
+      return; // No renderizar nada
     }
 
-    /**
-     * Actualiza el saludo según la hora del día
-     */
-    updateGreeting() {
-        const hour = new Date().getHours();
-        let greeting = '👋 ¡Hola!';
-        
-        if (hour >= 5 && hour < 12) {
-            greeting = '️ ¡Buenos días!';
-        } else if (hour >= 12 && hour < 19) {
-            greeting = '️ ¡Buenas tardes!';
-        } else {
-            greeting = '🌙 ¡Buenas noches!';
-        }
+    // Crear elemento de variación
+    const variationEl = document.createElement("div");
+    variationEl.className = "rate-variation";
 
-        const greetingEl = document.getElementById('welcome-greeting');
-        if (greetingEl) {
-            greetingEl.textContent = greeting;
-        }
+    const isUp = variation.direction === "up";
+    const arrowIcon = isUp ? "▲" : variation.direction === "down" ? "▼" : "─";
+    const colorClass = isUp
+      ? "variation-up"
+      : variation.direction === "down"
+        ? "variation-down"
+        : "variation-stable";
+
+    const absValue = Utils.formatNumber(
+      variation.absolute,
+      prefix === "Bs." ? "es-VE" : "es-CO",
+      { minimumFractionDigits: 2 },
+    );
+    const pctValue = variation.percentage.toFixed(2);
+
+    variationEl.innerHTML = `
+        <span class="${colorClass}">
+            ${arrowIcon} ${absValue} (${pctValue}%)
+        </span>
+    `;
+
+    parent.appendChild(variationEl);
+  }
+
+  updateGreeting() {
+    const hour = new Date().getHours();
+    let greeting = "👋 ¡Hola!";
+    if (hour >= 5 && hour < 12) greeting = "☀️ ¡Buenos días!";
+    else if (hour >= 12 && hour < 19) greeting = "🌤️ ¡Buenas tardes!";
+    else greeting = "🌙 ¡Buenas noches!";
+
+    const el = document.getElementById("welcome-greeting");
+    if (el) el.textContent = greeting;
+  }
+
+  updateInsight(bcvValue, paraleloValue) {
+    const brecha = ((paraleloValue - bcvValue) / bcvValue) * 100;
+    let text = "",
+      cls = "";
+
+    if (Math.abs(brecha) < 5) {
+      text = `La brecha cambiaria es mínima (${brecha.toFixed(1)}%). Tasas muy cercanas.`;
+      cls = "insight-neutral";
+    } else if (brecha >= 0) {
+      text = `El paralelo está ${brecha.toFixed(1)}% por encima del BCV. Brecha significativa.`;
+      cls = "insight-warning";
+    } else {
+      text = `El paralelo está ${Math.abs(brecha).toFixed(1)}% por debajo del BCV. Situación inusual.`;
+      cls = "insight-alert";
     }
 
-    /**
-     * Calcula y muestra el insight del día
-     */
-    updateInsight(bcvValue, paraleloValue) {
-        const brecha = ((paraleloValue - bcvValue) / bcvValue) * 100;
-        const isPositive = brecha >= 0;
-        
-        let insightText = '';
-        
-        if (Math.abs(brecha) < 5) {
-            insightText = `La brecha cambiaria es mínima (${brecha.toFixed(1)}%). Tasas muy cercanas.`;
-        } else if (isPositive) {
-            insightText = `El paralelo está ${brecha.toFixed(1)}% por encima del BCV. Brecha significativa.`;
-        } else {
-            insightText = `El paralelo está ${Math.abs(brecha).toFixed(1)}% por debajo del BCV. Situación inusual.`;
-        }
-
-        const insightEl = document.getElementById('welcome-insight-text');
-        if (insightEl) {
-            insightEl.textContent = insightText;
-        }
+    const el = document.getElementById("welcome-insight-text");
+    if (el) {
+      el.textContent = text;
+      el.className = `welcome-insight-text ${cls}`;
     }
+  }
 
-    /**
-     * Selecciona y muestra un tip rotativo
-     */
-    updateTip() {
-        // Usar el día del año como índice para rotar tips diariamente
-        const now = new Date();
-        const start = new Date(now.getFullYear(), 0, 0);
-        const diff = now - start;
-        const oneDay = 1000 * 60 * 60 * 24;
-        const dayOfYear = Math.floor(diff / oneDay);
-        
-        const tipIndex = dayOfYear % this.tips.length;
-        const tipText = this.tips[tipIndex];
+  updateTip() {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const dayOfYear = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    const tipText = this.tips[dayOfYear % this.tips.length];
+    const el = document.getElementById("welcome-tip-text");
+    if (el) el.textContent = tipText;
+  }
 
-        const tipEl = document.getElementById('welcome-tip-text');
-        if (tipEl) {
-            tipEl.textContent = tipText;
-        }
+  updateLastUpdate() {
+    const ratesData = Storage.getRates("exchange_rates_cache_USD");
+    const el = document.getElementById("welcome-last-update");
+    if (!el) return;
+
+    if (ratesData && ratesData.timestamp) {
+      const mins = Math.floor((Date.now() - ratesData.timestamp) / 60000);
+      if (mins < 1) el.textContent = "Actualizado: hace menos de 1 minuto";
+      else if (mins < 60)
+        el.textContent = `Actualizado: hace ${mins} minuto${mins > 1 ? "s" : ""}`;
+      else
+        el.textContent = `Actualizado: hace ${Math.floor(mins / 60)} hora${Math.floor(mins / 60) > 1 ? "s" : ""}`;
+    } else {
+      el.textContent = "Actualizado: ahora";
     }
-
-    /**
-     * Muestra cuándo se actualizaron las tasas por última vez
-     */
-    updateLastUpdate() {
-        const ratesData = Storage.getRates('exchange_rates_cache_USD');
-        const lastUpdateEl = document.getElementById('welcome-last-update');
-        
-        if (!lastUpdateEl) return;
-
-        if (ratesData && ratesData.timestamp) {
-            const minutesAgo = Math.floor((Date.now() - ratesData.timestamp) / 60000);
-            
-            if (minutesAgo < 1) {
-                lastUpdateEl.textContent = 'Actualizado: hace menos de 1 minuto';
-            } else if (minutesAgo < 60) {
-                lastUpdateEl.textContent = `Actualizado: hace ${minutesAgo} minuto${minutesAgo > 1 ? 's' : ''}`;
-            } else {
-                const hoursAgo = Math.floor(minutesAgo / 60);
-                lastUpdateEl.textContent = `Actualizado: hace ${hoursAgo} hora${hoursAgo > 1 ? 's' : ''}`;
-            }
-        } else {
-            lastUpdateEl.textContent = 'Actualizado: ahora';
-        }
-    }
+  }
 }
-

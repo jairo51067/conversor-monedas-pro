@@ -1,6 +1,7 @@
 // js/modules/api.js
 import { CONFIG } from '../config.js';
 import { Utils } from './utils.js';
+import { Storage } from './storage.js'; // ✅ ¡ESTA LÍNEA FALTABA!
 
 export class API {
     /**
@@ -25,11 +26,9 @@ export class API {
 
     /**
      * ✅ MÉTODO AGREGADO: Obtiene la tasa de conversión específica entre dos monedas
-     * Este es el método que llama converter.js y que faltaba en tu archivo original.
      */
     static async getConversionRate(fromCurrency, toCurrency) {
         if (fromCurrency === toCurrency) return 1;
-        
         try {
             const data = await this.fetchWithRetry(`${CONFIG.APIs.EXCHANGE_RATE}${fromCurrency}`);
             return data.rates[toCurrency] || null;
@@ -57,7 +56,9 @@ export class API {
      */
     static async getDolarOficial() {
         try {
-            return await this.fetchWithRetry(CONFIG.APIs.DOLAR_API.OFICIAL);
+            const data = await this.fetchWithRetry(CONFIG.APIs.DOLAR_API.OFICIAL);
+            Storage.setRatesWithHistory(CONFIG.CACHE.KEYS.BCV, data); // ✅ Ahora sí funcionará
+            return data;
         } catch (error) {
             console.error('❌ Error fetching dólar oficial:', error);
             throw error;
@@ -69,7 +70,9 @@ export class API {
      */
     static async getDolarParalelo() {
         try {
-            return await this.fetchWithRetry(CONFIG.APIs.DOLAR_API.PARALELO);
+            const data = await this.fetchWithRetry(CONFIG.APIs.DOLAR_API.PARALELO);
+            Storage.setRatesWithHistory(CONFIG.CACHE.KEYS.PARALELO, data); // ✅ Ahora sí funcionará
+            return data;
         } catch (error) {
             console.error('❌ Error fetching dólar paralelo:', error);
             throw error;
@@ -81,7 +84,9 @@ export class API {
      */
     static async getEuroOficial() {
         try {
-            return await this.fetchWithRetry(CONFIG.APIs.DOLAR_API.EURO);
+            const data = await this.fetchWithRetry(CONFIG.APIs.DOLAR_API.EURO);
+            Storage.setRatesWithHistory('euro_oficial_cache', data); // ✅ Ahora sí funcionará
+            return data;
         } catch (error) {
             console.error('❌ Error fetching euro oficial:', error);
             throw error;
@@ -94,7 +99,9 @@ export class API {
     static async getTRMColombia() {
         try {
             const rates = await this.getExchangeRates('USD');
-            return { trm: rates.COP };
+            const trmData = { trm: rates.COP };
+            Storage.setRatesWithHistory(CONFIG.CACHE.KEYS.TRM, trmData); // ✅ Ahora sí funcionará
+            return trmData;
         } catch (error) {
             console.error('❌ Error fetching TRM:', error);
             throw error;
@@ -113,7 +120,6 @@ export class API {
                 this.getEuroOficial()
             ]);
 
-            // Fallback seguro por si la API cambia el nombre de la propiedad
             const trm = trmData.trm || 0;
             const paralelo = paraleloData.promedio || paraleloData.venta || 0;
             const oficial = oficialData.promedio || oficialData.venta || 0;
@@ -124,9 +130,9 @@ export class API {
             }
 
             return {
-                factor1: trm / paralelo, // TRM/PARALELO
-                factor2: trm / oficial,  // TRM/OFICIAL
-                factor3: trm / euro      // TRM/EURO
+                factor1: trm / paralelo,
+                factor2: trm / oficial,
+                factor3: trm / euro
             };
         } catch (error) {
             console.error('❌ Error calculating factors:', error);

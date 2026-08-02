@@ -2601,3 +2601,227 @@ body {
         width: 100%;
     }
 }
+
+/* =========================================
+   MODAL DE BIENVENIDA - VERSIÓN FINAL
+   ========================================= */
+
+/* Grid de Tasas Rápidas - SIEMPRE EN COLUMNA */
+.rates-mini-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.rate-mini-card {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border);
+}
+
+.rate-mini-card:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+.rate-mini-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rate-mini-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+/* Variaciones - OCULTAR cuando son 0.00 */
+.rate-variation {
+    font-size: 0.8125rem;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+/* Clase para ocultar variaciones en cero */
+.rate-variation.hidden {
+    display: none !important;
+}
+
+.variation-up {
+    color: #10b981 !important; /* Verde brillante */
+}
+
+.variation-down {
+    color: #ef4444 !important; /* Rojo brillante */
+}
+
+.variation-stable {
+    color: #94a3b8 !important; /* Gris suave */
+}
+
+/* Insight del Día */
+.welcome-insight {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(6, 182, 212, 0.1));
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.insight-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.insight-content {
+    flex: 1;
+}
+
+.insight-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+.insight-text {
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Tip Rotativo */
+.welcome-tip {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    border: 1px solid var(--border);
+}
+
+.welcome-tip i {
+    color: var(--warning);
+    font-size: 1.125rem;
+    flex-shrink: 0;
+}
+
+/* Footer con Estado de Actualización */
+.welcome-footer {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.update-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+.update-status i {
+    font-size: 0.875rem;
+}
+
+/* Botón de Cierre */
+.welcome-close-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4F46E5, #6366F1);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.welcome-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+}
+
+.welcome-close-btn:active {
+    transform: translateY(0);
+}
+
+/* Modal Container */
+.welcome-dashboard {
+    max-width: 450px;
+    padding: 32px;
+    text-align: left;
+}
+
+.welcome-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.welcome-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #4F46E5, #06B6D4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.welcome-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Responsive - Mantiene columna en todos los tamaños */
+@media (max-width: 480px) {
+    .welcome-dashboard {
+        padding: 24px;
+    }
+    
+    .welcome-header h2 {
+        font-size: 1.75rem;
+    }
+    
+    .rate-mini-card {
+        padding: 14px;
+    }
+    
+    .rate-mini-label {
+        font-size: 0.8125rem;
+    }
+    
+    .rate-mini-value {
+        font-size: 1.125rem;
+    }
+}
