@@ -10,7 +10,7 @@ export class API {
         return Utils.retryAsync(async () => {
             const fetchOptions = {
                 method: 'GET',
-                cache: 'no-cache', // Evita usar caché del navegador para datos frescos
+                cache: 'no-cache',
                 mode: 'cors',
                 ...options
             };
@@ -20,7 +20,23 @@ export class API {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return await response.json();
-        }, 3); // 3 intentos
+        }, 3);
+    }
+
+    /**
+     * ✅ MÉTODO AGREGADO: Obtiene la tasa de conversión específica entre dos monedas
+     * Este es el método que llama converter.js y que faltaba en tu archivo original.
+     */
+    static async getConversionRate(fromCurrency, toCurrency) {
+        if (fromCurrency === toCurrency) return 1;
+        
+        try {
+            const data = await this.fetchWithRetry(`${CONFIG.APIs.EXCHANGE_RATE}${fromCurrency}`);
+            return data.rates[toCurrency] || null;
+        } catch (error) {
+            console.error(`❌ Error fetching rate from ${fromCurrency} to ${toCurrency}:`, error);
+            throw new Error('Tasa de cambio no disponible');
+        }
     }
 
     /**
@@ -97,10 +113,15 @@ export class API {
                 this.getEuroOficial()
             ]);
 
-            const trm = trmData.trm;
-            const paralelo = paraleloData.promedio;
-            const oficial = oficialData.promedio;
-            const euro = euroData.promedio;
+            // Fallback seguro por si la API cambia el nombre de la propiedad
+            const trm = trmData.trm || 0;
+            const paralelo = paraleloData.promedio || paraleloData.venta || 0;
+            const oficial = oficialData.promedio || oficialData.venta || 0;
+            const euro = euroData.promedio || euroData.venta || 0;
+
+            if (paralelo === 0 || oficial === 0 || euro === 0) {
+                throw new Error('Tasas de Venezuela incompletas o en cero');
+            }
 
             return {
                 factor1: trm / paralelo, // TRM/PARALELO
