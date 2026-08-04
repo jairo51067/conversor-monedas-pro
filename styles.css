@@ -8,17 +8,6 @@
     format("woff2");
 }
 
-/* Contraste accesible para botones de actualización */
-.btn-refresh {
-  background: #047857 !important; /* Verde oscuro accesible */
-  color: white !important;
-  font-weight: 700;
-}
-
-.btn-refresh:hover {
-  background: #065f46 !important;
-}
-
 /* ===== RESET Y VARIABLES ===== */
 *,
 *::before,
@@ -99,15 +88,6 @@ body {
 }
 
 /* ===== HEADER ===== */
-.app-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 1rem;
-  box-shadow: var(--shadow-lg);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
 
 .header-container {
   max-width: 1400px;
@@ -146,14 +126,6 @@ body {
 .menu-toggle:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
-}
-
-.header-title h1 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin: 0;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
 }
 
 .header-title p {
@@ -1276,10 +1248,6 @@ body {
     font-size: 1.75rem;
   }
 
-  .rate-card {
-    padding: 1.25rem;
-  }
-
   .rate-footer {
     flex-direction: column;
     align-items: stretch;
@@ -1713,6 +1681,25 @@ body {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+  color: white;
+  padding: 1rem;
+  box-shadow: var(--shadow-lg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  animation: slideDownHeader 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Animación sutil de entrada para el header */
+@keyframes slideDownHeader {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Efecto al hacer scroll (se puede activar con JS si se desea, pero por defecto se ve genial) */
@@ -1736,21 +1723,11 @@ body {
   -webkit-background-clip: text;
   /* -webkit-text-fill-color: transparent; */
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Animación sutil de entrada para el header */
-@keyframes slideDownHeader {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-.app-header {
-  animation: slideDownHeader 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 /* ===== MODAL DE ESTADÍSTICAS ===== */
@@ -1852,191 +1829,6 @@ body {
   position: relative;
   height: 250px;
   width: 100%;
-}
-
-/* ===== WELCOME DASHBOARD ===== */
-.welcome-dashboard {
-  max-width: 450px;
-  padding: 32px;
-  text-align: left;
-}
-
-.welcome-header {
-  text-align: center;
-  margin-bottom: 0px;
-}
-
-.welcome-header h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #4f46e5, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.welcome-subtitle {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-/* Grid de Tasas Mini */
-
-.rate-mini-card {
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-md);
-  padding: 16px 12px;
-  text-align: center;
-  transition: transform 0.2s ease;
-}
-
-.rate-mini-card:hover {
-  transform: translateY(-2px);
-}
-
-.rate-mini-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 8px;
-}
-
-.rate-mini-value {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Insight del Día */
-
-.insight-icon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.insight-content {
-  flex: 1;
-}
-
-.insight-title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
-}
-
-.insight-text {
-  font-size: 0.9375rem;
-  color: var(--text-primary);
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-/* Tip Rotativo */
-.welcome-tip {
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-md);
-  padding: 12px 16px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.welcome-tip i {
-  color: var(--warning);
-  font-size: 1.125rem;
-  flex-shrink: 0;
-}
-
-/* Footer con Estado de Actualización */
-.welcome-footer {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.update-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
-  font-weight: 500;
-}
-
-.update-status i {
-  font-size: 0.875rem;
-}
-
-/* Botón de Cierre */
-.welcome-close-btn {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-}
-
-.welcome-close-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
-}
-
-.welcome-close-btn:active {
-  transform: translateY(0);
-}
-
-/* Responsive para móvil */
-@media (max-width: 480px) {
-  .welcome-dashboard {
-    padding: 24px;
-  }
-
-  .welcome-header h2 {
-    font-size: 1.75rem;
-  }
-
-  .rates-mini-grid {
-    gap: 3px;
-  }
-
-  .rate-mini-card {
-    padding: 12px 8px;
-  }
-
-  .rate-mini-value {
-    font-size: 1.125rem;
-  }
-}
-
-/* ===== CALCULADORA DE ORO ===== */
-.gold-modal-content {
-  max-width: 550px;
-}
-
-.gold-intro {
-  font-size: 0.9375rem;
-  color: var(--text-secondary);
-  margin-bottom: 20px;
-  line-height: 1.5;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
 }
 
 .gold-grid {
