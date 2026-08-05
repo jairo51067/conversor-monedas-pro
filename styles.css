@@ -2624,7 +2624,7 @@ body {
 /* Responsive - Mantiene columna en todos los tamaños */
 @media (max-width: 480px) {
   .welcome-dashboard {
-    padding: 24px;
+    padding: 8px;
   }
 
   .welcome-header h2 {
