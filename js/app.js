@@ -84,9 +84,6 @@ class App {
         }
     }
 
-
-
-
   async loadExchangeRates() {
     try {
       await API.getExchangeRates("USD");
@@ -510,4 +507,25 @@ document.addEventListener('visibilitychange', async () => {
 document.addEventListener('DOMContentLoaded', () => {
     window.appInstance = new App();
     window.appInstance.init();
+});
+
+// Función para ocultar el Splash Screen
+function hideSplashScreen() {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        // Pequeño delay para asegurar que el usuario vea la animación
+        setTimeout(() => {
+            splash.classList.add('hidden');
+            // Opcional: Eliminar del DOM después de la transición para liberar memoria
+            setTimeout(() => splash.remove(), 500); 
+        }, 800); // 800ms de delay para apreciar la animación
+    }
+}
+
+// Ejecutar inmediatamente
+document.addEventListener('DOMContentLoaded', () => {
+    // ... tu código existente de inicialización ...
+    
+    // Llamar al splash al final
+    hideSplashScreen();
 });
